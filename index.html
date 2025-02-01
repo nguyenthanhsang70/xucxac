@@ -10,18 +10,20 @@
             text-align: center;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: #e0f7fa; /* Màu nền dễ nhìn */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #333;
         }
         .dice {
-            font-size: 80px; /* Nhỏ hơn để phù hợp với màn hình điện thoại */
+            font-size: 100px; /* Font size lớn để dễ nhìn */
             margin-top: 20px;
             display: inline-block;
             transition: transform 0.1s;
+            color: #d32f2f; /* Màu đỏ nổi bật cho xúc xắc */
         }
         button {
             padding: 15px 30px;
@@ -49,7 +51,7 @@
         /* Responsive styles for mobile */
         @media (max-width: 600px) {
             .dice {
-                font-size: 60px; /* Font size nhỏ hơn cho thiết bị di động */
+                font-size: 80px; /* Font size nhỏ hơn cho thiết bị di động */
             }
             button {
                 padding: 12px 25px;
