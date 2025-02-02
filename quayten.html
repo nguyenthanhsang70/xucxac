@@ -41,14 +41,32 @@
     <div class="result" id="result"></div>
     
     <script>
+        let intervalId;
+
         function spinName() {
             const names = document.getElementById("nameList").value.trim().split("\n").filter(name => name);
             if (names.length === 0) {
                 alert("Vui lòng nhập ít nhất một tên!");
                 return;
             }
-            const randomName = names[Math.floor(Math.random() * names.length)];
-            document.getElementById("result").textContent = "Kết quả: " + randomName;
+
+            const resultElement = document.getElementById("result");
+            let count = 0;
+            const totalIterations = 30; // Số lần thay đổi tên trước khi dừng
+
+            clearInterval(intervalId); // Đảm bảo chỉ có một interval chạy
+
+            intervalId = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * names.length);
+                resultElement.textContent = "Đang quay: " + names[randomIndex];
+                count++;
+
+                if (count >= totalIterations) {
+                    clearInterval(intervalId);
+                    const finalName = names[Math.floor(Math.random() * names.length)];
+                    resultElement.textContent = "Kết quả: " + finalName;
+                }
+            }, 100); // Thay đổi tên mỗi 100ms
         }
     </script>
 </body>
