@@ -10,7 +10,7 @@
             text-align: center;
             margin: 0;
             padding: 0;
-            background-color: #e0f7fa; /* Màu nền dễ nhìn */
+            background-color: #e0f7fa;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -19,11 +19,11 @@
             color: #333;
         }
         .dice {
-            font-size: 100px; /* Font size lớn để dễ nhìn */
+            font-size: 100px;
             margin-top: 20px;
             display: inline-block;
             transition: transform 0.1s;
-            color: #d32f2f; /* Màu đỏ nổi bật cho xúc xắc */
+            color: #d32f2f;
         }
         button {
             padding: 15px 30px;
@@ -34,7 +34,7 @@
             background-color: #007bff;
             color: white;
             font-weight: bold;
-            margin-top: 20px;
+            margin: 10px;
         }
         button:hover {
             background-color: #0056b3;
@@ -47,59 +47,118 @@
             50% { transform: rotate(360deg); }
             100% { transform: rotate(720deg); }
         }
-
-        /* Responsive styles for mobile */
-        @media (max-width: 600px) {
-            .dice {
-                font-size: 80px; /* Font size nhỏ hơn cho thiết bị di động */
-            }
-            button {
-                padding: 12px 25px;
-                font-size: 16px;
-            }
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
         }
-
-        footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #555;
-            position: fixed;
-            bottom: 10px;
+        .result-table {
+            margin-top: 20px;
             width: 100%;
+            max-width: 300px;
+            border-collapse: collapse;
+        }
+        .result-table th, .result-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
             text-align: center;
+        }
+        .result-table th {
+            background-color: #f2f2f2;
+        }
+        input[type="text"], select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="dice" id="dice">🎲</div>
-    <br>
-    <button onclick="rollDice()">Lắc Xúc Xắc</button>
-
-    <footer>
+    <h2>Xúc Xắc Vui Vẻ 🎲✨</h2>
+    <input type="text" id="nameInput" placeholder="Nhập tên của bạn">
+    <div class="controls">
+        <button onclick="resetGame()">Làm mới</button>
+        <select id="diceCount" onchange="toggleDiceDisplay()">
+            <option value="1">1 Xúc Xắc</option>
+            <option value="2">2 Xúc Xắc</option>
+        </select>
+        <button onclick="rollDice()">Lắc Xúc Xắc</button>
+    </div>
+    <div>
+        <span class="dice" id="dice1">🎲</span>
+        <span class="dice" id="dice2" style="display: none;">🎲</span>
+    </div>
+    <table class="result-table" id="resultTable">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Kết quả</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        function rollDice() {
+            const dice1 = document.getElementById('dice1');
+            const dice2 = document.getElementById('dice2');
+            const nameInput = document.getElementById('nameInput').value.trim();
+            const diceCount = parseInt(document.getElementById('diceCount').value);
+            const resultTable = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
+    
+            if (nameInput === "") {
+                alert("Bạn phải nhập tên mới được phép lắc!");
+                return;
+            }
+    
+            dice1.classList.add('rolling');
+            dice2.classList.add('rolling');
+    
+            setTimeout(() => {
+                let roll1 = Math.floor(Math.random() * 6) + 1;
+                let roll2 = diceCount === 2 ? Math.floor(Math.random() * 6) + 1 : 0;
+    
+                dice1.textContent = getDiceFace(roll1);
+                dice2.textContent = diceCount === 2 ? getDiceFace(roll2) : '';
+                dice1.classList.remove('rolling');
+                dice2.classList.remove('rolling');
+    
+                const newRow = resultTable.insertRow();
+                const nameCell = newRow.insertCell(0);
+                const resultCell = newRow.insertCell(1);
+                nameCell.textContent = nameInput;
+                resultCell.textContent = diceCount === 2 ? roll1 + roll2 : roll1;
+    
+                setTimeout(() => {
+                    dice1.textContent = '🎲';
+                    dice2.textContent = '🎲';
+                }, 1000);
+            }, 1000);
+        }
+    
+        function resetGame() {
+            document.getElementById('nameInput').value = '';
+            document.getElementById('resultTable').getElementsByTagName('tbody')[0].innerHTML = '';
+        }
+    
+        function toggleDiceDisplay() {
+            const diceCount = parseInt(document.getElementById('diceCount').value);
+            document.getElementById('dice2').style.display = diceCount === 2 ? 'inline-block' : 'none';
+        }
+    
+        function getDiceFace(num) {
+            const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+            return diceFaces[num - 1];
+        }
+    </script>
+    
+     <footer>
         © Bản quyền thuộc về Nguyễn Thanh Sang<br>
         © Copyright by Nguyễn Thanh Sang
     </footer>
-
-    <script>
-        function rollDice() {
-            const dice = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
-            const diceElement = document.getElementById('dice');
-            
-            // Thêm hiệu ứng quay
-            diceElement.classList.add('rolling');
-
-            // Chờ hiệu ứng hoàn thành
-            setTimeout(() => {
-                const randomIndex = Math.floor(Math.random() * dice.length);
-                diceElement.textContent = dice[randomIndex];
-                
-                // Đợi một chút trước khi trả về hình ban đầu
-                setTimeout(() => {
-                    diceElement.textContent = '🎲'; // Trả về hình xúc xắc ban đầu
-                    diceElement.classList.remove('rolling'); // Loại bỏ lớp hiệu ứng
-                }, 1000); // Thời gian hiển thị kết quả trước khi trở về trạng thái ban đầu
-            }, 1000); // Thời gian bằng với thời lượng của hiệu ứng CSS
-        }
-    </script>
 </body>
 </html>
