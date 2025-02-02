@@ -13,46 +13,74 @@
             background-color: #e0f7fa;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             color: #333;
         }
-        .dice {
-            font-size: 100px;
-            margin-top: 20px;
-            display: inline-block;
-            transition: transform 0.1s;
-            color: #d32f2f;
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        .name-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .name-input-container input {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
         }
         button {
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 10px 15px;
+            font-size: 1em;
             cursor: pointer;
             border: none;
             border-radius: 5px;
             background-color: #007bff;
             color: white;
             font-weight: bold;
-            margin: 10px;
+            transition: background-color 0.3s, transform 0.2s;
         }
         button:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
-        .rolling {
-            animation: roll 1s steps(8, end);
-        }
-        @keyframes roll {
-            0% { transform: rotate(0deg); }
-            50% { transform: rotate(360deg); }
-            100% { transform: rotate(720deg); }
+        button:active {
+            background-color: #004080;
+            transform: scale(0.95);
         }
         .controls {
             display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .dice {
+            font-size: 100px;
+            margin-top: 20px;
+            color: #d32f2f;
+            display: inline-block;
+            animation: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(90deg); }
+            50% { transform: rotate(180deg); }
+            75% { transform: rotate(270deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .rolling {
+            animation: spin 0.5s ease-in-out;
         }
         .result-table {
             margin-top: 20px;
@@ -68,40 +96,44 @@
         .result-table th {
             background-color: #f2f2f2;
         }
-        input[type="text"], select {
+        footer {
+            text-align: center;
             padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            background-color: #f2f2f2;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <h2>Xúc Xắc Vui Vẻ 🎲✨</h2>
-    <input type="text" id="nameInput" placeholder="Nhập tên của bạn">
-    <div class="controls">
-        <button onclick="resetGame()">Làm mới</button>
-        <select id="diceCount" onchange="toggleDiceDisplay()">
-            <option value="1">1 Xúc Xắc</option>
-            <option value="2">2 Xúc Xắc</option>
-        </select>
-        <button onclick="rollDice()">Lắc Xúc Xắc</button>
+    <div class="container">
+        <h2 style="color: #d32f2f;">Xúc Xắc Vui Vẻ 🎲✨</h2>
+        <div class="name-input-container">
+            <input type="text" id="nameInput" placeholder="Nhập tên của bạn">
+            <button onclick="openNameSpinner()">Quay Tên</button>
+        </div>
+        <div class="controls">
+            <button onclick="resetGame()">Làm mới</button>
+            <select id="diceCount" onchange="toggleDiceDisplay()">
+                <option value="1">1 Xúc Xắc</option>
+                <option value="2">2 Xúc Xắc</option>
+            </select>
+            <button onclick="rollDice()">Lắc Xúc Xắc</button>
+        </div>
+        <div>
+            <span class="dice" id="dice1">🎲</span>
+            <span class="dice" id="dice2" style="display: none;">🎲</span>
+        </div>
+        <table class="result-table" id="resultTable">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Kết quả</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
-    <div>
-        <span class="dice" id="dice1">🎲</span>
-        <span class="dice" id="dice2" style="display: none;">🎲</span>
-    </div>
-    <table class="result-table" id="resultTable">
-        <thead>
-            <tr>
-                <th>Tên</th>
-                <th>Kết quả</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
     <script>
         function rollDice() {
             const dice1 = document.getElementById('dice1');
@@ -109,56 +141,47 @@
             const nameInput = document.getElementById('nameInput').value.trim();
             const diceCount = parseInt(document.getElementById('diceCount').value);
             const resultTable = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
-    
+
             if (nameInput === "") {
                 alert("Bạn phải nhập tên mới được phép lắc!");
                 return;
             }
-    
-            dice1.classList.add('rolling');
-            dice2.classList.add('rolling');
-    
+
+            // Thêm hiệu ứng quay
+            dice1.classList.add("rolling");
+            dice2.classList.add("rolling");
+
             setTimeout(() => {
+                dice1.classList.remove("rolling");
+                dice2.classList.remove("rolling");
+
                 let roll1 = Math.floor(Math.random() * 6) + 1;
                 let roll2 = diceCount === 2 ? Math.floor(Math.random() * 6) + 1 : 0;
-    
-                dice1.textContent = getDiceFace(roll1);
-                dice2.textContent = diceCount === 2 ? getDiceFace(roll2) : '';
-                dice1.classList.remove('rolling');
-                dice2.classList.remove('rolling');
-    
+
+                dice1.textContent = "🎲";
+                dice2.textContent = diceCount === 2 ? "🎲" : '';
+
                 const newRow = resultTable.insertRow();
-                const nameCell = newRow.insertCell(0);
-                const resultCell = newRow.insertCell(1);
-                nameCell.textContent = nameInput;
-                resultCell.textContent = diceCount === 2 ? roll1 + roll2 : roll1;
-    
-                setTimeout(() => {
-                    dice1.textContent = '🎲';
-                    dice2.textContent = '🎲';
-                }, 1000);
-            }, 1000);
+                newRow.insertCell(0).textContent = nameInput;
+                newRow.insertCell(1).textContent = diceCount === 2 ? roll1 + roll2 : roll1;
+            }, 500);
         }
-    
+
         function resetGame() {
             document.getElementById('nameInput').value = '';
             document.getElementById('resultTable').getElementsByTagName('tbody')[0].innerHTML = '';
         }
-    
+
         function toggleDiceDisplay() {
-            const diceCount = parseInt(document.getElementById('diceCount').value);
-            document.getElementById('dice2').style.display = diceCount === 2 ? 'inline-block' : 'none';
+            document.getElementById('dice2').style.display = document.getElementById('diceCount').value === "2" ? 'inline-block' : 'none';
         }
-    
-        function getDiceFace(num) {
-            const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
-            return diceFaces[num - 1];
+
+        function openNameSpinner() {
+            window.open("quayten.html", "_blank", "width=400,height=500");
         }
     </script>
-    
-     <footer>
-        © Bản quyền thuộc về Nguyễn Thanh Sang<br>
-        © Copyright by Nguyễn Thanh Sang
+    <footer>
+        © Bản quyền thuộc về Nguyễn Thanh Sang
     </footer>
 </body>
 </html>
