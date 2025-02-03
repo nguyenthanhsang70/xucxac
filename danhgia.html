@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đánh giá sao và bình luận</title>
-     <style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -88,17 +88,17 @@
             font-size: 14px;
             color: #333;
         }
-         .user-actions {
+        .user-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
-         .user-actions .buttons {
+        .user-actions .buttons {
             display: flex;
             gap: 10px;
         }
-         .action-buttons button {
+        .action-buttons button {
             padding: 5px 10px;
             font-size: 14px;
             background-color: #dc3545;
@@ -116,56 +116,27 @@
         .hidden {
             display: none;
         }
-
-         @media (max-width: 600px) {
+        @media (max-width: 600px) {
             .name-input-container input {
                 width: 100%;
             }
-             /* Đảm bảo button reply vừa với kích thước màn hình điện thoại*/
-             .reply-section input{
-                width: calc(100% - 45px); /* Trừ padding and margin*/
-             }
-
-            .reply-button {
-                 display:block; /* chuyển button reply thành block để nó có chiều dài 100% width của .reply-section */
-                 width: auto; /* để chiều rộng phụ thuộc vào content bên trong */
-                 margin-top: 5px;
-             }
-
-            /* Giúp tên user vừa màn hình hơn*/
-           .review-section{
-                font-size: 15px;
+            .controls {
+                flex-direction: column;
             }
-            .review-stars {
-            font-size: 16px;
-        }
-           /* Loại bỏ user-action trên các thiết bị di động vì chúng có thể bị tràn lề ra bên ngoài
-              trong khi các tác vụ xóa, sửa thì phải được ưu tiên để giúp user thuận tiện trong việc thao tác
-            */
-           .user-actions{
-            display: block;
-            text-align: right;
+            .dice {
+                font-size: 80px;
             }
-            .user-actions .buttons {
-                display: inline-flex; /* Giúp các button hiển thị theo hàng ngang*/
-                gap: 1px; /* Đặt khoảng cách các nút sát lại */
-            }
-             .user-actions .buttons button{
-               padding: 2px 5px;
-               font-size: 11px;
-            }
-
         }
     </style>
 </head>
 <body>
     <h1>Đánh giá</h1>
     <div class="rating">
-        <span class="star" data-value="1">★</span>
-        <span class="star" data-value="2">★</span>
-        <span class="star" data-value="3">★</span>
-        <span class="star" data-value="4">★</span>
-        <span class="star" data-value="5">★</span>
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
         <span id="rating-value">0 sao</span>
     </div>
     <input type="text" id="username" placeholder="Nhập tên của bạn...">
@@ -302,7 +273,7 @@
 
             const ratingStars = document.createElement('p');
             ratingStars.classList.add('review-stars');
-            ratingStars.innerHTML = "Số sao: " + "<span>" + "★".repeat(parseInt(review.rating)) + "</span>";
+            ratingStars.innerHTML = "Số sao: " + "<span>" + "&#9733;".repeat(parseInt(review.rating)) + "</span>";
 
             const commentText = document.createElement('p');
             commentText.textContent = `Bình luận: ${review.comment}`;
