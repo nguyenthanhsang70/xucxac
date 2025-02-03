@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đánh giá sao và bình luận</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .star {
+            font-size: 30px;
+            color: gray;
+            cursor: pointer;
+        }
+        .star.active {
+            color: gold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .review {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .review p {
+            margin: 5px 0;
+        }
+        .review-stars {
+            font-size: 20px;
+            color: black;
+        }
+        .review-stars span {
+            color: gold;
+        }
+        .admin-tag {
+            color: red;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .reply-section {
+            margin-left: 20px;
+            border-left: 2px solid #ccc;
+            padding-left: 10px;
+        }
+        .reply-input {
+            width: calc(100% - 20px);
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        .reply-button {
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .reply-button:hover {
+            background-color: #218838;
+        }
+        .reply {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+        .user-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .user-actions .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .action-buttons button {
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .action-buttons button.edit {
+            background-color: #ffc107;
+        }
+        .action-buttons button:hover {
+            opacity: 0.9;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .name-input-container input {
+                width: 100%;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .dice {
+                font-size: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Đánh giá</h1>
+    <div class="rating">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+        <span id="rating-value">0 sao</span>
+    </div>
+    <input type="text" id="username" placeholder="Nhập tên của bạn...">
+    <textarea id="comment" placeholder="Nhập bình luận của bạn..."></textarea>
+    <button onclick="submitReview()">Gửi đánh giá</button>
+    <div id="reviews-container">
+        <h2>Các đánh giá đã gửi:</h2>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.star');
+        let selectedRating = 0;
+
+        // Load reviews from localStorage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+            savedReviews.forEach(review => addReviewToDOM(review));
+        });
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                selectedRating = star.getAttribute('data-value');
+                updateStars();
+                document.getElementById('rating-value').textContent = `${selectedRating} sao`;
+            });
+        });
+
+        function updateStars() {
+            stars.forEach(star => {
+                if (star.getAttribute('data-value') <= selectedRating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function submitReview() {
+            const username = document.getElementById('username').value.trim();
+            const comment = document.getElementById('comment').value.trim();
+            if (selectedRating === 0 || comment === "" || username === "") {
+                alert("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+            const existingReviewIndex = savedReviews.findIndex(review => review.username === username);
+
+            if (existingReviewIndex !== -1) {
+                // Nếu người dùng đã tồn tại, cập nhật bình luận của họ
+                savedReviews[existingReviewIndex].rating = selectedRating;
+                savedReviews[existingReviewIndex].comment = comment;
+                localStorage.setItem('reviews', JSON.stringify(savedReviews));
+                // Cập nhật lại giao diện
+                updateReviewsDisplay();
+            } else {
+                // Nếu người dùng mới, thêm bình luận mới
+                const isAdmin = username === "Nguyễn Thanh Sang"; // Kiểm tra xem có phải admin không
+                const review = {
+                    username,
+                    rating: selectedRating,
+                    comment,
+                    isAdmin,
+                    replies: []
+                };
+                savedReviews.push(review);
+                localStorage.setItem('reviews', JSON.stringify(savedReviews));
+                // Thêm bình luận mới vào giao diện
+                addReviewToDOM(review);
+            }
+
+            // Reset form
+            selectedRating = 0;
+            updateStars();
+            document.getElementById('username').value = "";
+            document.getElementById('comment').value = "";
+            document.getElementById('rating-value').textContent = "0 sao";
+        }
+
+        function updateReviewsDisplay() {
+            const reviewsContainer = document.getElementById('reviews-container');
+            reviewsContainer.innerHTML = "<h2>Các đánh giá đã gửi:</h2>"; // Xóa nội dung cũ
+            const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+            savedReviews.forEach(review => addReviewToDOM(review));
+        }
+
+        function addReviewToDOM(review) {
+            const reviewContainer = document.getElementById('reviews-container');
+            const reviewDiv = document.createElement('div');
+            reviewDiv.classList.add('review');
+            reviewDiv.setAttribute('data-username', review.username); // Lưu tên người dùng để kiểm tra
+
+            // User actions container
+            const userActions = document.createElement('div');
+            userActions.classList.add('user-actions');
+
+            // Display username or admin tag
+            const usernameText = document.createElement('p');
+            if (review.isAdmin) {
+                usernameText.innerHTML = `Nguyễn Thanh Sang<span class="admin-tag">(admin)</span>`;
+            } else {
+                usernameText.textContent = `Người dùng: ${review.username}`;
+            }
+
+            // Buttons for edit and delete
+            const actionButtons = document.createElement('div');
+            actionButtons.classList.add('buttons');
+
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Chỉnh sửa';
+            editButton.classList.add('edit');
+            editButton.onclick = () => editComment(commentText, review);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Xóa';
+            deleteButton.onclick = () => deleteReview(reviewDiv, review);
+
+            // Check permissions
+            const currentUser = document.getElementById('username').value.trim();
+            if (currentUser === review.username) {
+                // Regular user can edit and delete their own review
+                actionButtons.appendChild(editButton);
+                actionButtons.appendChild(deleteButton);
+            } else if (currentUser === "Nguyễn Thanh Sang") {
+                // Admin can delete any review
+                actionButtons.appendChild(deleteButton);
+            } else {
+                // Hide buttons for other users
+                actionButtons.classList.add('hidden');
+            }
+
+            userActions.appendChild(usernameText);
+            userActions.appendChild(actionButtons);
+
+            const ratingStars = document.createElement('p');
+            ratingStars.classList.add('review-stars');
+            ratingStars.innerHTML = "Số sao: " + "<span>" + "&#9733;".repeat(parseInt(review.rating)) + "</span>";
+
+            const commentText = document.createElement('p');
+            commentText.textContent = `Bình luận: ${review.comment}`;
+            commentText.setAttribute('contenteditable', 'false'); // Cho phép chỉnh sửa khi cần
+
+            // Reply section
+            const replySection = document.createElement('div');
+            replySection.classList.add('reply-section');
+            const replyInput = document.createElement('input');
+            replyInput.type = 'text';
+            replyInput.classList.add('reply-input');
+            replyInput.placeholder = 'Nhập phản hồi...';
+            const replyButton = document.createElement('button');
+            replyButton.classList.add('reply-button');
+            replyButton.textContent = 'Phản hồi';
+            replyButton.onclick = () => addReply(replySection, reviewDiv, replyInput.value);
+            replySection.appendChild(replyInput);
+            replySection.appendChild(replyButton);
+
+            // Display existing replies
+            review.replies.forEach(reply => {
+                const replyDiv = createReplyElement(reply);
+                replySection.appendChild(replyDiv);
+            });
+
+            reviewDiv.appendChild(userActions);
+            reviewDiv.appendChild(ratingStars);
+            reviewDiv.appendChild(commentText);
+            reviewDiv.appendChild(replySection);
+            reviewContainer.appendChild(reviewDiv);
+        }
+
+        function editComment(commentText, review) {
+            const currentUser = document.getElementById('username').value.trim();
+            if (currentUser !== review.username) {
+                alert("Bạn không có quyền chỉnh sửa bình luận này!");
+                return;
+            }
+
+            const isEditable = commentText.getAttribute('contenteditable') === 'true';
+            if (isEditable) {
+                // Save changes
+                commentText.setAttribute('contenteditable', 'false');
+                const newComment = commentText.textContent;
+                review.comment = newComment;
+
+                // Update in localStorage
+                const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+                const reviewIndex = savedReviews.findIndex(r => r.username === review.username);
+                if (reviewIndex !== -1) {
+                    savedReviews[reviewIndex].comment = newComment;
+                    localStorage.setItem('reviews', JSON.stringify(savedReviews));
+                }
+            } else {
+                // Enable editing
+                commentText.setAttribute('contenteditable', 'true');
+                commentText.focus();
+            }
+        }
+
+        function deleteReview(reviewDiv, review) {
+            const currentUser = document.getElementById('username').value.trim();
+            if (currentUser !== review.username && currentUser !== "Nguyễn Thanh Sang") {
+                alert("Bạn không có quyền xóa bình luận này!");
+                return;
+            }
+
+            if (confirm("Bạn có chắc chắn muốn xóa bình luận này?")) {
+                reviewDiv.remove();
+
+                // Remove from localStorage
+                const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+                const updatedReviews = savedReviews.filter(r => r.username !== review.username);
+                localStorage.setItem('reviews', JSON.stringify(updatedReviews));
+            }
+        }
+
+        function addReply(replySection, reviewDiv, replyText) {
+            const username = "Nguyễn Thanh Sang"; // Tên người được phép phản hồi
+            const reviewUsername = reviewDiv.getAttribute('data-username'); // Lấy tên người bình luận
+            if (replyText.trim() === "") {
+                alert("Vui lòng nhập nội dung phản hồi!");
+                return;
+            }
+            if (username === reviewUsername) {
+                alert("Bạn không thể tự phản hồi bình luận của chính mình!");
+                return;
+            }
+            const reply = {
+                username: "Nguyễn Thanh Sang",
+                text: replyText
+            };
+            // Update local storage
+            const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+            const reviewIndex = savedReviews.findIndex(review => review.username === reviewUsername);
+            if (reviewIndex !== -1) {
+                savedReviews[reviewIndex].replies.push(reply);
+                localStorage.setItem('reviews', JSON.stringify(savedReviews));
+            }
+            // Add reply to DOM
+            const replyDiv = createReplyElement(reply);
+            replySection.appendChild(replyDiv);
+        }
+
+        function createReplyElement(reply) {
+            const replyDiv = document.createElement('div');
+            replyDiv.classList.add('reply');
+            const replyText = document.createElement('p');
+            replyText.innerHTML = `<strong>${reply.username}${reply.username === "Nguyễn Thanh Sang" ? '<span class="admin-tag">(admin)</span>' : ''}:</strong> ${reply.text}`;
+            replyDiv.appendChild(replyText);
+            return replyDiv;
+        }
+    </script>
+</body>
+</html>
