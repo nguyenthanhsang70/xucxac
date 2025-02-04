@@ -58,7 +58,7 @@
 
     <script>
         let historyData = JSON.parse(localStorage.getItem('externalWebsiteHistory')) || [];
-        
+
         function getDeviceInfo() {
             const userAgent = navigator.userAgent;
             let deviceInfo = { "Hãng": "Không xác định", "Loại thiết bị": "Không xác định", "Hệ điều hành": "Không xác định", "RAM": "Không xác định", "Card đồ họa": "Không xác định", "Kích thước màn hình": `${window.screen.width}x${window.screen.height}px` };
@@ -92,7 +92,27 @@
             document.getElementById("deviceInfo").innerHTML = tableHTML;
         }
 
+        window.addEventListener("beforeunload", function () {
+    const title = document.title;
+    const url = window.location.href;
+    const timestamp = new Date().toLocaleString();
+
+    historyData.push({ name: title, url: url, timestamp: timestamp });
+    localStorage.setItem('externalWebsiteHistory', JSON.stringify(historyData));
+});
+
+
+        function saveCurrentPage() {
+            const title = document.title;
+            const url = window.location.href;
+            const timestamp = new Date().toLocaleString();
+            
+            historyData.push({ name: title, url: url, timestamp: timestamp });
+            localStorage.setItem('externalWebsiteHistory', JSON.stringify(historyData));
+        }
+
         function updateHistory() {
+            saveCurrentPage();
             showHistory();
         }
 
@@ -118,6 +138,8 @@
 
         document.getElementById("currentUrl").innerText = window.location.href;
         document.getElementById("currentTitle").innerText = document.title;
+        
+        saveCurrentPage();
     </script>
 </body>
 </html>
