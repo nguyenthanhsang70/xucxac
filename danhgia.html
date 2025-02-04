@@ -20,18 +20,6 @@
         th {
             background-color: #f2f2f2;
         }
-         /* Media Queries for Mobile Devices */
-         @media (max-width: 600px) {
-            .name-input-container input {
-                width: 100%;
-            }
-            .controls {
-                flex-direction: column;
-            }
-            .dice {
-                font-size: 80px;
-            }
-        }
     </style>
     <script>
         function getDeviceName() {
@@ -40,110 +28,90 @@
                 "Hãng": "Không xác định",
                 "Loại thiết bị": "Không xác định",
                 "Hệ điều hành": "Không xác định",
-                "Phiên bản hệ điều hành": "Không xác định",
-                "Model": "Không xác định",
-                "RAM": "Không thể lấy thông tin",
-                "CPU": "Không thể lấy thông tin",
-                "Bộ nhớ trong": "Không thể lấy thông tin",
                 "Kích thước màn hình": "Không thể lấy thông tin",
-                "Bộ xử lý": "Không thể lấy thông tin",
-                "Kiểu máy": "Không thể lấy thông tin"
+                "Card đồ họa": "Không thể lấy thông tin"
             };
 
             if (userAgent.match(/Android/i)) {
-                deviceInfo["Hãng"] = "Hãng không xác định";
-                deviceInfo["Loại thiết bị"] = "Điện thoại/Thiết bị Android";
+                deviceInfo["Hãng"] = "Android";
+                deviceInfo["Loại thiết bị"] = "Điện thoại Android";
                 deviceInfo["Hệ điều hành"] = "Android";
-
-                // Lấy tên hãng và model nếu có trong userAgent
-                const match = userAgent.match(/\((.*?)\)/);
-                if (match && match[1]) {
-                    const details = match[1].split(';');
-                    if (details.length > 1) {
-                        deviceInfo["Model"] = details[1].trim();
-                        const brandMatch = details[1].match(/([A-Za-z]+)\s?(.*)/);
-                        if (brandMatch) {
-                            deviceInfo["Hãng"] = brandMatch[1];
-                        }
-                    }
-                }
             } else if (userAgent.match(/iPhone|iPad|iPod/i)) {
                 deviceInfo["Hãng"] = "Apple";
-                if (userAgent.match(/iPhone/i)) {
-                    deviceInfo["Loại thiết bị"] = "iPhone";
-                } else if (userAgent.match(/iPad/i)) {
-                    deviceInfo["Loại thiết bị"] = "iPad";
-                } else if (userAgent.match(/iPod/i)) {
-                    deviceInfo["Loại thiết bị"] = "iPod";
-                }
+                deviceInfo["Loại thiết bị"] = userAgent.match(/iPhone/i) ? "iPhone" : "iPad";
                 deviceInfo["Hệ điều hành"] = "iOS";
-
-                // Lấy thêm thông tin phiên bản iOS
-                const iosMatch = userAgent.match(/iPhone OS (\d+_[\d_]+) like Mac OS X/);
-                if (iosMatch && iosMatch[1]) {
-                    deviceInfo["Phiên bản hệ điều hành"] = iosMatch[1].replace(/_/g, '.');
-                }
             } else if (userAgent.match(/Windows/i)) {
                 deviceInfo["Hãng"] = "Microsoft";
                 deviceInfo["Loại thiết bị"] = "Máy tính Windows";
                 deviceInfo["Hệ điều hành"] = "Windows";
-
-                // Lấy thêm thông tin về phiên bản Windows
+                
                 const winMatch = userAgent.match(/Windows NT (\d+\.\d+)/);
                 if (winMatch && winMatch[1]) {
                     const windowsVersion = parseFloat(winMatch[1]);
                     switch (windowsVersion) {
                         case 10.0:
-                            deviceInfo["Phiên bản hệ điều hành"] = "Windows 10";
+                            deviceInfo["Phiên bản Windows"] = "Windows 10";
+                            break;
+                        case 11.0:
+                            deviceInfo["Phiên bản Windows"] = "Windows 11";
                             break;
                         case 6.3:
-                            deviceInfo["Phiên bản hệ điều hành"] = "Windows 8.1";
+                            deviceInfo["Phiên bản Windows"] = "Windows 8.1";
                             break;
                         case 6.2:
-                            deviceInfo["Phiên bản hệ điều hành"] = "Windows 8";
+                            deviceInfo["Phiên bản Windows"] = "Windows 8";
                             break;
                         case 6.1:
-                            deviceInfo["Phiên bản hệ điều hành"] = "Windows 7";
+                            deviceInfo["Phiên bản Windows"] = "Windows 7";
+                            break;
+                        case 6.0:
+                            deviceInfo["Phiên bản Windows"] = "Windows Vista";
+                            break;
+                        case 5.1:
+                        case 5.2:
+                            deviceInfo["Phiên bản Windows"] = "Windows XP";
                             break;
                         default:
-                            deviceInfo["Phiên bản hệ điều hành"] = `Windows NT ${windowsVersion}`;
+                            deviceInfo["Phiên bản Windows"] = `Windows NT ${windowsVersion}`;
                     }
                 }
             } else if (userAgent.match(/Macintosh|MacIntel/i)) {
                 deviceInfo["Hãng"] = "Apple";
                 deviceInfo["Loại thiết bị"] = "Mac";
                 deviceInfo["Hệ điều hành"] = "macOS";
-
-                // Lấy thêm thông tin macOS nếu có
-                const macMatch = userAgent.match(/Mac OS X (\d+_\d+)/);
-                if (macMatch && macMatch[1]) {
-                    deviceInfo["Phiên bản hệ điều hành"] = `macOS ${macMatch[1].replace(/_/g, '.')}`;
-                }
             } else if (userAgent.match(/Linux/i)) {
                 deviceInfo["Hãng"] = "Không xác định";
-                deviceInfo["Loại thiết bị"] = "Thiết bị Linux";
+                deviceInfo["Loại thiết bị"] = "Linux";
                 deviceInfo["Hệ điều hành"] = "Linux";
-
-                // Kiểm tra xem có phải là Chromebook hay không
                 if (userAgent.match(/CrOS/i)) {
                     deviceInfo["Hãng"] = "Google";
                     deviceInfo["Loại thiết bị"] = "Chromebook";
                 }
             }
 
-            // Thêm thông tin RAM, CPU, bộ nhớ trong, kích thước màn hình
-            if (navigator.deviceMemory) {
-                deviceInfo["RAM"] = `${navigator.deviceMemory} GB`;
-            }
-            if (navigator.hardwareConcurrency) {
-                deviceInfo["CPU"] = `${navigator.hardwareConcurrency} cores`;
-            }
+            // Lấy kích thước màn hình
             if (screen.width && screen.height) {
                 const screenSizeInches = Math.sqrt(Math.pow(screen.width / window.devicePixelRatio, 2) + Math.pow(screen.height / window.devicePixelRatio, 2)) / 96;
                 deviceInfo["Kích thước màn hình"] = `${screenSizeInches.toFixed(1)} inch`;
             }
 
-            // Hiển thị bảng thông số
+            // Lấy thông tin GPU bằng WebGL
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        deviceInfo["Card đồ họa"] = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    } else {
+                        deviceInfo["Card đồ họa"] = "Không thể xác định";
+                    }
+                }
+            } catch (e) {
+                deviceInfo["Card đồ họa"] = "Không thể xác định";
+            }
+
+            // Hiển thị kết quả
             let tableHTML = "<table><tr><th>Thông số</th><th>Chi tiết</th></tr>";
             for (const key in deviceInfo) {
                 tableHTML += `<tr><td>${key}</td><td>${deviceInfo[key]}</td></tr>`;
@@ -154,7 +122,7 @@
     </script>
 </head>
 <body>
-    <h1>Nhấn nút để nhận diện thiết bị của bạn</h1>
+    <h1>Nhận diện thiết bị của bạn</h1>
     <button onclick="getDeviceName()">Nhận diện thiết bị</button>
     <div id="deviceInfo"></div>
 </body>
