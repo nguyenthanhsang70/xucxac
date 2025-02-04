@@ -146,7 +146,18 @@
         <h2>Các đánh giá đã gửi:</h2>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
     <script>
+        const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
         const stars = document.querySelectorAll('.star');
         let selectedRating = 0;
 
@@ -386,6 +397,7 @@
             replyDiv.appendChild(replyText);
             return replyDiv;
         }
+        document.addEventListener('DOMContentLoaded', loadReviews);
     </script>
 </body>
 </html>
