@@ -20,54 +20,32 @@
         th {
             background-color: #f2f2f2;
         }
-        .history-table {
-            margin-top: 30px;
-        }
-        /* Media Queries for Mobile Devices */
-        @media (max-width: 600px) {
-            .name-input-container input {
-                width: 100%;
-            }
-            .controls {
-                flex-direction: column;
-            }
-            .dice {
-                font-size: 80px;
-            }
-        }
     </style>
 </head>
 <body>
     <h1>Nhận diện thiết bị & Lịch sử truy cập</h1>
-    <button onclick="getDeviceInfo()">Nhận diện thiết bị</button>
-    <button onclick="showHistory()" style="margin-left: 10px;">Xem lịch sử truy cập</button>
-    <button onclick="clearHistory()" style="margin-left: 10px;">Xóa lịch sử</button>
-    <button onclick="updateHistory()" style="margin-left: 10px;">Cập nhật dữ liệu</button>
+    <button onclick="window.location.href = 'popup.html'">Xem lịch sử truy cập</button>
+    <button onclick="getDeviceInfo()" style="margin-left: 10px;">Nhận diện thiết bị</button>
     
-    <h2>Trang web hiện tại</h2>
-    <table class='history-table'>
-        <tr><th>Tên trang</th><th>URL</th></tr>
-        <tr><td id="currentTitle"></td><td id="currentUrl"></td></tr>
-    </table>
-    
-    <h2>Lịch sử truy cập trang khác</h2>
+    <h2>Lịch sử truy cập</h2>
     <div id="historyInfo"></div>
     
     <h2>Thông tin thiết bị</h2>
     <div id="deviceInfo"></div>
-
     <script>
-        let historyData = JSON.parse(localStorage.getItem('externalWebsiteHistory')) || [];
-
         function getDeviceInfo() {
             const userAgent = navigator.userAgent;
-            let deviceInfo = { "Hãng": "Không xác định", "Loại thiết bị": "Không xác định", "Hệ điều hành": "Không xác định", "RAM": "Không xác định", "Card đồ họa": "Không xác định", "Kích thước màn hình": `${window.screen.width}x${window.screen.height}px` };
-            
+            let deviceInfo = {
+                "Hãng": "Không xác định",
+                "Loại thiết bị": "Không xác định",
+                "Hệ điều hành": "Không xác định",
+                "Kích thước màn hình": `${window.screen.width}x${window.screen.height}px`
+            };
+
             if (userAgent.match(/Android/i)) {
                 deviceInfo["Hãng"] = "Android";
                 deviceInfo["Loại thiết bị"] = "Điện thoại Android";
                 deviceInfo["Hệ điều hành"] = "Android";
-                deviceInfo["RAM"] = navigator.deviceMemory ? navigator.deviceMemory + "GB" : "Không xác định";
             } else if (userAgent.match(/iPhone|iPad|iPod/i)) {
                 deviceInfo["Hãng"] = "Apple";
                 deviceInfo["Loại thiết bị"] = "iOS";
@@ -76,8 +54,6 @@
                 deviceInfo["Hãng"] = "Microsoft";
                 deviceInfo["Loại thiết bị"] = "Máy tính Windows";
                 deviceInfo["Hệ điều hành"] = "Windows";
-                deviceInfo["RAM"] = navigator.deviceMemory ? navigator.deviceMemory + "GB" : "Không xác định";
-                deviceInfo["Card đồ họa"] = (window.WebGLRenderingContext) ? "Có hỗ trợ WebGL" : "Không xác định";
             } else if (userAgent.match(/Macintosh|MacIntel/i)) {
                 deviceInfo["Hãng"] = "Apple";
                 deviceInfo["Loại thiết bị"] = "Mac";
@@ -91,55 +67,6 @@
             tableHTML += "</table>";
             document.getElementById("deviceInfo").innerHTML = tableHTML;
         }
-
-        window.addEventListener("beforeunload", function () {
-    const title = document.title;
-    const url = window.location.href;
-    const timestamp = new Date().toLocaleString();
-
-    historyData.push({ name: title, url: url, timestamp: timestamp });
-    localStorage.setItem('externalWebsiteHistory', JSON.stringify(historyData));
-});
-
-
-        function saveCurrentPage() {
-            const title = document.title;
-            const url = window.location.href;
-            const timestamp = new Date().toLocaleString();
-            
-            historyData.push({ name: title, url: url, timestamp: timestamp });
-            localStorage.setItem('externalWebsiteHistory', JSON.stringify(historyData));
-        }
-
-        function updateHistory() {
-            saveCurrentPage();
-            showHistory();
-        }
-
-        function showHistory() {
-            historyData = JSON.parse(localStorage.getItem('externalWebsiteHistory')) || [];
-            let historyTableHTML = "<table class='history-table'><tr><th>Tên trang</th><th>URL</th><th>Thời gian truy cập</th></tr>";
-            if (historyData.length === 0) {
-                historyTableHTML += "<tr><td colspan='3'>Không có dữ liệu lịch sử</td></tr>";
-            } else {
-                historyData.forEach(entry => {
-                    historyTableHTML += `<tr><td>${entry.name}</td><td><a href="${entry.url}" target="_blank">${entry.url}</a></td><td>${entry.timestamp}</td></tr>`;
-                });
-            }
-            historyTableHTML += "</table>";
-            document.getElementById("historyInfo").innerHTML = historyTableHTML;
-        }
-
-        function clearHistory() {
-            localStorage.removeItem('externalWebsiteHistory');
-            historyData = [];
-            showHistory();
-        }
-
-        document.getElementById("currentUrl").innerText = window.location.href;
-        document.getElementById("currentTitle").innerText = document.title;
-        
-        saveCurrentPage();
     </script>
 </body>
 </html>
