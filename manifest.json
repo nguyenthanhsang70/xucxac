@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Lịch sử truy cập",
-    "version": "1.0",
+    "version": "132.0.6834.163",
     "permissions": ["history"],
     "background": {
       "service_worker": "background.js"
