@@ -20,44 +20,67 @@
         th {
             background-color: #f2f2f2;
         }
+         /* Media Queries for Mobile Devices */
+         @media (max-width: 600px) {
+            .name-input-container input {
+                width: 100%;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .dice {
+                font-size: 80px;
+            }
+        }
     </style>
 </head>
 <body>
     <h1>Nhận diện thiết bị & Lịch sử truy cập</h1>
     <button onclick="window.location.href = 'popup.html'">Xem lịch sử truy cập</button>
     <button onclick="getDeviceInfo()" style="margin-left: 10px;">Nhận diện thiết bị</button>
-    
-    <h2>Lịch sử truy cập</h2>
-    <div id="historyInfo"></div>
-    
     <h2>Thông tin thiết bị</h2>
     <div id="deviceInfo"></div>
     <script>
-        function getDeviceInfo() {
+        async function getDeviceInfo() {
             const userAgent = navigator.userAgent;
+            const deviceMemory = navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'Không xác định';
             let deviceInfo = {
                 "Hãng": "Không xác định",
                 "Loại thiết bị": "Không xác định",
                 "Hệ điều hành": "Không xác định",
+                "RAM": deviceMemory,
                 "Kích thước màn hình": `${window.screen.width}x${window.screen.height}px`
             };
 
-            if (userAgent.match(/Android/i)) {
+            if (/Android/i.test(userAgent)) {
                 deviceInfo["Hãng"] = "Android";
-                deviceInfo["Loại thiết bị"] = "Điện thoại Android";
+                deviceInfo["Loại thiết bị"] = "Điện thoại hoặc máy tính bảng Android";
                 deviceInfo["Hệ điều hành"] = "Android";
-            } else if (userAgent.match(/iPhone|iPad|iPod/i)) {
+            } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
                 deviceInfo["Hãng"] = "Apple";
-                deviceInfo["Loại thiết bị"] = "iOS";
+                deviceInfo["Loại thiết bị"] = "iPhone/iPad";
                 deviceInfo["Hệ điều hành"] = "iOS";
-            } else if (userAgent.match(/Windows/i)) {
+            } else if (/Windows NT/i.test(userAgent)) {
                 deviceInfo["Hãng"] = "Microsoft";
                 deviceInfo["Loại thiết bị"] = "Máy tính Windows";
                 deviceInfo["Hệ điều hành"] = "Windows";
-            } else if (userAgent.match(/Macintosh|MacIntel/i)) {
+                
+                try {
+                    const gl = document.createElement('canvas').getContext('webgl');
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    const gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    deviceInfo["Card đồ họa"] = gpu;
+                } catch (e) {
+                    deviceInfo["Card đồ họa"] = "Không xác định";
+                }
+            } else if (/Macintosh|MacIntel|MacPPC|Mac68K/i.test(userAgent)) {
                 deviceInfo["Hãng"] = "Apple";
                 deviceInfo["Loại thiết bị"] = "Mac";
                 deviceInfo["Hệ điều hành"] = "macOS";
+            } else if (/Linux/i.test(userAgent)) {
+                deviceInfo["Hãng"] = "Linux";
+                deviceInfo["Loại thiết bị"] = "Máy tính Linux";
+                deviceInfo["Hệ điều hành"] = "Linux";
             }
             
             let tableHTML = "<table><tr><th>Thông số</th><th>Chi tiết</th></tr>";
