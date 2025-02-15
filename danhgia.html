@@ -29,6 +29,7 @@
 </style>
 </head>
 <body>
+<h1> Game Caro</h1>
 <div id="controls">
   <button id="playAI">Chơi với máy</button>
   <button id="playHuman">Chơi với người</button>
@@ -215,22 +216,24 @@ function getVeryHardMove() {
 }
 
 function getImpossibleMove() {
-  const winningMove = findWinningMove(currentPlayer);
-  if (winningMove) return winningMove;
+  let bestMove = null;
+  let bestScore = -Infinity;
 
-  const blockingMove = findWinningMove(playerChoice);
-  if (blockingMove) return blockingMove;
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      if (!board[i][j]) {
+        board[i][j] = currentPlayer;
+        let score = evaluateBoard(currentPlayer) - evaluateBoard(playerChoice);
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = { row: i, col: j };
+        }
+        board[i][j] = null;
+      }
+    }
+  }
 
-  const strategicMove = findStrategicMove();
-  if (strategicMove) return strategicMove;
-
-  const defensiveMove = findDefensiveMove();
-  if (defensiveMove) return defensiveMove;
-
-  const trapMove = findTrapMove();
-  if (trapMove) return trapMove;
-
-  return getRandomMove();
+  return bestMove || getRandomMove();
 }
 
 function findWinningMove(player) {
@@ -308,6 +311,63 @@ function findDefensiveMove() {
   }
   return null;
 }
+const strategicPatterns = [
+  { pattern: "XXXXX", score: 100000 }, // Thắng ngay
+  { pattern: "_XXXX_", score: 50000 }, // Chờ thắng 2 đầu
+  { pattern: "OXXXX_", score: 10000 }, // Chặn một đầu
+  { pattern: "_XXXXO", score: 10000 },
+  { pattern: "_XXX_", score: 5000 }, // Tạo nước đôi
+  { pattern: "OXXX_", score: 2000 },
+  { pattern: "_XXXO", score: 2000 },
+  { pattern: "_XX_", score: 1000 },
+  { pattern: "OXX_", score: 500 },
+  { pattern: "_XXO", score: 500 }
+];
+
+function evaluateBoard(player) {
+  let score = 0;
+  const lines = getAllLines();
+  
+  lines.forEach(line => {
+    strategicPatterns.forEach(({ pattern, score: value }) => {
+      if (line.includes(pattern.replace(/X/g, player))) {
+        score += value;
+      }
+    });
+  });
+  return score;
+}
+
+function getAllLines() {
+  let lines = [];
+  
+  // Duyệt tất cả hàng ngang, dọc, chéo
+  for (let i = 0; i < boardSize; i++) {
+    lines.push(board[i].join(""));
+    let col = "";
+    for (let j = 0; j < boardSize; j++) {
+      col += board[j][i] || "_";
+    }
+    lines.push(col);
+  }
+  
+  // Lấy đường chéo
+  for (let d = -(boardSize - 1); d <= boardSize - 1; d++) {
+    let diag1 = "", diag2 = "";
+    for (let i = 0; i < boardSize; i++) {
+      let j1 = i - d;
+      let j2 = boardSize - 1 - i - d;
+      if (j1 >= 0 && j1 < boardSize) diag1 += board[i][j1] || "_";
+      if (j2 >= 0 && j2 < boardSize) diag2 += board[i][j2] || "_";
+    }
+    if (diag1) lines.push(diag1);
+    if (diag2) lines.push(diag2);
+  }
+  
+  return lines;
+}
+
+
 
 function findTrapMove() {
   const emptyCells = [];
@@ -362,5 +422,8 @@ document.getElementById('winCondition').addEventListener('change', (event) => {
 
 createBoard();
 </script>
+<footer>
+        © Bản quyền thuộc về Nguyễn Thanh Sang
+    </footer>
 </body>
 </html>
