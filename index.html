@@ -1,231 +1,57 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xúc Xắc Ngẫu Nhiên</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #e0f7fa;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 100vh;
-            color: #333;
-        }
-        .container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 20px;
-        }
-        .name-input-container {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .name-input-container input {
-            padding: 10px;
-            font-size: 1em;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 200px;
-        }
-        button {
-            padding: 10px 15px;
-            font-size: 1em;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-        button:active {
-            background-color: #004080;
-            transform: scale(0.95);
-        }
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .dice {
-            font-size: 100px;
-            margin-top: 20px;
-            color: #d32f2f;
-            display: inline-block;
-            animation: none;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(90deg); }
-            50% { transform: rotate(180deg); }
-            75% { transform: rotate(270deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .rolling {
-            animation: spin 0.5s ease-in-out;
-        }
-        .result-table {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 300px;
-            border-collapse: collapse;
-        }
-        .result-table th, .result-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        .result-table th {
-            background-color: #f2f2f2;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #f2f2f2;
-            width: 100%;
-        }
+  <head>
+    <title>Thế giới của anhhhh</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        /* Media Queries for Mobile Devices */
-        @media (max-width: 600px) {
-            .name-input-container input {
-                width: 100%;
-            }
-            .controls {
-                flex-direction: column;
-            }
-            .dice {
-                font-size: 80px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2 style="color: #d32f2f;">Xúc Xắc Vui Vẻ 🎲✨</h2>
-        <div class="name-input-container">
-            <input type="text" id="nameInput" placeholder="Nhập tên của bạn">
-            <button onclick="openNameSpinner()">Quay Tên</button>
-        </div>
-        <div class="controls">
-            <button onclick="resetGame()">Làm mới</button>
-            <select id="diceCount" onchange="toggleDiceDisplay()">
-                <option value="1">1 Xúc Xắc</option>
-                <option value="2">2 Xúc Xắc</option>
-            </select>
-            <button onclick="rollDice()">Lắc Xúc Xắc</button>
-        </div>
-        <div>
-            <span class="dice" id="dice1">🎲</span>
-            <span class="dice" id="dice2" style="display: none;">🎲</span>
-        </div>
-        <table class="result-table" id="resultTable">
-            <thead>
-                <tr>
-                    <th>Tên</th>
-                    <th>Kết quả</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/spinload.css">
+    <link rel="stylesheet" type="text/css" href=" https://fonts.googleapis.com/css?family=Pacifico" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Preloader -->
+    <div id="preloader">
+      <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+  </div>
+      <div id="bg"></div>
+      <div class="content">
+        <div class="back-container">
+          <a href="index.html">
+              <i class="fas fa-arrow-left"></i> Quay lại
+          </a>
+      </div>
+        <header>
+          <h2 id="title"></h2>
+          <h4 id="desc"></h4>
+        </header>
+        <button id="yes" type="button" class="btn btn-danger btn-lg"> </button>
+        <button id="no" type="button" class="btn btn-info btn-lg"></button>
+        
+      </div>
     </div>
-    <script>
-        function rollDice() {
-            const dice1 = document.getElementById('dice1');
-            const dice2 = document.getElementById('dice2');
-            const nameInput = document.getElementById('nameInput').value.trim();
-            const diceCount = parseInt(document.getElementById('diceCount').value);
-            const resultTable = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
+    <audio src="sound.mp3" autoplay></audio>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="config.js"></script>
+    <script src="main.js"></script>
 
-            if (nameInput === "") {
-                alert("Bạn phải nhập tên mới được phép lắc!");
-                return;
-            }
-
-            // Thêm hiệu ứng quay
-            dice1.classList.add("rolling");
-            dice2.classList.add("rolling");
-
-            setTimeout(() => {
-                dice1.classList.remove("rolling");
-                dice2.classList.remove("rolling");
-
-                let roll1, roll2;
-
-                if (nameInput.toLowerCase() === "sang") {
-                    // Tỷ lệ đặc biệt cho tên "Sang"
-                    const random = Math.random();
-                    if (diceCount === 1) {
-                        if (random < 0.7) {
-                            roll1 = 6;
-                        } else if (random < 0.5) {
-                            roll1 = 5;
-                        } else {
-                            roll1 = Math.floor(Math.random() * 4) + 1;
-                        }
-                    } else {
-                        if (random < 0.7) {
-                            roll1 = 6;
-                            roll2 = 6;
-                        } else if (random < 0.5) {
-                            roll1 = 5;
-                            roll2 = 5;
-                        } else {
-                            roll1 = Math.floor(Math.random() * 4) + 1;
-                            roll2 = Math.floor(Math.random() * 4) + 1;
-                        }
-                    }
-                } else {
-                    // Tỷ lệ ngẫu nhiên cho các tên khác
-                    roll1 = Math.floor(Math.random() * 6) + 1;
-                    roll2 = diceCount === 2 ? Math.floor(Math.random() * 6) + 1 : 0;
-                }
-
-                dice1.textContent = "🎲";
-                dice2.textContent = diceCount === 2 ? "🎲" : '';
-
-                const newRow = resultTable.insertRow();
-                newRow.insertCell(0).textContent = nameInput;
-                newRow.insertCell(1).textContent = diceCount === 2 ? roll1 + roll2 : roll1;
-            }, 500);
-        }
-
-        function resetGame() {
-            document.getElementById('nameInput').value = '';
-            document.getElementById('resultTable').getElementsByTagName('tbody')[0].innerHTML = '';
-        }
-
-        function toggleDiceDisplay() {
-            document.getElementById('dice2').style.display = document.getElementById('diceCount').value === "2" ? 'inline-block' : 'none';
-        }
-
-        function openNameSpinner() {
-            window.open("quayten.html", "_blank", "width=400,height=500");
-        }
-    </script>
-    <footer>
-        © Bản quyền thuộc về Nguyễn Thanh Sang
-    </footer>
-</body>
+  </body>
 </html>
