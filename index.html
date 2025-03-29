@@ -1,57 +1,203 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Thế giới của anhhhh</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="css/spinload.css">
-    <link rel="stylesheet" type="text/css" href=" https://fonts.googleapis.com/css?family=Pacifico" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="wrapper">
-      <!-- Preloader -->
-    <div id="preloader">
-      <div class="spinner">
-        <div class="rect1"></div>
-        <div class="rect2"></div>
-        <div class="rect3"></div>
-        <div class="rect4"></div>
-        <div class="rect5"></div>
-      </div>
-  </div>
-      <div id="bg"></div>
-      <div class="content">
-        <div class="back-container">
-          <a href="index.html">
-              <i class="fas fa-arrow-left"></i> Quay lại
-          </a>
-      </div>
-        <header>
-          <h2 id="title"></h2>
-          <h4 id="desc"></h4>
-        </header>
-        <button id="yes" type="button" class="btn btn-danger btn-lg"> </button>
-        <button id="no" type="button" class="btn btn-info btn-lg"></button>
-        
-      </div>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thử Thách Hay Chịu Phạt Ngẫu Nhiên</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 15px 0;
+            text-align: center;
+            z-index: 1000;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            animation: flicker 1.5s infinite alternate;
+        }
+        @keyframes flicker {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.7;
+            }
+        }
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-button:hover {
+            background-color: #ff4d4d;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            margin-top: 80px; /* Add space for the header */
+        }
+        input#nameInput {
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            width: calc(100% - 24px);
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+        input#nameInput:focus {
+            background-color: rgba(255, 255, 255, 1);
+            outline: none;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin: 5px 0;
+        }
+        button#spin {
+            background-color: #ff6f61;
+            color: white;
+        }
+        button#reset {
+            background-color: #6a11cb;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: white;
+            min-height: 50px;
+            word-wrap: break-word;
+        }
+        @media (max-width: 480px) {
+      header h1 {
+        font-size: 30px;
+      }
+      header p {
+        font-size: 16px;
+      }
+      .content h2 {
+        font-size: 26px;
+      }
+      .section h2 {
+        font-size: 28px;
+      }
+      .section a {
+        font-size: 16px;
+        padding: 12px 25px;
+      }
+      .social-icons a {
+        font-size: 20px;
+      }
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="game.html" class="back-button">Quay Lại</a>
+        <h1>Thử Thách Hay Chịu Phạt</h1>
+    </header>
+    <div class="container">
+        <input type="text" id="nameInput" placeholder="Nhập tên của bạn">
+        <button id="spin">Quay</button>
+        <button id="reset">Làm Mới</button>
+        <div class="result" id="result"></div>
     </div>
-    <audio src="sound.mp3" autoplay></audio>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script
-  src="https://code.jquery.com/jquery-3.4.1.js"
-  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-  crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-    <script src="config.js"></script>
-    <script src="main.js"></script>
 
-  </body>
+    <script>
+        const challenges = [
+            "Hát một bài hát yêu thích của bạn.",
+            "Nhảy múa tự do trong 30 giây.",
+            "Kể một câu chuyện cười.",
+            "Bắt chước tiếng động vật.",
+            "Nói ngược tên của bạn."
+        ];
+
+        const punishments = [
+            "Chạy tại chỗ trong 1 phút.",
+            "Uống một cốc nước muối.",
+            "Làm 10 cái squat.",
+            "Không được nói chuyện trong 5 phút.",
+            "Đứng im như tượng trong 1 phút."
+        ];
+
+        let intervalId;
+
+        document.getElementById('spin').addEventListener('click', () => {
+            const name = document.getElementById('nameInput').value.trim();
+            if (name === "") {
+                alert("Vui lòng nhập tên của bạn!");
+                return;
+            }
+
+            // Start randomizing effect
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = "Đang quay...";
+            let count = 0;
+
+            intervalId = setInterval(() => {
+                const randomOption = Math.random() < 0.5 ? challenges : punishments;
+                const randomItem = randomOption[Math.floor(Math.random() * randomOption.length)];
+                const optionType = randomOption === challenges ? "Thử thách" : "Hình phạt";
+                resultElement.textContent = `${name}, ${optionType} của bạn là: ${randomItem}`;
+                count++;
+            }, 100);
+
+            // Stop after 2 seconds and show final result
+            setTimeout(() => {
+                clearInterval(intervalId);
+                const randomOption = Math.random() < 0.5 ? challenges : punishments;
+                const randomItem = randomOption[Math.floor(Math.random() * randomOption.length)];
+                const optionType = randomOption === challenges ? "Thử thách" : "Hình phạt";
+                resultElement.textContent = `${name}, ${optionType} của bạn là: ${randomItem}`;
+            }, 2000);
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            clearInterval(intervalId);
+            document.getElementById('nameInput').value = "";
+            document.getElementById('result').textContent = "";
+        });
+    </script>
+</body>
 </html>
