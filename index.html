@@ -3,113 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thử Thách Hay Chịu Phạt Ngẫu Nhiên</title>
+    <title>Trang Chủ NTS3DPRO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            background: #f0f0f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+        .container {
+            width: 100%; /* Chiếm toàn bộ chiều rộng màn hình */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
         header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 15px 0;
+            background: linear-gradient(135deg, #2a5298, #4a7bc1);
+            color: white;
+            padding: 40px;
             text-align: center;
-            z-index: 1000;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: glow 3s ease-in-out infinite;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: ripple 5s linear infinite;
         }
         header h1 {
             margin: 0;
-            font-size: 24px;
-            animation: flicker 1.5s infinite alternate;
+            font-size: 36px;
+            font-weight: 600;
+            color: #ffd700; /* Màu vàng giống trong hình */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-        @keyframes flicker {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0.7;
-            }
+        header p {
+            margin: 10px 0 0;
+            font-size: 20px;
+            font-weight: 300;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
-        .back-button {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #ff6f61;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .back-button:hover {
-            background-color: #ff4d4d;
-        }
-        .container {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 30px 20px;
+        .intro {
+            margin: 20px auto;
+            padding: 30px;
+            background: #fff url('https://via.placeholder.com/1200x200') no-repeat center;
+            background-size: cover;
             border-radius: 15px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             text-align: center;
-            max-width: 400px;
-            width: 100%;
-            margin-top: 80px; /* Add space for the header */
-        }
-        input#nameInput {
-            padding: 12px;
             font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            width: calc(100% - 24px);
-            margin-bottom: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #333;
-            transition: background-color 0.3s ease;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.5s ease;
+            font-weight: 400;
+            max-width: 1200px; /* Giới hạn chiều rộng nội dung để dễ đọc */
         }
-        input#nameInput:focus {
-            background-color: rgba(255, 255, 255, 1);
-            outline: none;
+        .intro:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        button {
-            padding: 12px 20px;
+        .intro p {
+            margin: 0;
+            line-height: 1.6;
+        }
+        .section {
+            margin: 20px auto;
+            padding: 20px;
+            background: #f4f4f9;
+            border-radius: 15px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease-out;
+            font-weight: 400;
+            max-width: 1200px; /* Giới hạn chiều rộng nội dung để dễ đọc */
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section h2 {
+            margin: 0 0 10px;
+            font-size: 24px;
+            color: #2a5298;
+            transition: color 0.3s ease;
+            font-weight: 600;
+        }
+        .section:hover h2 {
+            color: #1e3d7a;
+        }
+        .section p {
+            margin: 0 0 15px;
             font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            width: 100%;
-            margin: 5px 0;
         }
-        button#spin {
-            background-color: #ff6f61;
+        .heart-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #2a5298;
             color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
         }
-        button#reset {
-            background-color: #6a11cb;
+        .heart-button:hover {
+            background: #1e3d7a;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .heart-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+        .heart-button:hover::after {
+            width: 200px;
+            height: 200px;
+        }
+        .game-section {
+            background: #e8f0fe url('https://via.placeholder.com/1200x200') no-repeat center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .heart-section {
+            background: #ffebee url('https://via.placeholder.com/1200x200') no-repeat center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .heart-section-alt {
+            background: #f3e5f5 url('https://via.placeholder.com/1200x200') no-repeat center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #2a5298, #1e3d7a);
             color: white;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
-        .result {
             margin-top: 20px;
-            font-size: 18px;
-            color: white;
-            min-height: 50px;
-            word-wrap: break-word;
+            position: relative;
+            animation: fadeInUp 1s ease-out;
+            font-weight: 400;
+            border-radius: 15px; /* Bo góc cho footer */
         }
-        @media (max-width: 480px) {
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 600;
+        }
+        footer a:hover {
+            color: #f0f0f5;
+        }
+
+        /* Keyframe Animations */
+        @keyframes glow {
+            0% { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); }
+            50% { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); }
+            100% { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); }
+        }
+        @keyframes ripple {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+      @media (max-width: 768px) {
+      header h1 {
+        font-size: 36px;
+      }
+      header p {
+        font-size: 18px;
+      }
+      .content h2 {
+        font-size: 30px;
+      }
+      .feature {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+    }
+    @media (max-width: 480px) {
       header h1 {
         font-size: 30px;
       }
@@ -133,71 +236,86 @@
     </style>
 </head>
 <body>
-    <header>
-        <a href="game.html" class="back-button">Quay Lại</a>
-        <h1>Thử Thách Hay Chịu Phạt</h1>
-    </header>
     <div class="container">
-        <input type="text" id="nameInput" placeholder="Nhập tên của bạn">
-        <button id="spin">Quay</button>
-        <button id="reset">Làm Mới</button>
-        <div class="result" id="result"></div>
+        <!-- Header -->
+        <header>
+            <h1>Trang Chủ Của NTS</h1>
+            <p>Welcome to NTS</p>
+        </header>
+
+        <!-- Phần giới thiệu NTS -->
+        <div class="intro">
+            <p>NTS - Nơi hội tụ niềm vui và sự gắn kết cho bạn bè! Đây là không gian lý tưởng để cùng nhau thoát khỏi bộn bề cuộc sống, tận hưởng những trò chơi sáng tạo và độc đáo. NTS mang đến những khoảnh khắc thư giãn, tiếng cười và thử thách thú vị, giúp bạn và bạn bè thắt chặt tình cảm. Mỗi hoạt động được thiết kế để khơi dậy tinh thần đồng đội và làm mới những mối quan hệ thân thiết. Hãy để NTS trở thành điểm đến cho những kỷ niệm đẹp, nơi bạn cùng bạn bè tạo nên niềm hạnh phúc khó quên!</p>
+        </div>
+
+        <!-- Phần 1: Trang Chủ NTS3DPRO -->
+        <div class="section">
+            <h2>Trang Chủ NTS3DPRO</h2>
+            <p>Khám phá NTS3DPRO - trải nghiệm công nghệ 3D đỉnh cao!</p>
+            <a href="nts3dpro.html" class="heart-button">Xem Ngay</a>
+        </div>
+
+        <!-- Phần 2: Kiểm tra thiết bị -->
+        <div class="section">
+            <h2>Kiểm Tra Thiết Bị Của Bạn</h2>
+            <p>Kiểm tra hôm nay – An toàn ngày mai!</p>
+            <a href="hoso.html" class="heart-button">Kiểm Tra Ngay</a>
+        </div>
+
+        <!-- Phần 3: Bể cá 3D -->
+        <div class="section">
+            <h2>Bể Cá 3D</h2>
+            <p>Một đại dương thu nhỏ, cả thế giới trong tầm mắt!</p>
+            <a href="beca.html" class="heart-button">Xem Ngay</a>
+        </div>
+
+        <!-- Phần 4: Trò chơi -->
+        <div class="section game-section">
+            <h2>Thử Thách Bản Thân Với Trò Chơi</h2>
+            <p>Khám phá trò chơi thú vị do NTS phát triển!</p>
+            <a href="game.html" class="heart-button">Chơi Ngay</a>
+        </div>
+
+        <!-- Phần 5: Danh sách ngày quan trọng -->
+        <div class="section heart-section">
+            <h2>Danh Sách Ngày Quan Trọng</h2>
+            <p>Hãy đánh dấu ngay những ngày quan trọng này! Hãy Xem ngay!</p>
+            <a href="ngayquantrong.html" class="heart-button">Xem Ngay</a>
+        </div>
+
+        <!-- Phần 6: Tỏ tình -->
+        <div class="section heart-section-alt">
+            <h2>Tỏ Tình Với Người Mình Thích</h2>
+            <p>Anh không cần cả thế giới, anh chỉ cần em! Hãy gửi lời tỏ tình ngay!</p>
+            <a href="totinh.html" class="heart-button">Tỏ Tình Ngay</a>
+        </div>
+
+        <!-- Phần 7: Chúc mừng sinh nhật -->
+        <div class="section game-section">
+            <h2>Happy Birthday</h2>
+            <p>Sinh nhật tới – Thành công mới! Hãy gửi lời chúc ngay!</p>
+            <a href="chucmungsinhnhat.html" class="heart-button">Gửi lời Ngay</a>
+        </div>
+
+        <!-- Phần 8: Footer -->
+        
     </div>
 
     <script>
-        const challenges = [
-            "Hát một bài hát yêu thích của bạn.",
-            "Nhảy múa tự do trong 30 giây.",
-            "Kể một câu chuyện cười.",
-            "Bắt chước tiếng động vật.",
-            "Nói ngược tên của bạn."
-        ];
+        // Hiệu ứng fade-in khi cuộn
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.3 });
 
-        const punishments = [
-            "Chạy tại chỗ trong 1 phút.",
-            "Uống một cốc nước muối.",
-            "Làm 10 cái squat.",
-            "Không được nói chuyện trong 5 phút.",
-            "Đứng im như tượng trong 1 phút."
-        ];
-
-        let intervalId;
-
-        document.getElementById('spin').addEventListener('click', () => {
-            const name = document.getElementById('nameInput').value.trim();
-            if (name === "") {
-                alert("Vui lòng nhập tên của bạn!");
-                return;
-            }
-
-            // Start randomizing effect
-            const resultElement = document.getElementById('result');
-            resultElement.textContent = "Đang quay...";
-            let count = 0;
-
-            intervalId = setInterval(() => {
-                const randomOption = Math.random() < 0.5 ? challenges : punishments;
-                const randomItem = randomOption[Math.floor(Math.random() * randomOption.length)];
-                const optionType = randomOption === challenges ? "Thử thách" : "Hình phạt";
-                resultElement.textContent = `${name}, ${optionType} của bạn là: ${randomItem}`;
-                count++;
-            }, 100);
-
-            // Stop after 2 seconds and show final result
-            setTimeout(() => {
-                clearInterval(intervalId);
-                const randomOption = Math.random() < 0.5 ? challenges : punishments;
-                const randomItem = randomOption[Math.floor(Math.random() * randomOption.length)];
-                const optionType = randomOption === challenges ? "Thử thách" : "Hình phạt";
-                resultElement.textContent = `${name}, ${optionType} của bạn là: ${randomItem}`;
-            }, 2000);
-        });
-
-        document.getElementById('reset').addEventListener('click', () => {
-            clearInterval(intervalId);
-            document.getElementById('nameInput').value = "";
-            document.getElementById('result').textContent = "";
-        });
+        sections.forEach(section => observer.observe(section));
     </script>
+    <footer>
+        © 2025 NTS. Được thiết kế bởi <a href="https://www.tiktok.com/@thanh.sang70">Nguyễn Thanh Sang</a>.
+    </footer>
 </body>
 </html>
