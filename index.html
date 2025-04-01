@@ -6,217 +6,111 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Trang Chủ NTS</title>
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: 'Arial', sans-serif;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: white;
+      color: #fff;
       overflow-x: hidden;
+      line-height: 1.6;
     }
     header {
-      text-align: center;
-      padding: 120px 20px;
       position: relative;
+      text-align: center;
+      padding: 150px 20px;
       overflow: hidden;
+      background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
+      box-shadow: inset 0 0 0 1000px rgba(30, 60, 114, 0.7);
     }
     header h1 {
-      font-size: 48px;
-      margin-bottom: 20px;
-      animation: fadeIn 2s ease-in-out;
-      text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      font-size: 60px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: glow 3s infinite alternate, fadeIn 1.5s ease-out;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
     }
     header p {
-      font-size: 20px;
-      line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto;
-      animation: slideUp 2s ease-in-out;
+      font-size: 24px;
+      max-width: 700px;
+      margin: 20px auto;
+      animation: slideUp 2s ease-out;
+      font-style: italic;
     }
-    .circle {
+    .particle {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      animation: float 8s infinite ease-in-out alternate;
+      background: rgba(255, 255, 255, 0.2);
+      animation: drift 10s infinite ease-in-out;
     }
-    .circle.small {
-      width: 100px;
-      height: 100px;
-      top: 15%;
-      left: 5%;
-      animation-duration: 6s;
-    }
-    .circle.medium {
-      width: 200px;
-      height: 200px;
-      bottom: 10%;
-      right: 15%;
-      animation-duration: 10s;
-    }
-    .circle.large {
-      width: 300px;
-      height: 300px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation-duration: 12s;
+    .particle:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-duration: 8s; }
+    .particle:nth-child(2) { width: 150px; height: 150px; bottom: 20%; right: 15%; animation-duration: 12s; }
+    .particle:nth-child(3) { width: 200px; height: 200px; top: 60%; left: 40%; animation-duration: 15s; }
+    
+    @keyframes glow {
+      0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+      100% { text-shadow: 0 0 30px rgba(255, 255, 255, 1); }
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.8); }
+      from { opacity: 0; transform: scale(0.9); }
       to { opacity: 1; transform: scale(1); }
     }
     @keyframes slideUp {
-      from { transform: translateY(50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    @keyframes float {
-      from { transform: translateY(0) scale(1); }
-      to { transform: translateY(-30px) scale(1.1); }
+    @keyframes drift {
+      0% { transform: translate(0, 0); opacity: 0.2; }
+      50% { transform: translate(20px, -30px); opacity: 0.5; }
+      100% { transform: translate(0, 0); opacity: 0.2; }
     }
+
     .content {
-      text-align: center;
-      padding: 50px 20px;
-      background: white;
+      background: #fff;
       color: #333;
-      margin-top: -50px;
+      padding: 80px 20px;
+      text-align: center;
+      border-radius: 40px 40px 0 0;
+      box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.1);
       position: relative;
       z-index: 2;
-      border-radius: 30px 30px 0 0;
-      box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.1);
     }
     .content h2 {
-      font-size: 36px;
+      font-size: 40px;
       margin-bottom: 20px;
+      font-weight: 600;
+      color: #2a5298;
       position: relative;
-      display: inline-block;
     }
     .content h2::after {
       content: '';
+      width: 100px;
+      height: 5px;
+      background: linear-gradient(to right, #2a5298, #a777e3);
       display: block;
-      width: 80px;
-      height: 4px;
-      background: #2a5298;
-      margin: 10px auto 0;
-      border-radius: 2px;
+      margin: 15px auto;
+      border-radius: 5px;
     }
     .content p {
       font-size: 18px;
-      line-height: 1.8;
-      max-width: 800px;
-      margin: 0 auto;
+      max-width: 900px;
+      margin: 0 auto 40px;
     }
-    .social-icons {
-      margin-top: 20px;
-      text-align: center;
-    }
-    .social-icons a {
-      display: inline-block;
-      margin: 0 15px;
-      font-size: 24px;
-      color: #2a5298;
-      transition: color 0.3s ease;
-    }
-    .social-icons a:hover {
-      color: #a777e3;
-    }
-    .important-dates {
-      background: #f4f4f9;
-      color: #333;
-      padding: 30px 20px;
-      margin-top: 30px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-    .important-dates h3 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #2a5298;
-    }
-    .important-dates ul {
-      list-style: none;
-      padding: 0;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .important-dates li {
-      background: white;
-      margin-bottom: 10px;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .important-dates li:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-    .important-dates li span {
-      font-size: 16px;
-      font-weight: bold;
-    }
-    .important-dates li small {
-      font-size: 14px;
-      color: #666;
-    }
-    .features {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      margin-top: 50px;
-    }
-    .feature {
-      background: #f4f4f9;
-      color: #333;
-      padding: 30px;
-      width: 100%;
-      max-width: 350px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      text-align: center;
-      margin: 10px auto;
-    }
-    .feature:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    }
-    .feature i {
-      font-size: 48px;
-      margin-bottom: 20px;
-      color: #2a5298;
-    }
-    .feature h3 {
-      font-size: 24px;
-      margin-bottom: 15px;
-    }
-    .feature p {
-      font-size: 16px;
-      line-height: 1.6;
-    }
+
     .section {
+      padding: 80px 20px;
       text-align: center;
-      padding: 60px 20px;
-      color: white;
-      margin-top: 50px;
       position: relative;
       overflow: hidden;
     }
     .section h2 {
       font-size: 36px;
       margin-bottom: 20px;
-      position: relative;
-      display: inline-block;
-    }
-    .section h2::after {
-      content: '';
-      display: block;
-      width: 100px;
-      height: 4px;
-      background: white;
-      margin: 10px auto 0;
-      border-radius: 2px;
+      font-weight: 600;
     }
     .section p {
       font-size: 18px;
@@ -224,199 +118,135 @@
     }
     .section a {
       display: inline-block;
-      margin-top: 20px;
-      padding: 15px 30px;
-      text-decoration: none;
-      border-radius: 25px;
+      padding: 15px 40px;
       font-size: 18px;
-      font-weight: bold;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
+      z-index: 1;
     }
     .section a::before {
       content: '';
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 300%;
-      height: 300%;
-      background: rgba(255, 255, 255, 0.2);
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
       border-radius: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      transition: transform 0.5s ease;
+      transform: translate(-50%, -50%);
+      transition: all 0.6s ease;
+      z-index: -1;
     }
     .section a:hover::before {
-      transform: translate(-50%, -50%) scale(1);
+      width: 300px;
+      height: 300px;
     }
     .section a:hover {
-      transform: scale(1.1);
+      transform: translateY(-5px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
-    .game-section {
+
+    .game-section { background: linear-gradient(135deg, #2a5298, #1e3c72); }
+    .game-section a { background: #fff; color: #2a5298; }
+    .heart-section { background: linear-gradient(135deg, #a777e3, #8e44ad); }
+    .heart-section a { background: #fff; color: #a777e3; }
+    .heart-section-alt { background: linear-gradient(135deg, #ff4d6d, #e84393); }
+    .heart-section-alt a { background: #fff; color: #ff4d6d; }
+
+    .card {
+      background: #fff;
+      color: #333;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin: 20px auto;
+      max-width: 600px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+    .card a {
       background: #2a5298;
+      color: #fff;
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease;
     }
-    .game-section a {
-      background: white;
-      color: #2a5298;
-    }
-    .heart-section {
-      background: #a777e3;
-    }
-    .heart-section a {
-      background: white;
-      color: #a777e3;
-    }
-    .heart-section-alt {
-      background: #ff4d6d;
-    }
-    .heart-section-alt a {
-      background: white;
-      color: #ff4d6d;
-    }
-    footer {
-      text-align: center;
-      padding: 30px 20px;
+    .card a:hover {
       background: #1e3c72;
-      color: white;
-      margin-top: 50px;
-      font-size: 14px;
+    }
+
+    footer {
+      background: #1e3c72;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 16px;
+      color: #fff;
     }
     footer a {
       color: #a777e3;
       text-decoration: none;
+      font-weight: 600;
       transition: color 0.3s ease;
     }
     footer a:hover {
-      color: #ffffff;
+      color: #fff;
     }
+
     @media (max-width: 768px) {
-      header h1 {
-        font-size: 36px;
-      }
-      header p {
-        font-size: 18px;
-      }
-      .content h2 {
-        font-size: 30px;
-      }
-      .feature {
-        width: 100%;
-        margin-bottom: 20px;
-      }
+      header h1 { font-size: 40px; }
+      header p { font-size: 20px; }
+      .content h2 { font-size: 32px; }
+      .section h2 { font-size: 30px; }
+      .section a { font-size: 16px; padding: 12px 30px; }
     }
     @media (max-width: 480px) {
-      header h1 {
-        font-size: 30px;
-      }
-      header p {
-        font-size: 16px;
-      }
-      .content h2 {
-        font-size: 26px;
-      }
-      .section h2 {
-        font-size: 28px;
-      }
-      .section a {
-        font-size: 16px;
-        padding: 12px 25px;
-      }
-      .social-icons a {
-        font-size: 20px;
-      }
+      header h1 { font-size: 32px; }
+      header p { font-size: 16px; }
+      .content h2 { font-size: 28px; }
+      .section h2 { font-size: 24px; }
+      .section a { font-size: 14px; padding: 10px 25px; }
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
-    <div class="circle small"></div>
-    <div class="circle medium"></div>
-    <div class="circle large"></div>
-    <h1>Chào mừng đến với NTS</h1>
-    <p>Nơi sáng tạo và công nghệ hòa quyện để tạo ra những điều tuyệt vời.</p>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <h1>Trang Chủ Của NTS</h1>
+    <p>Welcome to NTS</p>
   </header>
   <div class="content">
     <h2>Về Chúng Tôi</h2>
-    <p>NTS là một nhóm đam mê công nghệ, luôn nỗ lực để mang lại những giải pháp sáng tạo và hiệu quả cho người dùng. Với đội ngũ chuyên gia giàu kinh nghiệm, chúng tôi cam kết cung cấp dịch vụ chất lượng cao và trải nghiệm người dùng tốt nhất.</p>
-    <div class="important-dates">
-      <h3>Lịch Sử Của NTS</h3>
-      <ul>
-        <li>
-          <span>Ngày Thành Lập NTS</span>
-          <small>26/10/2024</small>
-        </li>
-        <li>
-          <span>Ra Mắt Sản Phẩm Đầu Tiên</span>
-          <small>30/01/2025</small>
-        </li>
-        <li>
-          <span>Kỷ Niệm 1 Năm Thành Lập</span>
-          <small>26/10/2026</small>
-        </li>
-        <li>
-          <span>Ra Mắt Tính Năng Mới</span>
-          <small>26/02/2025</small>
-        </li>
-        <li>
-          <span>Cập Nhật Game Mới</span>
-          <small>01/03/2025</small>
-        </li>
-         <li>
-          <span>Kiểm Tra Thiết Bị Của Bạn</span>
-          <small>12/03/2025</small>
-        </li>
-         <li>
-          <span>Thêm Trang Chủ 3D</span>
-          <small>04/03/2025</small>
-        </li>
-         <li>
-          <span>Bể Cá 3D</span>
-          <small>13/03/2025</small>
-        </li>
-         <li>
-          <span>Ngưng update</span>
-          <small>13/03/2025</small>
-        </li>
-        <li>
-          <span>Kế Hoạch Tương Lai</span>
-          <small>Đang cập nhật...</small>
-        </li>
-      </ul>
+    <p>Nơi gắn kết những người bạn, cùng nhau khám phá, trải nghiệm và tạo nên những khoảnh khắc đáng nhớ. Không chỉ là trò chơi, mà còn là cầu nối để chia sẻ niềm vui, tiếng cười và những kỷ niệm khó quên. Cùng nhau tham gia, cùng nhau chinh phục thử thách, để tình bạn thêm bền chặt và ý nghĩa hơn bao giờ hết!</p>
+
+    <div class="card">
+      <h2>Trang Chủ NTS3DPRO</h2>
+      <p>Khám phá NTS3DPRO - trải nghiệm công nghệ 3D đỉnh cao!</p>
+      <a href="nts3dpro.html">Xem Ngay</a>
     </div>
-    <div class="features">
-      <div class="feature">
-        <i class="fas fa-lightbulb"></i>
-        <h3>Sáng Tạo</h3>
-        <p>Chúng tôi luôn tìm kiếm những ý tưởng mới để tạo ra các giải pháp độc đáo.</p>
-      </div>
-      <div class="feature">
-        <i class="fas fa-cogs"></i>
-        <h3>Công Nghệ</h3>
-        <p>Ứng dụng công nghệ tiên tiến để mang lại hiệu quả tối ưu.</p>
-      </div>
-      <div class="feature">
-        <i class="fas fa-users"></i>
-        <h3>Hỗ Trợ</h3>
-        <p>Đội ngũ hỗ trợ tận tâm, sẵn sàng giúp đỡ bạn mọi lúc mọi nơi.</p>
-      </div>
+    <div class="card">
+      <h2>Kiểm Tra Thiết Bị Của Bạn</h2>
+      <p>Kiểm tra hôm nay – An toàn ngày mai!</p>
+      <a href="hoso.html">Kiểm Tra Ngay</a>
+    </div>
+    <div class="card">
+      <h2>Bể Cá 3D</h2>
+      <p>Một đại dương thu nhỏ, cả thế giới trong tầm mắt!</p>
+      <a href="beca.html">Xem Ngay</a>
     </div>
   </div>
-  <div class="section" style="margin: 20px 0; padding: 20px; background: #f4f4f9; border-radius: 15px; color: #333;">
-    <h2>Trang Chủ NTS3DPRO</h2>
-    <p>Khám phá NTS3DPRO - trải nghiệm công nghệ 3D đỉnh cao!</p>
-    <a href="nts3dpro.html" class="heart-button" style="background: #2a5298; color: white;">Xem Ngay</a>
-</div>
-   <div class="section" style="margin: 20px 0; padding: 20px; background: #f4f4f9; border-radius: 15px; color: #333;">
-    <h2>Kiểm Tra Thiết Bị Của Bạn</h2>
-    <p>Kiểm tra hôm nay – An toàn ngày mai!</p>
-    <a href="hoso.html" class="heart-button" style="background: #2a5298; color: white;">Kiểm Tra Ngay</a>
-</div>
-  <div class="section" style="margin: 20px 0; padding: 20px; background: #f4f4f9; border-radius: 15px; color: #333;">
-    <h2>Bể Cá 3D</h2>
-    <p>Một đại dương thu nhỏ, cả thế giới trong tầm mắt!</p>
-    <a href="beca.html" class="heart-button" style="background: #2a5298; color: white;">Xem Ngay</a>
-</div>
+
   <div class="section game-section">
     <h2>Thử Thách Bản Thân Với Trò Chơi</h2>
     <p>Khám phá trò chơi thú vị do NTS phát triển!</p>
@@ -424,22 +254,22 @@
   </div>
   <div class="section heart-section">
     <h2>Danh Sách Ngày Quan Trọng</h2>
-    <p>Hãy đánh dấu ngay những ngày quan trọng này! Hãy Xem ngay!</p>
-    <a href="ngayquantrong.html" class="heart-button">Xem Ngay</a>
+    <p>Hãy đánh dấu ngay những ngày quan trọng này! Hãy xem ngay!</p>
+    <a href="ngayquantrong.html">Xem Ngay</a>
   </div>
   <div class="section heart-section-alt">
     <h2>Tỏ Tình Với Người Mình Thích</h2>
     <p>Anh không cần cả thế giới, anh chỉ cần em! Hãy gửi lời tỏ tình ngay!</p>
-    <a href="totinh.html" class="heart-button">Tỏ Tình Ngay</a>
+    <a href="totinh.html">Tỏ Tình Ngay</a>
   </div>
   <div class="section game-section">
     <h2>Happy Birthday</h2>
-    <p> Sinh nhật tới – Thành công mới! Hãy gửi lời chúc ngay!</p>
-    <a href="chucmungsinhnhat.html" class="heart-button">Gửi lời Ngay</a>
+    <p>Sinh nhật tới – Thành công mới! Hãy gửi lời chúc ngay!</p>
+    <a href="chucmungsinhnhat.html">Gửi Lời Ngay</a>
   </div>
+
   <footer>
-    &copy; 2025 NTS. Được thiết kế với bởi <a href="https://www.tiktok.com/@thanh.sang70">Nguyễn Thanh Sang</a>.
+    © 2025 NTS. Được thiết kế với bởi <a href="https://www.tiktok.com/@thanh.sang70">Nguyễn Thanh Sang</a>.
   </footer>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
