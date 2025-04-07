@@ -1,192 +1,217 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lịch Sử Của NTS</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      color: #333;
-    }
-    header {
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: white;
-      padding: 20px 30px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-      position: relative;
-    }
-    .back-button {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #4CAF50; /* Màu xanh lá cây */
-      color: white;
-      padding: 10px 15px;
-      text-decoration: none;
-      border-radius: 25px;
-      font-size: 16px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .back-button:hover {
-      background: #45a049; /* Màu xanh lá cây đậm hơn khi hover */
-      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-      transform: translateY(-50%) scale(1.05);
-    }
-    .back-button::before {
-      content: "←";
-      font-size: 18px;
-      margin-right: 8px;
-    }
-    .important-dates {
-      max-width: 600px;
-      margin: 50px auto 30px;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
-      text-align: left;
-    }
-    h3 {
-      color: #444;
-      font-size: 28px;
-      margin-bottom: 20px;
-      position: relative;
-    }
-    h3::after {
-      content: '';
-      display: block;
-      width: 50px;
-      height: 3px;
-      background: #6a11cb;
-      margin: 10px 0;
-      border-radius: 5px;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      display: flex;
-      justify-content: space-between;
-      padding: 15px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-    li:last-child {
-      border-bottom: none;
-    }
-    li:hover {
-      transform: translateX(10px);
-      background: rgba(255, 255, 255, 0.5);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-    }
-    span {
-      font-weight: bold;
-      color: #555;
-      font-size: 16px;
-    }
-    small {
-      color: #888;
-      font-size: 14px;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: white;
-      font-size: 14px;
-      margin-top: 30px;
-    }
-    footer a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    footer a:hover {
-      text-decoration: underline;
-      color: #ffeb3b;
-    }
-    @media (max-width: 768px) {
-      header h1 { font-size: 40px; }
-      header p { font-size: 20px; }
-      .content h2 { font-size: 32px; }
-      .section h2 { font-size: 30px; }
-      .section a { font-size: 16px; padding: 12px 30px; }
-    }
-    @media (max-width: 480px) {
-      header h1 { font-size: 32px; }
-      header p { font-size: 16px; }
-      .content h2 { font-size: 28px; }
-      .section h2 { font-size: 24px; }
-      .section a { font-size: 14px; padding: 10px 25px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thử Thách Hay Chịu Phạt Ngẫu Nhiên</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(18px, 5vw, 24px); /* Tự động điều chỉnh kích thước chữ */
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        .back-button {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: clamp(12px, 3vw, 14px);
+        }
+
+        .back-button:hover {
+            background-color: #ff4d4d;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            margin-top: 70px; /* Đảm bảo không bị che bởi header */
+        }
+
+        input#nameInput {
+            padding: 10px;
+            font-size: clamp(14px, 4vw, 16px);
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        input#nameInput:focus {
+            background-color: rgba(255, 255, 255, 1);
+            outline: none;
+        }
+
+        button {
+            padding: 10px;
+            font-size: clamp(14px, 4vw, 16px);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        button#spin {
+            background-color: #ff6f61;
+            color: white;
+        }
+
+        button#reset {
+            background-color: #6a11cb;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .result {
+            margin-top: 15px;
+            font-size: clamp(16px, 4vw, 18px);
+            color: white;
+            min-height: 50px;
+            word-wrap: break-word;
+        }
+
+        /* Media Queries cho điện thoại */
+        @media (max-width: 480px) {
+            header {
+                padding: 8px 0;
+            }
+
+            .container {
+                padding: 15px;
+                margin-top: 60px;
+            }
+
+            .back-button {
+                padding: 5px 10px;
+                left: 5px;
+            }
+        }
+
+        /* Media Queries cho máy tính bảng */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .container {
+                max-width: 500px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="back-button"></a>
-    Lịch Sử Phát Triển Của NTS
-  </header>
-  <div class="important-dates">
-    <h3>Lịch Sử Của NTS</h3>
-    <ul>
-      <li>
-        <span>Ngày Thành Lập NTS</span>
-        <small>26/10/2024</small>
-      </li>
-      <li>
-        <span>Ra Mắt Sản Phẩm Đầu Tiên</span>
-        <small>30/01/2025</small>
-      </li>
-      <li>
-        <span>Kỷ Niệm 1 Năm Thành Lập</span>
-        <small>26/10/2026</small>
-      </li>
-      <li>
-        <span>Ra Mắt Tính Năng Mới</span>
-        <small>26/02/2025</small>
-      </li>
-      <li>
-        <span>Cập Nhật Game Mới</span>
-        <small>01/03/2025</small>
-      </li>
-      <li>
-        <span>Kiểm Tra Thiết Bị Của Bạn</span>
-        <small>12/03/2025</small>
-      </li>
-      <li>
-        <span>Thêm Trang Chủ 3D</span>
-        <small>04/03/2025</small>
-      </li>
-      <li>
-        <span>Bể Cá 3D</span>
-        <small>13/03/2025</small>
-      </li>
-      <li>
-        <span>Ngưng update</span>
-        <small>13/03/2025</small>
-      </li>
-      <li>
-        <span>Kế Hoạch Tương Lai</span>
-        <small>Đang cập nhật...</small>
-      </li>
-    </ul>
-  </div>
-  <footer>
-    © 2025 NTS. Được thiết kế với bởi <a href="https://www.tiktok.com/@thanh.sang70">Nguyễn Thanh Sang</a>.
-  </footer>
+    <header>
+        <a href="game.html" class="back-button">Quay Lại</a>
+        <h1>Thử Thách Hay Chịu Phạt</h1>
+    </header>
+    <div class="container">
+        <input type="text" id="nameInput" placeholder="Nhập tên của bạn">
+        <button id="spin">Quay</button>
+        <button id="reset">Làm Mới</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const challenges = [
+            "Hát một bài hát yêu thích của bạn.",
+            "Nhảy múa tự do trong 30 giây.",
+            "Kể một câu chuyện cười.",
+            "Bắt chước tiếng động vật.",
+            "Nói ngược tên của bạn."
+        ];
+
+        const punishments = [
+            "Chạy tại chỗ trong 1 phút.",
+            "Uống một cốc nước muối.",
+            "Làm 10 cái squat.",
+            "Không được nói chuyện trong 5 phút.",
+            "Đứng im như tượng trong 1 phút."
+        ];
+
+        let intervalId;
+
+        document.getElementById('spin').addEventListener('click', () => {
+            const name = document.getElementById('nameInput').value.trim();
+            if (name === "") {
+                alert("Vui lòng nhập tên của bạn!");
+                return;
+            }
+
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = "Đang quay...";
+            let count = 0;
+
+            intervalId = setInterval(() => {
+                const randomOption = Math.random() < 0.5 ? challenges : punishments;
+                const randomItem = randomOption[Math.floor(Math.random() * randomOption.length)];
+                const optionType = randomOption === challenges ? "Thử thách" : "Hình phạt";
+                resultElement.textContent = `${name}, ${optionType} của bạn là: ${randomItem}`;
+                count++;
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(intervalId);
+                const randomOption = Math.random() < 0.5 ? challenges : punishments;
+                const randomItem = randomOption[Math.floor(Math.random() * randomOption.length)];
+                const optionType = randomOption === challenges ? "Thử thách" : "Hình phạt";
+                resultElement.textContent = `${name}, ${optionType} của bạn là: ${randomItem}`;
+            }, 2000);
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            clearInterval(intervalId);
+            document.getElementById('nameInput').value = "";
+            document.getElementById('result').textContent = "";
+        });
+    </script>
 </body>
 </html>
