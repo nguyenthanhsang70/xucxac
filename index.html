@@ -1,217 +1,123 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thử Thách Hay Chịu Phạt Ngẫu Nhiên</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 10px 0;
-            text-align: center;
-            z-index: 1000;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: clamp(18px, 5vw, 24px); /* Tự động điều chỉnh kích thước chữ */
-            animation: flicker 1.5s infinite alternate;
-        }
-
-        @keyframes flicker {
-            0% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-
-        .back-button {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #ff6f61;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: clamp(12px, 3vw, 14px);
-        }
-
-        .back-button:hover {
-            background-color: #ff4d4d;
-        }
-
-        .container {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            margin-top: 70px; /* Đảm bảo không bị che bởi header */
-        }
-
-        input#nameInput {
-            padding: 10px;
-            font-size: clamp(14px, 4vw, 16px);
-            border: none;
-            border-radius: 5px;
-            width: 100%;
-            margin-bottom: 15px;
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #333;
-            transition: background-color 0.3s ease;
-        }
-
-        input#nameInput:focus {
-            background-color: rgba(255, 255, 255, 1);
-            outline: none;
-        }
-
-        button {
-            padding: 10px;
-            font-size: clamp(14px, 4vw, 16px);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            width: 100%;
-            margin: 5px 0;
-        }
-
-        button#spin {
-            background-color: #ff6f61;
-            color: white;
-        }
-
-        button#reset {
-            background-color: #6a11cb;
-            color: white;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        .result {
-            margin-top: 15px;
-            font-size: clamp(16px, 4vw, 18px);
-            color: white;
-            min-height: 50px;
-            word-wrap: break-word;
-        }
-
-        /* Media Queries cho điện thoại */
-        @media (max-width: 480px) {
-            header {
-                padding: 8px 0;
-            }
-
-            .container {
-                padding: 15px;
-                margin-top: 60px;
-            }
-
-            .back-button {
-                padding: 5px 10px;
-                left: 5px;
-            }
-        }
-
-        /* Media Queries cho máy tính bảng */
-        @media (min-width: 481px) and (max-width: 768px) {
-            .container {
-                max-width: 500px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Trang Chủ NTS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .parallax {
+      background-attachment: fixed;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    .gradient-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      animation: drift 12s infinite ease-in-out;
+    }
+    .particle:nth-child(1) { width: 60px; height: 60px; top: 15%; left: 10%; animation-duration: 9s; }
+    .particle:nth-child(2) { width: 120px; height: 120px; bottom: 25%; right: 10%; animation-duration: 14s; }
+    .particle:nth-child(3) { width: 180px; height: 180px; top: 50%; left: 35%; animation-duration: 16s; }
+    @keyframes drift {
+      0% { transform: translate(0, 0); opacity: 0.3; }
+      50% { transform: translate(30px, -20px); opacity: 0.6; }
+      100% { transform: translate(0, 0); opacity: 0.3; }
+    }
+    .animate-slide-up {
+      animation: slideUp 1s ease-out;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
-<body>
-    <header>
-        <a href="game.html" class="back-button">Quay Lại</a>
-        <h1>Thử Thách Hay Chịu Phạt</h1>
-    </header>
-    <div class="container">
-        <input type="text" id="nameInput" placeholder="Nhập tên của bạn">
-        <button id="spin">Quay</button>
-        <button id="reset">Làm Mới</button>
-        <div class="result" id="result"></div>
+<body class="font-inter bg-gray-100 text-gray-900">
+  <audio src="c:\Users\dell\Downloads\mo\chaomungnts.mp3" autoplay></audio>
+  <header class="parallax h-screen flex items-center justify-center text-center text-white relative" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80')">
+    <div class="gradient-overlay"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="relative z-10 animate-slide-up">
+      <h1 class="text-5xl md:text-7xl font-bold tracking-tight uppercase">Trang Chủ NTS</h1>
+      <p class="mt-4 text-xl md:text-2xl max-w-2xl mx-auto italic">Chào mừng bạn đến với NTS - Nơi kết nối và chinh phục mọi thử thách!</p>
     </div>
+  </header>
 
-    <script>
-        const challenges = [
-            "Hát một bài hát yêu thích của bạn.",
-            "Nhảy múa tự do trong 30 giây.",
-            "Kể một câu chuyện cười.",
-            "Bắt chước tiếng động vật.",
-            "Nói ngược tên của bạn."
-        ];
+  <section class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Thử Thách Bản Thân</h3>
+          <p class="text-gray-600 mb-6">Khám phá trò chơi thú vị do NTS phát triển!</p>
+          <a href="game.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Chơi Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Tỏ Tình</h3>
+          <p class="text-gray-600 mb-6">Anh không cần cả thế giới, anh chỉ cần em!</p>
+          <a href="totinh.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Tỏ Tình Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Happy Birthday</h3>
+          <p class="text-gray-600 mb-6">Born to shine, Happy Birthday!</p>
+          <a href="chucmungsinhnhat.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Gửi Lời Chúc Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Ngày Quan Trọng</h3>
+          <p class="text-gray-600 mb-6">Hãy đánh dấu ngay những ngày quan trọng này!</p>
+          <a href="ngayquantrong.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Kiểm Tra Thiết Bị</h3>
+          <p class="text-gray-600 mb-6">Kiểm tra hôm nay – An toàn ngày mai!</p>
+          <a href="hoso.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Kiểm Tra Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Bể Cá 3D</h3>
+          <p class="text-gray-600 mb-6">Một đại dương thu nhỏ, cả thế giới trong tầm mắt!</p>
+          <a href="beca.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Hộp Không Gian 3D</h3>
+          <p class="text-gray-600 mb-6">Khám phá và trải nghiệm không gian 3D!</p>
+          <a href="khampha.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Lịch Sử NTS</h3>
+          <p class="text-gray-600 mb-6">Dấu ấn thời đại, bứt phá tương lai.</p>
+          <a href="lichsu.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    function playAudio() {
+      const audio = document.getElementById("background-audio");
+      audio.muted = false; // Bật tiếng
+      audio.play().catch(err => console.error("Lỗi phát âm thanh:", err));
+    }
+  </script>
 
-        const punishments = [
-            "Chạy tại chỗ trong 1 phút.",
-            "Uống một cốc nước muối.",
-            "Làm 10 cái squat.",
-            "Không được nói chuyện trong 5 phút.",
-            "Đứng im như tượng trong 1 phút."
-        ];
-
-        let intervalId;
-
-        document.getElementById('spin').addEventListener('click', () => {
-            const name = document.getElementById('nameInput').value.trim();
-            if (name === "") {
-                alert("Vui lòng nhập tên của bạn!");
-                return;
-            }
-
-            const resultElement = document.getElementById('result');
-            resultElement.textContent = "Đang quay...";
-            let count = 0;
-
-            intervalId = setInterval(() => {
-                const randomOption = Math.random() < 0.5 ? challenges : punishments;
-                const randomItem = randomOption[Math.floor(Math.random() * randomOption.length)];
-                const optionType = randomOption === challenges ? "Thử thách" : "Hình phạt";
-                resultElement.textContent = `${name}, ${optionType} của bạn là: ${randomItem}`;
-                count++;
-            }, 100);
-
-            setTimeout(() => {
-                clearInterval(intervalId);
-                const randomOption = Math.random() < 0.5 ? challenges : punishments;
-                const randomItem = randomOption[Math.floor(Math.random() * randomOption.length)];
-                const optionType = randomOption === challenges ? "Thử thách" : "Hình phạt";
-                resultElement.textContent = `${name}, ${optionType} của bạn là: ${randomItem}`;
-            }, 2000);
-        });
-
-        document.getElementById('reset').addEventListener('click', () => {
-            clearInterval(intervalId);
-            document.getElementById('nameInput').value = "";
-            document.getElementById('result').textContent = "";
-        });
-    </script>
+  <footer class="bg-indigo-900 text-white py-12 text-center">
+    <p class="text-lg">© 2025 NTS. Được thiết kế với bởi <a href="https://www.tiktok.com/@thanh.sang70" class="text-purple-400 hover:text-white transition">Nguyễn Thanh Sang</a>.</p>
+  </footer>
 </body>
 </html>
