@@ -50,10 +50,11 @@
   </style>
 </head>
 <body class="font-inter bg-gray-100 text-gray-900">
-  <audio id="background-audio" autoplay muted loop>
-    <source src="audio/chaomungnts.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+
+  <!-- Nhạc nền -->
+  <audio id="bg-music" src="audio/chaomungnts.mp3" loop></audio>
+
+  <!-- Header -->
   <header class="parallax h-screen flex items-center justify-center text-center text-white relative" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80')">
     <div class="gradient-overlay"></div>
     <div class="particle"></div>
@@ -65,9 +66,11 @@
     </div>
   </header>
 
+  <!-- Nội dung chính -->
   <section class="bg-white py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Các thẻ mục -->
         <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
           <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Thử Thách Bản Thân</h3>
           <p class="text-gray-600 mb-6">Khám phá trò chơi thú vị do NTS phát triển!</p>
@@ -112,17 +115,17 @@
     </div>
   </section>
 
+  <!-- Footer -->
   <footer class="bg-indigo-900 text-white py-12 text-center">
     <p class="text-lg">© 2025 NTS. Được thiết kế với bởi <a href="https://www.tiktok.com/@thanh.sang70" class="text-purple-400 hover:text-white transition">Nguyễn Thanh Sang</a>.</p>
   </footer>
 
+  <!-- Script phát nhạc sau tương tác -->
   <script>
-    const audio = document.getElementById('background-audio');
-    document.addEventListener('click', () => {
-      audio.muted = false;
-      audio.play().catch((error) => {
-        console.error('Audio playback failed:', error);
-      });
+    document.addEventListener('click', function playMusic() {
+      const audio = document.getElementById('bg-music');
+      audio.play().catch(e => console.log("Không thể phát nhạc tự động:", e));
+      document.removeEventListener('click', playMusic);
     });
   </script>
 </body>
