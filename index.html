@@ -50,7 +50,10 @@
   </style>
 </head>
 <body class="font-inter bg-gray-100 text-gray-900">
-  <audio src="c:\Users\dell\Downloads\mo\chaomungnts.mp3" autoplay></audio>
+  <audio id="background-audio" autoplay muted loop>
+    <source src="audio/chaomungnts.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
   <header class="parallax h-screen flex items-center justify-center text-center text-white relative" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80')">
     <div class="gradient-overlay"></div>
     <div class="particle"></div>
@@ -108,16 +111,19 @@
       </div>
     </div>
   </section>
-  <script>
-    function playAudio() {
-      const audio = document.getElementById("background-audio");
-      audio.muted = false; // Bật tiếng
-      audio.play().catch(err => console.error("Lỗi phát âm thanh:", err));
-    }
-  </script>
 
   <footer class="bg-indigo-900 text-white py-12 text-center">
     <p class="text-lg">© 2025 NTS. Được thiết kế với bởi <a href="https://www.tiktok.com/@thanh.sang70" class="text-purple-400 hover:text-white transition">Nguyễn Thanh Sang</a>.</p>
   </footer>
+
+  <script>
+    const audio = document.getElementById('background-audio');
+    document.addEventListener('click', () => {
+      audio.muted = false;
+      audio.play().catch((error) => {
+        console.error('Audio playback failed:', error);
+      });
+    });
+  </script>
 </body>
 </html>
