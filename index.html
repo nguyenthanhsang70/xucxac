@@ -53,16 +53,59 @@
             font-weight: bold;
         }
         tr {
-            transition: all 0.3s ease; /* Smooth transition for hover and scale */
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         tr:hover {
-            background-color: #e0f7fa; /* Light cyan on hover */
-            transform: scale(1.02); /* Slightly scale up on hover */
+            background-color: #e0f7fa;
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
-        /* Highlight current date (example: June 29, adjust as needed) */
+        tr::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+        tr:hover::before {
+            left: 100%;
+        }
+        tr td a.button {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        tr td a.button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: -1;
+        }
+        tr td a.button:hover::after {
+            width: 200px;
+            height: 200px;
+        }
         tr.current-date {
-            background-color: #ffeb3b; /* Yellow highlight */
+            background-color: #ffeb3b;
             font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
         }
         a.button {
             display: inline-block;
@@ -72,10 +115,11 @@
             padding: 8px 16px;
             border-radius: 5px;
             font-size: 14px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
         a.button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
         .back-button {
             display: inline-flex;
@@ -126,7 +170,6 @@
             <i class="fas fa-arrow-left mr-2"></i> 
         </a>
         <h1 class="text-[6px] md:text-[6px] font-bold text-center tracking-tight">Ngày quan trọng</h1>
-
     </header>
     <div class="container">
         <table>
@@ -181,7 +224,6 @@
             </tbody>
         </table>
     </div>
-
     <footer class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-8">
         <div class="container mx-auto px-4">
             <div class="flex justify-center space-x-6 mb-4">
