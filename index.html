@@ -16,6 +16,7 @@
             line-height: 1.6;
             color: #333;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
         header {
             background: linear-gradient(135deg, #6a11cb, #2575fc);
@@ -50,6 +51,7 @@
             padding: 15px;
             text-align: center;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            touch-action: manipulation; /* Improve touch responsiveness */
         }
         th {
             background-color: #f4f4f4;
@@ -62,11 +64,9 @@
             position: relative;
             overflow: hidden;
         }
-        tr:hover {
-            background-color: #e0f7fa;
-            transform: translateX(10px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            border-radius: 8px;
+        tr:active {
+            background-color: #e0f7fa; /* Active state for touch */
+            transform: translateX(5px);
         }
         tr::before {
             content: '';
@@ -78,7 +78,7 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: 0.5s;
         }
-        tr:hover::before {
+        tr:active::before {
             left: 100%;
         }
         tr.current-date {
@@ -91,10 +91,9 @@
             color: white;
             font-weight: bold;
         }
-        tr.nts-date:hover {
+        tr.nts-date:active {
             background-color: #2575fc;
-            transform: translateX(10px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateX(5px);
         }
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -106,15 +105,16 @@
             background-color: #007bff;
             color: white;
             text-decoration: none;
-            padding: 8px 16px;
+            padding: 10px 20px; /* Increased padding for touch */
             border-radius: 5px;
             font-size: 14px;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             z-index: 1;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
         }
-        a.button:hover {
+        a.button:active {
             background-color: #0056b3;
             transform: translateY(-2px);
         }
@@ -131,7 +131,7 @@
             transition: width 0.4s ease, height 0.4s ease;
             z-index: -1;
         }
-        a.button:hover::after {
+        a.button:active::after {
             width: 200px;
             height: 200px;
         }
@@ -148,8 +148,9 @@
             font-size: 16px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
         }
-        .back-button:hover {
+        .back-button:active {
             background: #45a049;
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
             transform: translateY(-50%) scale(1.05);
@@ -173,20 +174,35 @@
             font-weight: bold;
             transition: all 0.3s ease;
         }
-        footer a:hover {
+        footer a:hover, footer a:active {
             text-decoration: underline;
             color: #ffeb3b;
         }
         @media (max-width: 768px) {
             header h1 { font-size: 1.5rem; }
-            th, td { font-size: 14px; }
-            a.button { font-size: 12px; padding: 6px 12px; }
+            th, td { 
+                font-size: 14px; 
+                padding: 12px; /* Adjusted padding for mobile */
+            }
+            a.button { 
+                font-size: 12px; 
+                padding: 8px 16px; 
+            }
         }
         @media (max-width: 480px) {
             header h1 { font-size: 1.25rem; }
-            th, td { font-size: 12px; }
-            a.button { font-size: 10px; padding: 5px 10px; }
-            .back-button { font-size: 14px; padding: 8px 12px; }
+            th, td { 
+                font-size: 12px; 
+                padding: 10px; /* Further adjusted padding */
+            }
+            a.button { 
+                font-size: 10px; 
+                padding: 6px 12px; 
+            }
+            .back-button { 
+                font-size: 14px; 
+                padding: 8px 12px; 
+            }
         }
     </style>
     <script>
@@ -195,8 +211,8 @@
             const rows = document.querySelectorAll("tbody tr");
             rows.forEach(row => {
                 const dateCell = row.cells[0].textContent;
-                const [day, month] = dateCell.split(" tháng ");
-                const rowDate = new Date(`2025-${month}-${day}`);
+                const [day, month] = dateCell.split("/").map(Number);
+                const rowDate = new Date(2025, month - 1, day); // Month is 0-based in JS
                 if (rowDate.getDate() === currentDate.getDate() && rowDate.getMonth() === currentDate.getMonth()) {
                     row.classList.add("current-date");
                 }
@@ -205,7 +221,7 @@
     </script>
 </head>
 <body>
-   <header class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-6 relative">
+     <header class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-6 relative">
         <a href="index.html" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center transition-colors duration-300">
             <i class="fas fa-arrow-left mr-2"></i> 
         </a>
@@ -221,45 +237,43 @@
                 </tr>
             </thead>
             <tbody>
-            
                 <tr>
-                    <td>1/1/2025</td>
+                    <td>1/1</td>
                     <td>Tết Dương lịch</td>
                     <td><a href="chuctetduonglich.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>14/2/2025</td>
+                    <td>14/2</td>
                     <td>Lễ Tình nhân (Valentine)</td>
                     <td><a href="chucletinhnhan.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
-               
                 <tr>
-                    <td>8/3/2025</td>
+                    <td>8/3</td>
                     <td>Quốc tế Phụ nữ</td>
                     <td><a href="chucquoctephunu.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>30/4/2025</td>
+                    <td>30/4</td>
                     <td>Ngày Giải phóng miền Nam</td>
                     <td><a href="chucngaygiaiphong.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>1/5/2025</td>
+                    <td>1/5</td>
                     <td>Ngày Quốc tế Lao động</td>
                     <td><a href="chucquoctelaodong.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>2/9/2025</td>
+                    <td>2/9</td>
                     <td>Ngày Quốc khánh Việt Nam</td>
                     <td><a href="chucquockhanh.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>20/11/2025</td>
+                    <td>20/11</td>
                     <td>Ngày Nhà giáo Việt Nam</td>
                     <td><a href="chucngaynhagiao.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>24/12/2025</td>
+                    <td>24/12</td>
                     <td>Lễ Giáng sinh</td>
                     <td><a href="chucgiangsinh.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
