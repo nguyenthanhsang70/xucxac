@@ -75,6 +75,11 @@
         tr:hover::before {
             left: 100%;
         }
+        tr.clicked {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
         tr td a.button {
             position: relative;
             overflow: hidden;
@@ -240,5 +245,15 @@
             <p class="text-center text-sm">© 2025 NTS. Được thiết kế bởi <a href="#" class="text-indigo-200 hover:underline">Nguyễn Thanh Sang</a>.</p>
         </div>
     </footer>
+    <script>
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                row.classList.add('clicked');
+                setTimeout(() => {
+                    row.classList.remove('clicked');
+                }, 300);
+            });
+        });
+    </script>
 </body>
 </html>
