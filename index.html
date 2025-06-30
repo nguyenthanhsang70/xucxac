@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngày quan trọng - NTS</title>
+    <title>Ngày Quan Trọng - NTS</title>
     <link rel="icon" type="image/png" href="logos3.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f9f9f9;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
             margin: 0;
             padding: 0;
             line-height: 1.6;
             color: #333;
+            overflow-x: hidden;
         }
         header {
             background: linear-gradient(135deg, #6a11cb, #2575fc);
@@ -22,10 +23,11 @@
             padding: 40px 20px;
             text-align: center;
             position: relative;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
         header h1 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -39,18 +41,21 @@
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-            background-color: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
         }
         th, td {
             padding: 15px;
             text-align: center;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
         th {
             background-color: #f4f4f4;
             color: #333;
             font-weight: bold;
+            font-size: 16px;
         }
         tr {
             transition: all 0.3s ease;
@@ -59,8 +64,9 @@
         }
         tr:hover {
             background-color: #e0f7fa;
-            transform: scale(1.02);
+            transform: translateX(10px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
         }
         tr::before {
             content: '';
@@ -75,37 +81,20 @@
         tr:hover::before {
             left: 100%;
         }
-        tr.clicked {
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        tr td a.button {
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-        tr td a.button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s ease, height 0.4s ease;
-            z-index: -1;
-        }
-        tr td a.button:hover::after {
-            width: 200px;
-            height: 200px;
-        }
         tr.current-date {
             background-color: #ffeb3b;
             font-weight: bold;
             animation: pulse 2s infinite;
+        }
+        tr.nts-date {
+            background-color: #6a11cb;
+            color: white;
+            font-weight: bold;
+        }
+        tr.nts-date:hover {
+            background-color: #2575fc;
+            transform: translateX(10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -120,57 +109,103 @@
             padding: 8px 16px;
             border-radius: 5px;
             font-size: 14px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
         a.button:hover {
             background-color: #0056b3;
             transform: translateY(-2px);
         }
+        a.button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: -1;
+        }
+        a.button:hover::after {
+            width: 200px;
+            height: 200px;
+        }
         .back-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #4CAF50;
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #4CAF50;
             color: white;
+            padding: 10px 15px;
             text-decoration: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+            border-radius: 25px;
             font-size: 16px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .back-button i {
-            margin-right: 8px;
-            font-size: 18px;
-        }
         .back-button:hover {
-            background-color: #45a049;
+            background: #45a049;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .back-button::before {
+            content: "←";
+            font-size: 18px;
+            margin-right: 8px;
+        }
+        footer {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        footer a:hover {
+            text-decoration: underline;
+            color: #ffeb3b;
+        }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.5rem; }
+            th, td { font-size: 14px; }
+            a.button { font-size: 12px; padding: 6px 12px; }
         }
         @media (max-width: 480px) {
-            header h1 {
-                font-size: 24px;
-            }
-            header p {
-                font-size: 16px;
-            }
-            .content h2 {
-                font-size: 26px;
-            }
-            .game-section h2 {
-                font-size: 28px;
-            }
-            .game-section a {
-                font-size: 16px;
-                padding: 12px 25px;
-            }
-            .social-icons a {
-                font-size: 20px;
-            }
+            header h1 { font-size: 1.25rem; }
+            th, td { font-size: 12px; }
+            a.button { font-size: 10px; padding: 5px 10px; }
+            .back-button { font-size: 14px; padding: 8px 12px; }
         }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentDate = new Date("2025-06-30");
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const dateCell = row.cells[0].textContent;
+                const [day, month] = dateCell.split(" tháng ");
+                const rowDate = new Date(`2025-${month}-${day}`);
+                if (rowDate.getDate() === currentDate.getDate() && rowDate.getMonth() === currentDate.getMonth()) {
+                    row.classList.add("current-date");
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <header class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-6 relative">
+   <header class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-6 relative">
         <a href="index.html" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center transition-colors duration-300">
             <i class="fas fa-arrow-left mr-2"></i> 
         </a>
@@ -186,50 +221,52 @@
                 </tr>
             </thead>
             <tbody>
+            
                 <tr>
-                    <td>1 tháng 1</td>
+                    <td>1/1/2025</td>
                     <td>Tết Dương lịch</td>
                     <td><a href="chuctetduonglich.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>14 tháng 2</td>
+                    <td>14/2/2025</td>
                     <td>Lễ Tình nhân (Valentine)</td>
                     <td><a href="chucletinhnhan.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
+               
                 <tr>
-                    <td>8 tháng 3</td>
+                    <td>8/3/2025</td>
                     <td>Quốc tế Phụ nữ</td>
                     <td><a href="chucquoctephunu.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>30 tháng 4</td>
+                    <td>30/4/2025</td>
                     <td>Ngày Giải phóng miền Nam</td>
                     <td><a href="chucngaygiaiphong.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>1 tháng 5</td>
+                    <td>1/5/2025</td>
                     <td>Ngày Quốc tế Lao động</td>
                     <td><a href="chucquoctelaodong.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>2 tháng 9</td>
+                    <td>2/9/2025</td>
                     <td>Ngày Quốc khánh Việt Nam</td>
                     <td><a href="chucquockhanh.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>20 tháng 11</td>
+                    <td>20/11/2025</td>
                     <td>Ngày Nhà giáo Việt Nam</td>
                     <td><a href="chucngaynhagiao.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
                 <tr>
-                    <td>24 tháng 12</td>
+                    <td>24/12/2025</td>
                     <td>Lễ Giáng sinh</td>
                     <td><a href="chucgiangsinh.html" target="_blank" class="button">Chúc</a></td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <footer class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-8">
+    <footer>
         <div class="container mx-auto px-4">
             <div class="flex justify-center space-x-6 mb-4">
                 <a href="#" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
@@ -242,18 +279,8 @@
                     <i class="fab fa-tiktok text-xl"></i>
                 </a>
             </div>
-            <p class="text-center text-sm">© 2025 NTS. Được thiết kế bởi <a href="#" class="text-indigo-200 hover:underline">Nguyễn Thanh Sang</a>.</p>
+            <p>© 2025 NTS. Được thiết kế bởi <a href="https://www.tiktok.com/@thanh.sang70" class="text-indigo-200 hover:underline">Nguyễn Thanh Sang</a>.</p>
         </div>
     </footer>
-    <script>
-        document.querySelectorAll('tbody tr').forEach(row => {
-            row.addEventListener('click', () => {
-                row.classList.add('clicked');
-                setTimeout(() => {
-                    row.classList.remove('clicked');
-                }, 300);
-            });
-        });
-    </script>
 </body>
 </html>
