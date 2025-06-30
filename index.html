@@ -60,24 +60,24 @@
             padding: 8px;
             text-decoration: none;
             border: 2px solid rgba(255, 255, 255, 0.7);
-            border-radius: 12px; /* Rounded corners for a softer look */
+            border-radius: 12px;
             font-size: 14px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 32px; /* Smaller size */
+            width: 32px;
             height: 32px;
         }
         .back-button:hover {
             background-color: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 1);
             color: #ffffff;
-            transform: scale(1.1); /* Slight scale on hover for visual feedback */
+            transform: scale(1.1);
         }
         .back-button::before {
             content: '\2190'; /* Unicode for left arrow */
-            font-size: 16px; /* Slightly smaller icon */
+            font-size: 16px;
         }
         @media (max-width: 768px) {
             header h1 {
@@ -113,6 +113,14 @@
             }
             .social-icons a {
                 font-size: 20px;
+            }
+            .back-button {
+                width: 36px; /* Slightly larger button on mobile */
+                height: 36px;
+                padding: 8px;
+            }
+            .back-button::before {
+                font-size: 20px; /* Larger icon on mobile */
             }
         }
     </style>
