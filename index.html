@@ -3,139 +3,1591 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hộp Không Gian 3D - NTS</title>
-    <link rel="icon" type="image/png" href="logos3.png">
+    <title>Caro Game - NTS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" type="png" href="logos3.png">
     <style>
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            background-color: #1a1a2e;
-            overflow: hidden;
-            position: relative;
+            min-height: 100vh;
         }
-        .container {
-            perspective: 1000px;
+        header {
+            text-align: center;
+            margin-bottom: 20px;
         }
-        .cube {
-            position: relative;
-            width: 200px;
-            transform-style: preserve-3d;
-            animation: rotate 8s infinite linear;
+        header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin: 0;
         }
-        .cube div {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        header p {
+            color: #666;
+            font-size: 1em;
+            margin-top: 5px;
+        }
+        .top-container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            font-size: 24px;
-            color: white;
-            font-family: Arial, sans-serif;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
         }
-        .front  { transform: translateZ(100px); background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet); }
-        .back   { transform: rotateY(180deg) translateZ(100px); background: linear-gradient(45deg, violet, indigo, blue, green, yellow, orange, red); }
-        .right  { transform: rotateY(90deg) translateZ(100px); background: linear-gradient(45deg, yellow, green, blue, indigo, violet, red, orange); }
-        .left   { transform: rotateY(-90deg) translateZ(100px); background: linear-gradient(45deg, orange, red, violet, indigo, blue, green, yellow); }
-        .top    { transform: rotateX(90deg) translateZ(100px); background: linear-gradient(45deg, green, blue, indigo, violet, red, orange, yellow); }
-        .bottom { transform: rotateX(-90deg) translateZ(100px); background: linear-gradient(45deg, blue, indigo, violet, red, orange, yellow, green); }
-
-        @keyframes rotate {
-            from { transform: rotateY(0deg) rotateX(0deg); }
-            to { transform: rotateY(360deg) rotateX(360deg); }
+        .back-container {
+            flex: 0 0 auto;
         }
-        .back-button {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background-color: transparent;
-            color: white;
-            padding: 8px;
+        .back-container a {
             text-decoration: none;
-            border: 2px solid rgba(255, 255, 255, 0.7);
-            border-radius: 12px;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            color: #007bff;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+        }
+        .back-container a i {
+            margin-right: 5px;
+        }
+        .timer-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .timer {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
+            font-size: 1.2em;
+            color: #2c3e50;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffffff, #e8ecef);
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            width: 150px;
+            height: 50px;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
-        .back-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 1);
-            color: #ffffff;
-            transform: scale(1.1);
+        .timer i {
+            margin-right: 8px;
+            font-size: 1.3em;
+            color: #007bff;
         }
-        .back-button::before {
-            content: '\2190'; /* Unicode for left arrow */
-            font-size: 16px;
+        .timer.warning {
+            color: #dc3545;
+            background: linear-gradient(135deg, #fff5f5, #f8d7da);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
         }
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 36px;
+        .timer.warning i {
+            color: #dc3545;
+        }
+        .timer-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: rgba(0, 123, 255, 0.1);
+            transition: width 0.5s linear;
+        }
+        .timer-progress.warning {
+            background: rgba(220, 53, 69, 0.2);
+        }
+        .game-container {
+            width: 80%;
+            max-width: 600px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .controls button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .controls button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .options {
+            display: none;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 15px;
+        }
+        .options div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .options label {
+            margin-bottom: 8px;
+            font-size: 1em;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        .options select {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 100%;
+            max-width: 200px;
+            box-sizing: border-box;
+            background-color: #fff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .options select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(10, 40px);
+            gap: 2px;
+            justify-content: center;
+        }
+        .cell {
+            width: 40px;
+            height: 40px;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.2s ease;
+        }
+        .cell.X {
+            color: #007bff;
+        }
+        .cell.O {
+            color: #dc3545;
+        }
+        .cell:hover {
+            background-color: #d1e7dd;
+        }
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #28a745;
+        }
+        .player-options {
+            display: none;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .player-options div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .player-options label {
+            margin-bottom: 8px;
+            font-size: 1em;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        .player-options select {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 100%;
+            max-width: 200px;
+            box-sizing: border-box;
+            background-color: #fff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .player-options select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+        .player-options button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .player-options button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        footer {
+            margin-top: auto;
+            width: 100%;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .footer-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .social-icons {
+            margin-bottom: 10px;
+        }
+        .social-icons a {
+            color: #ecf0f1;
+            font-size: 1.5em;
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: #3498db;
+            transform: scale(1.2);
+        }
+        .footer-container p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+        .footer-container a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .footer-container a:hover {
+            color: #ecf0f1;
+        }
+        @media (max-width: 600px) {
+            .board {
+                grid-template-columns: repeat(10, 30px);
+                gap: 1px;
             }
-            header p {
-                font-size: 18px;
+            .cell {
+                width: 30px;
+                height: 30px;
+                font-size: 1.2em;
             }
-            .content h2 {
-                font-size: 30px;
-            }
-            .feature {
+            .game-container {
                 width: 100%;
-                margin-bottom: 20px;
+                padding: 10px;
             }
-        }
-        @media (max-width: 480px) {
-            header h1 {
-                font-size: 30px;
+            .controls button {
+                padding: 8px 12px;
+                font-size: 0.9em;
             }
-            header p {
-                font-size: 16px;
+            .options select, .player-options select {
+                max-width: 100%;
+                font-size: 0.9em;
             }
-            .content h2 {
-                font-size: 26px;
+            .message {
+                font-size: 1em;
             }
-            .section h2 {
-                font-size: 28px;
+            .top-container {
+                flex-direction: column;
+                align-items: flex-start;
             }
-            .section a {
-                font-size: 16px;
-                padding: 12px 25px;
+            .timer-container {
+                width: 100%;
+                margin-top: 10px;
             }
-            .social-icons a {
-                font-size: 20px;
-            }
-            .back-button {
-                width: 36px; /* Slightly larger button on mobile */
-                height: 36px;
-                padding: 8px;
-            }
-            .back-button::before {
-                font-size: 20px; /* Larger icon on mobile */
+            .timer {
+                width: 120px;
+                height: 40px;
+                font-size: 1em;
             }
         }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-button"></a>
-    <div class="container">
-        <div class="cube">
-            <div class="front"></div>
-            <div class="back"></div>
-            <div class="right"></div>
-            <div class="left"></div>
-            <div class="top"></div>
-            <div class="bottom"></div>
+    <div class="top-container">
+        <div class="back-container">
+            <a href="game.html">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
         </div>
     </div>
+    <header>
+        <h1>Caro Game</h1>
+        <p id="game-mode">Chế độ chơi: Chưa chọn</p>
+        <div class="timer-container">
+            <div class="timer" id="timer">
+                <div class="timer-progress" id="timer-progress"></div>
+                <i class="fas fa-clock"></i>
+                <span>: 20 giây</span>
+            </div>
+        </div>
+    </header>
+    <div class="game-container">
+        <div class="controls">
+            <button onclick="startGame('computer')">Chơi với máy</button>
+            <button onclick="showPlayerOptions()">Chơi với người</button>
+            <button onclick="resetBoard()">Chơi lại</button>
+        </div>
+        <div class="options" id="difficultyOptions">
+            <div>
+                <label>Độ khó:</label>
+                <select id="difficulty" onchange="setDifficulty(this.value)">
+                    <option value="easy">Dễ</option>
+                    <option value="medium">Trung bình</option>
+                    <option value="hard">Khó</option>
+                </select>
+            </div>
+        </div>
+        <div class="player-options" id="playerOptions">
+            <div>
+                <label>Chọn quân cho Player 1:</label>
+                <select id="player1Piece" onchange="setPlayerPieces()">
+                    <option value="X">X</option>
+                    <option value="O">O</option>
+                </select>
+            </div>
+            <div>
+                <label>Chọn quân cho Player 2:</label>
+                <select id="player2Piece" onchange="setPlayerPieces()">
+                    <option value="O">O</option>
+                    <option value="X">X</option>
+                </select>
+            </div>
+            <div>
+                <label>Số ô để thắng:</label>
+                <select id="winLength" onchange="setWinLength(this.value)">
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <button onclick="startPlayerGame()">Bắt đầu chơi</button>
+        </div>
+        <div class="board" id="board"></div>
+        <div class="message" id="message"></div>
+    </div>
+    <script>
+        const boardSize = 10;
+        let boardState = Array(boardSize).fill(null).map(() => Array(boardSize).fill(null));
+        let currentPlayer = 'X';
+        let computerPlayer = 'O';
+        let humanPlayer = 'X';
+        let player2Piece = 'O';
+        let difficultyLevel = 'medium';
+        let winConditionLength = 5;
+        let currentGameMoves = [];
+        let currentMode = null;
+        let timerInterval = null;
+        let timeLeft = 20;
+        let timerIntervalSpeed = 1000;
+        let baseTimeLeft = 20;
+        let timerStartTime = 0;
+        let isGameActive = false;
+
+        const boardElement = document.getElementById('board');
+        const messageElement = document.getElementById('message');
+        const gameModeElement = document.getElementById('game-mode');
+        const playerOptionsElement = document.getElementById('playerOptions');
+        const player1PieceSelect = document.getElementById('player1Piece');
+        const player2PieceSelect = document.getElementById('player2Piece');
+        const timerElement = document.getElementById('timer');
+        const timerProgressElement = document.getElementById('timer-progress');
+        const difficultyOptionsElement = document.getElementById('difficultyOptions');
+
+        function setTimerSpeed() {
+            switch (difficultyLevel) {
+                case 'easy':
+                    timerIntervalSpeed = 2000;
+                    baseTimeLeft = 10;
+                    break;
+                case 'medium':
+                    timerIntervalSpeed = 1000;
+                    baseTimeLeft = 20;
+                    break;
+                case 'hard':
+                    timerIntervalSpeed = 1000;
+                    baseTimeLeft = 10;
+                    break;
+                default:
+                    timerIntervalSpeed = 1000;
+                    baseTimeLeft = 20;
+            }
+            console.log(`Set timer speed: difficulty=${difficultyLevel}, interval=${timerIntervalSpeed}ms, ticks=${baseTimeLeft}, total=${baseTimeLeft * timerIntervalSpeed / 1000}s`);
+        }
+
+        function startTimer() {
+            stopTimer('startTimer');
+            timeLeft = baseTimeLeft;
+            timerStartTime = performance.now();
+            console.log(`Starting timer: difficulty=${difficultyLevel}, interval=${timerIntervalSpeed}ms, ticks=${baseTimeLeft}`);
+            updateTimerDisplay();
+            const intervalSpeed = currentMode === 'computer' ? timerIntervalSpeed : 1000;
+            const startDelay = performance.now();
+            function tick() {
+                if (!isGameActive) {
+                    console.log('Timer tick skipped: game not active');
+                    return;
+                }
+                const currentTime = performance.now();
+                if (currentTime - startDelay < 50) {
+                    timerInterval = requestAnimationFrame(tick);
+                    return;
+                }
+                const elapsed = (currentTime - timerStartTime) / intervalSpeed;
+                timeLeft = baseTimeLeft - Math.floor(elapsed);
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    console.log(`Timer expired after: ${(currentTime - timerStartTime) / 1000} seconds`);
+                    handleTimeout();
+                } else {
+                    setTimeout(() => {
+                        timerInterval = requestAnimationFrame(tick);
+                    }, Math.max(1, timerIntervalSpeed / 2));
+                }
+            }
+            timerInterval = requestAnimationFrame(tick);
+        }
+
+        function stopTimer(context = 'unknown') {
+            if (timerInterval) {
+                cancelAnimationFrame(timerInterval);
+                timerInterval = null;
+                console.log(`Timer stopped by: ${context}, duration: ${(performance.now() - timerStartTime) / 1000} seconds`);
+            }
+        }
+
+        function updateTimerDisplay() {
+            const secondsLeft = currentMode === 'computer' ? Math.ceil(timeLeft * (timerIntervalSpeed / 1000)) : timeLeft;
+            console.log(`Updating timer display: ${secondsLeft}s, timeLeft=${timeLeft}, difficulty=${difficultyLevel}`);
+            timerElement.querySelector('span').textContent = `: ${secondsLeft} giây`;
+            const warningThreshold = currentMode === 'computer' ? Math.ceil(4 / (timerIntervalSpeed / 1000)) : 5;
+            timerElement.classList.toggle('warning', timeLeft <= warningThreshold);
+            timerProgressElement.classList.toggle('warning', timeLeft <= warningThreshold);
+            const progressWidth = (timeLeft / baseTimeLeft) * 100;
+            timerProgressElement.style.width = `${progressWidth}%`;
+        }
+
+        function handleTimeout() {
+            stopTimer('handleTimeout');
+            const duration = (performance.now() - timerStartTime) / 1000;
+            console.log(`Timeout triggered after: ${duration} seconds`);
+            if (currentMode === 'computer') {
+                showMessage('Hết thời gian! Máy thắng!');
+                saveGameResult(computerPlayer);
+            } else if (currentMode === 'player') {
+                const lostTurnPlayer = currentPlayer === humanPlayer ? 'Player 1' : 'Player 2';
+                currentPlayer = currentPlayer === humanPlayer ? player2Piece : humanPlayer;
+                const nextPlayer = currentPlayer === humanPlayer ? 'Player 1' : 'Player 2';
+                showMessage(`Hết thời gian! ${lostTurnPlayer} mất lượt! Lượt tiếp theo: ${nextPlayer} được đánh`);
+                isGameActive = true;
+                startTimer();
+            }
+        }
+
+        function showPlayerOptions() {
+            playerOptionsElement.style.display = 'block';
+            difficultyOptionsElement.style.display = 'none';
+            gameModeElement.textContent = `Chế độ chơi: Đang chọn tùy chỉnh cho Player 1 vs Player 2`;
+            stopTimer('showPlayerOptions');
+            isGameActive = false;
+        }
+
+        function setPlayerPieces() {
+            const player1Choice = player1PieceSelect.value;
+            const player2Choice = player2PieceSelect.value;
+
+            if (player1Choice === player2Choice) {
+                player2PieceSelect.value = player1Choice === 'X' ? 'O' : 'X';
+            }
+
+            humanPlayer = player1Choice;
+            player2Piece = player2PieceSelect.value;
+            currentPlayer = humanPlayer;
+            computerPlayer = 'O';
+        }
+
+        function setWinLength(length) {
+            winConditionLength = parseInt(length);
+        }
+
+        function startPlayerGame() {
+            resetBoardWithoutStart();
+            currentMode = 'player';
+            gameModeElement.textContent = `Chế độ chơi: Player 1 (${humanPlayer}) vs Player 2 (${player2Piece})`;
+            playerOptionsElement.style.display = 'none';
+            difficultyOptionsElement.style.display = 'none';
+            timerIntervalSpeed = 1000;
+            baseTimeLeft = 20;
+            isGameActive = true;
+            startTimer();
+        }
+
+        function startGame(mode) {
+            resetBoardWithoutStart();
+            currentMode = mode;
+            if (mode === 'computer') {
+                gameModeElement.textContent = `Chế độ chơi: Người chơi (X) vs Máy (O, đi trước)`;
+                currentPlayer = computerPlayer;
+                humanPlayer = 'X';
+                computerPlayer = 'O';
+                winConditionLength = 5;
+                setTimerSpeed();
+                difficultyOptionsElement.style.display = 'block';
+                playerOptionsElement.style.display = 'none';
+                isGameActive = true;
+                console.log('Starting computer game, scheduling first move');
+                startTimer();
+                makeComputerMove();
+            }
+        }
+
+        function setDifficulty(level) {
+            difficultyLevel = level;
+            setTimerSpeed();
+        }
+
+        function resetBoard() {
+            stopTimer('resetBoard');
+            if (currentMode === 'computer') {
+                resetBoardWithoutStart();
+                startGame('computer');
+            } else if (currentMode === 'player') {
+                resetBoardWithoutStart();
+                currentPlayer = humanPlayer;
+                gameModeElement.textContent = `Chế độ chơi: Player 1 (${humanPlayer}) vs Player 2 (${player2Piece})`;
+                timerIntervalSpeed = 1000;
+                baseTimeLeft = 20;
+                isGameActive = true;
+                startTimer();
+            } else {
+                resetBoardWithoutStart();
+                difficultyOptionsElement.style.display = 'none';
+                playerOptionsElement.style.display = 'none';
+                gameModeElement.textContent = `Chế độ chơi: Chưa chọn`;
+                isGameActive = false;
+            }
+        }
+
+        function resetBoardWithoutStart() {
+            boardState = Array(boardSize).fill(null).map(() => Array(boardSize).fill(null));
+            boardElement.innerHTML = '';
+            messageElement.textContent = '';
+            currentGameMoves = [];
+            for (let i = 0; i < boardSize * boardSize; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.addEventListener('click', () => handleCellClick(i));
+                boardElement.appendChild(cell);
+            }
+            console.log('Board reset, boardState:', JSON.stringify(boardState));
+            stopTimer('resetBoardWithoutStart');
+        }
+
+        function handleCellClick(index) {
+            if (!isGameActive || timeLeft <= 0 || boardState[Math.floor(index / boardSize)][index % boardSize] || (currentMode === 'computer' && currentPlayer === computerPlayer)) return;
+
+            placePiece(index, currentMode === 'computer' ? humanPlayer : currentPlayer);
+            stopTimer('handleCellClick');
+
+            if (checkWin(currentMode === 'computer' ? humanPlayer : currentPlayer)) {
+                showMessage(currentMode === 'computer' ? 'Người chơi thắng!' : (currentPlayer === humanPlayer ? 'Player 1 thắng!' : 'Player 2 thắng!'));
+                return;
+            }
+
+            if (!boardState.flat().includes(null)) {
+                showMessage('Hòa!');
+                return;
+            }
+
+            if (currentMode === 'computer') {
+                currentPlayer = computerPlayer;
+                makeComputerMove();
+            } else {
+                currentPlayer = currentPlayer === humanPlayer ? player2Piece : humanPlayer;
+                startTimer();
+            }
+        }
+
+        function placePiece(index, player) {
+            const row = Math.floor(index / boardSize);
+            const col = index % boardSize;
+            boardState[row][col] = player;
+            boardElement.children[index].textContent = player;
+            boardElement.children[index].classList.add(player);
+            currentGameMoves.push({ row, col, player });
+        }
+
+        function checkWin(player) {
+            const directions = [
+                { rowDir: 0, colDir: 1 },
+                { rowDir: 1, colDir: 0 },
+                { rowDir: 1, colDir: 1 },
+                { rowDir: 1, colDir: -1 }
+            ];
+            let winFound = false;
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    if (boardState[row][col] === player) {
+                        for (const { rowDir, colDir } of directions) {
+                            let count = 1;
+                            for (let i = 1; i < winConditionLength; i++) {
+                                const newRow = row + i * rowDir;
+                                const newCol = col + i * colDir;
+                                if (newRow >= boardSize || newCol >= boardSize || newRow < 0 || newCol < 0 || boardState[newRow][newCol] !== player) break;
+                                count++;
+                            }
+                            if (count === winConditionLength) {
+                                console.log(`Win detected for ${player} at row=${row}, col=${col}, dir=(${rowDir}, ${colDir})`);
+                                highlightWinningLine(row, col, rowDir, colDir, player);
+                                winFound = true;
+                            }
+                        }
+                    }
+                }
+            }
+            return winFound;
+        }
+
+        function highlightWinningLine(row, col, rowDir, colDir, player) {
+            for (let i = 0; i < winConditionLength; i++) {
+                const index = (row + i * rowDir) * boardSize + (col + i * colDir);
+                boardElement.children[index].style.backgroundColor = '#d1e7dd';
+            }
+        }
+
+        function showMessage(msg) {
+            messageElement.textContent = msg;
+            if (isGameActive && (msg.includes('thắng') || msg === 'Hòa!' || msg.includes('Hết thời gian'))) {
+                stopTimer('showMessage');
+                isGameActive = false;
+                saveGameResult(msg.includes(humanPlayer) ? humanPlayer : msg.includes(player2Piece) ? player2Piece : msg.includes('Máy') ? computerPlayer : 'tie');
+            }
+        }
+
+        function makeComputerMove(noDelay = false) {
+            const executeMove = async () => {
+                if (!isGameActive) {
+                    console.log('Computer move skipped: game not active');
+                    return;
+                }
+                const emptyCells = boardState.flat().filter(cell => !cell).length;
+                console.log(`Making computer move, empty cells: ${emptyCells}, boardState:`, JSON.stringify(boardState));
+                if (emptyCells > boardSize * boardSize - 2) {
+                    console.log('Board nearly empty, skipping win/draw checks');
+                } else {
+                    if (checkWin(computerPlayer)) {
+                        showMessage('Máy thắng!');
+                        return;
+                    }
+                    if (!boardState.flat().includes(null)) {
+                        showMessage('Hòa!');
+                        return;
+                    }
+                }
+                let move;
+                switch (difficultyLevel) {
+                    case 'easy':
+                        console.log('Calculating easy move...');
+                        move = getEasyMove();
+                        console.log('Easy move calculated:', move);
+                        break;
+                    case 'medium':
+                        console.log('Calculating medium move...');
+                        move = getMediumMove();
+                        console.log('Medium move calculated:', move);
+                        break;
+                    case 'hard':
+                        console.log('Calculating hard move...');
+                        move = await getHardMove();
+                        console.log('Hard move calculated:', move);
+                        break;
+                    default:
+                        move = getMediumMove();
+                }
+                if (move && !boardState[move.row][move.col]) {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                    placePiece(move.row * boardSize + move.col, computerPlayer);
+                    console.log(`Computer placed ${computerPlayer} at row=${move.row}, col=${move.col}`);
+                    if (checkWin(computerPlayer)) {
+                        showMessage('Máy thắng!');
+                        return;
+                    }
+                    if (!boardState.flat().includes(null)) {
+                        showMessage('Hòa!');
+                        return;
+                    }
+                    currentPlayer = humanPlayer;
+                    startTimer();
+                } else {
+                    console.log('No valid move found or move invalid:', move);
+                    showMessage('Hòa! Không còn nước đi hợp lệ.');
+                }
+            };
+
+            if (noDelay) {
+                console.log('Executing computer move without delay');
+                executeMove();
+            } else {
+                console.log('Scheduling computer move with 200ms delay');
+                setTimeout(executeMove, 200);
+            }
+        }
+
+        function getEasyMove() {
+            const moves = getPotentialMoves();
+            return moves[Math.floor(Math.random() * moves.length)];
+        }
+
+        function getMediumMove() {
+            return findWinningMove(computerPlayer) || findWinningMove(humanPlayer) || getEasyMove();
+        }
+
+        async function getHardMove() {
+            const moves = getPotentialMoves();
+            const remainingCells = boardState.flat().filter(cell => !cell).length;
+
+            const winningMove = findWinningMove(computerPlayer);
+            if (winningMove) return winningMove;
+
+            const blockWin = findWinningMove(humanPlayer);
+            if (blockWin) return blockWin;
+
+            const blockOpenFour = findOpenFour(humanPlayer);
+            if (blockOpenFour) return blockOpenFour;
+
+            const openFourAttack = findOpenFour(computerPlayer);
+            if (openFourAttack) return openFourAttack;
+
+            const blockHalfOpenFour = findHalfOpenFour(humanPlayer);
+            if (blockHalfOpenFour) return blockHalfOpenFour;
+
+            const interruptedHorizontalTrap = createInterruptedHorizontalTrap(computerPlayer);
+            if (interruptedHorizontalTrap) return interruptedHorizontalTrap;
+
+            const doubleOpenDiagonalTrap = createDoubleOpenDiagonalTrap(computerPlayer);
+            if (doubleOpenDiagonalTrap) return doubleOpenDiagonalTrap;
+
+            const misleadDirectionTrap = createMisleadDirectionTrap(computerPlayer);
+            if (misleadDirectionTrap && remainingCells > boardSize * boardSize * 0.5) return misleadDirectionTrap;
+
+            const tripleParallelTrap = createTripleParallelTrap(computerPlayer);
+            if (tripleParallelTrap) return tripleParallelTrap;
+
+            const lShapeTrap = createLShapeTrap(computerPlayer);
+            if (lShapeTrap) return lShapeTrap;
+
+            const squareTrap = createSquareTrap(computerPlayer);
+            if (squareTrap) return squareTrap;
+
+            const blurBlockTrap = createBlurBlockTrap(computerPlayer);
+            if (blurBlockTrap) return blurBlockTrap;
+
+            const twoMiddleGapsTrap = createTwoMiddleGapsTrap(computerPlayer);
+            if (twoMiddleGapsTrap) return twoMiddleGapsTrap;
+
+            const baitThreeTrap = createBaitThreeTrap(computerPlayer);
+            if (baitThreeTrap && remainingCells > boardSize * boardSize * 0.5) return baitThreeTrap;
+
+            const hShapeTrap = createHShapeTrap(computerPlayer);
+            if (hShapeTrap) return hShapeTrap;
+
+            const wrongDirectionTrap = createWrongDirectionTrap(computerPlayer);
+            if (wrongDirectionTrap && remainingCells > boardSize * boardSize * 0.5) return wrongDirectionTrap;
+
+            const wallTrap = createWallTrap(computerPlayer);
+            if (wallTrap) return wallTrap;
+
+            const useOpponentPieceTrap = createUseOpponentPieceTrap(computerPlayer);
+            if (useOpponentPieceTrap) return useOpponentPieceTrap;
+
+            const hiddenFourTrap = createHiddenFourTrap(computerPlayer);
+            if (hiddenFourTrap) return hiddenFourTrap;
+
+            const fenceTrap = createFenceTrap(computerPlayer);
+            if (fenceTrap) return fenceTrap;
+
+            const tripleDiagonalComboTrap = createTripleDiagonalComboTrap(computerPlayer);
+            if (tripleDiagonalComboTrap) return tripleDiagonalComboTrap;
+
+            const halfOpenFourAttack = findHalfOpenFour(computerPlayer);
+            if (halfOpenFourAttack) return halfOpenFourAttack;
+
+            const blockOpenThree = findOpenThree(humanPlayer);
+            if (blockOpenThree) return blockOpenThree;
+
+            const openThreeAttack = findOpenThree(computerPlayer);
+            if (openThreeAttack) return openThreeAttack;
+
+            const blockHalfOpenThree = findHalfOpenThree(humanPlayer);
+            if (blockHalfOpenThree) return blockHalfOpenThree;
+
+            const activeDefense = blockMultipleThreeInARow(humanPlayer);
+            if (activeDefense) return activeDefense;
+
+            if (remainingCells > boardSize * boardSize * 0.8) {
+                const centerMove = occupyCenter();
+                if (centerMove) return centerMove;
+            }
+
+            const openTwoAttack = findOpenTwo(computerPlayer);
+            if (openTwoAttack) return openTwoAttack;
+
+            if (remainingCells < boardSize * boardSize * 0.2) {
+                const endgameMove = await runAlphaBeta(computerPlayer, 6);
+                if (endgameMove) return endgameMove;
+            }
+
+            return await runAlphaBeta(computerPlayer, 4) || getEasyMove();
+        }
+
+        function getPotentialMoves() {
+            const moves = [];
+            const range = 2;
+            for (const { row, col } of currentGameMoves) {
+                for (let r = Math.max(0, row - range); r <= Math.min(boardSize - 1, row + range); r++) {
+                    for (let c = Math.max(0, col - range); c <= Math.min(boardSize - 1, col + range); c++) {
+                        if (!boardState[r][c]) moves.push({ row: r, col: c });
+                    }
+                }
+            }
+            return moves.length ? moves : [{ row: Math.floor(boardSize / 2), col: Math.floor(boardSize / 2) }];
+        }
+
+        function findWinningMove(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                if (checkWin(player)) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function findOpenFour(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                if (countLine(row, col, player, 4, true)) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function findHalfOpenFour(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                if (countLine(row, col, player, 4, false)) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function findOpenThree(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                if (countLine(row, col, player, 3, true)) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function findHalfOpenThree(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                if (countLine(row, col, player, 3, false)) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function findOpenTwo(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                if (countLine(row, col, player, 2, true)) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function countLine(row, col, player, length, requireOpenEnds) {
+            const directions = [
+                { rowDir: 0, colDir: 1 },
+                { rowDir: 1, colDir: 0 },
+                { rowDir: 1, colDir: 1 },
+                { rowDir: 1, colDir: -1 }
+            ];
+            for (const { rowDir, colDir } of directions) {
+                let count = 1;
+                let openEnds = 0;
+
+                for (let i = 1; i < length; i++) {
+                    const newRow = row + i * rowDir;
+                    const newCol = col + i * colDir;
+                    if (newRow >= boardSize || newCol >= boardSize || newRow < 0 || newCol < 0 || boardState[newRow][newCol] !== player) break;
+                    count++;
+                }
+                const forwardRow = row + length * rowDir;
+                const forwardCol = col + length * colDir;
+                if (forwardRow >= 0 && forwardRow < boardSize && forwardCol >= 0 && forwardCol < boardSize && !boardState[forwardRow][forwardCol]) openEnds++;
+
+                for (let i = 1; i < length; i++) {
+                    const newRow = row - i * rowDir;
+                    const newCol = col - i * colDir;
+                    if (newRow < 0 || newCol < 0 || newRow >= boardSize || newCol >= boardSize || boardState[newRow][newCol] !== player) break;
+                    count++;
+                }
+                const backwardRow = row - length * rowDir;
+                const backwardCol = col - length * colDir;
+                if (backwardRow >= 0 && backwardRow < boardSize && backwardCol >= 0 && backwardCol < boardSize && !boardState[backwardRow][backwardCol]) openEnds++;
+
+                if (count >= length && (!requireOpenEnds || openEnds === 2)) return true;
+            }
+            return false;
+        }
+
+        function createInterruptedHorizontalTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let count = 1, gaps = 0;
+                for (let i = 1; i <= 4; i++) {
+                    const newCol = col + i;
+                    if (newCol < boardSize) {
+                        if (boardState[row][newCol] === player) count++;
+                        else if (!boardState[row][newCol]) gaps++;
+                        else break;
+                    }
+                }
+                for (let i = 1; i <= 4; i++) {
+                    const newCol = col - i;
+                    if (newCol >= 0) {
+                        if (boardState[row][newCol] === player) count++;
+                        else if (!boardState[row][newCol]) gaps++;
+                        else break;
+                    }
+                }
+                if (count === 4 && gaps === 1) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createDoubleOpenDiagonalTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                if (countLine(row, col, player, 4, true)) {
+                    for (const { rowDir, colDir } of [{ rowDir: 1, colDir: 1 }, { rowDir: 1, colDir: -1 }]) {
+                        let count = 1;
+                        for (let i = 1; i < winConditionLength; i++) {
+                            const newRow = row + i * rowDir;
+                            const newCol = col + i * colDir;
+                            if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize && boardState[newRow][newCol] === player) count++;
+                        }
+                        if (count >= 3) {
+                            boardState[row][col] = null;
+                            return { row, col };
+                        }
+                    }
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createMisleadDirectionTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                const fakeLine = countLine(row, col, player, 4, false);
+                if (fakeLine) {
+                    for (const { row: r, col: c } of getPotentialMoves()) {
+                        if (r !== row || c !== col) {
+                            boardState[r][c] = player;
+                            if (checkWin(player)) {
+                                boardState[r][c] = null;
+                                boardState[row][col] = null;
+                                return { row, col };
+                            }
+                            boardState[r][c] = null;
+                        }
+                    }
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createTripleParallelTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let parallelCount = 0;
+                for (let offset = -2; offset <= 2; offset += 2) {
+                    const checkRow = row + offset;
+                    if (checkRow >= 0 && checkRow < boardSize) {
+                        let count = 1;
+                        for (let i = 1; i < winConditionLength; i++) {
+                            const newCol = col + i;
+                            if (newCol < boardSize && boardState[checkRow][newCol] === player) count++;
+                        }
+                        if (count >= 3) parallelCount++;
+                    }
+                }
+                if (parallelCount >= 3) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createLShapeTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let lShape = false;
+                if (row + 2 < boardSize && col + 2 < boardSize) {
+                    if (boardState[row][col + 1] === player && boardState[row][col + 2] === player &&
+                        boardState[row + 1][col + 2] === player) {
+                        lShape = true;
+                    }
+                }
+                if (lShape) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createSquareTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let square = false;
+                if (row + 1 < boardSize && col + 1 < boardSize) {
+                    if (boardState[row][col + 1] === player && boardState[row + 1][col] === player &&
+                        boardState[row + 1][col + 1] === player) {
+                        square = true;
+                    }
+                }
+                if (square) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createBlurBlockTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let threats = 0;
+                for (const { rowDir, colDir } of [{ rowDir: 0, colDir: 1 }, { rowDir: 1, colDir: 0 }, { rowDir: 1, colDir: 1 }]) {
+                    let count = 1;
+                    for (let i = 1; i < 4; i++) {
+                        const newRow = row + i * rowDir;
+                        const newCol = col + i * colDir;
+                        if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize && boardState[newRow][newCol] === player) count++;
+                    }
+                    if (count >= 3) threats++;
+                }
+                if (threats >= 2) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createTwoMiddleGapsTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let count = 1, gaps = 0;
+                for (let i = 1; i <= 5; i++) {
+                    const newCol = col + i;
+                    if (newCol < boardSize) {
+                        if (boardState[row][newCol] === player) count++;
+                        else if (!boardState[row][newCol]) gaps++;
+                        else break;
+                    }
+                }
+                for (let i = 1; i <= 5; i++) {
+                    const newCol = col - i;
+                    if (newCol >= 0) {
+                        if (boardState[row][newCol] === player) count++;
+                        else if (!boardState[row][newCol]) gaps++;
+                        else break;
+                    }
+                }
+                if (count === 3 && gaps === 2) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createBaitThreeTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                const fakeLine = countLine(row, col, player, 3, false);
+                if (fakeLine) {
+                    for (const { row: r, col: c } of getPotentialMoves()) {
+                        if (r !== row || c !== col) {
+                            boardState[r][c] = player;
+                            if (checkWin(player)) {
+                                boardState[r][c] = null;
+                                boardState[row][col] = null;
+                                return { row, col };
+                            }
+                            boardState[r][c] = null;
+                        }
+                    }
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createHShapeTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let hShape = false;
+                if (row + 2 < boardSize && col + 2 < boardSize) {
+                    if (boardState[row][col + 1] === player && boardState[row + 2][col + 1] === player &&
+                        boardState[row + 1][col] === player && boardState[row + 1][col + 2] === player) {
+                        hShape = true;
+                    }
+                }
+                if (hShape) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createWrongDirectionTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                const fakeLine = countLine(row, col, player, 4, false);
+                if (fakeLine) {
+                    for (const { row: r, col: c } of getPotentialMoves()) {
+                        if (r !== row || c !== col) {
+                            boardState[r][c] = player;
+                            if (checkWin(player)) {
+                                boardState[r][c] = null;
+                                boardState[row][col] = null;
+                                return { row, col };
+                            }
+                            boardState[r][c] = null;
+                        }
+                    }
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createWallTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let wallCount = 0;
+                for (let offset = -2; offset <= 2; offset += 2) {
+                    const checkRow = row + offset;
+                    if (checkRow >= 0 && checkRow < boardSize) {
+                        let count = 1;
+                        for (let i = 1; i < winConditionLength; i++) {
+                            const newCol = col + i;
+                            if (newCol < boardSize && boardState[checkRow][newCol] === player) count++;
+                        }
+                        if (count >= 4) wallCount++;
+                    }
+                }
+                if (wallCount >= 2) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createUseOpponentPieceTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let count = 1;
+                for (let i = 1; i < winConditionLength; i++) {
+                    const newCol = col + i;
+                    if (newCol < boardSize) {
+                        if (boardState[row][newCol] === player || boardState[row][newCol] === humanPlayer) count++;
+                        else break;
+                    }
+                }
+                for (let i = 1; i < winConditionLength; i++) {
+                    const newCol = col - i;
+                    if (newCol >= 0) {
+                        if (boardState[row][newCol] === player || boardState[row][newCol] === humanPlayer) count++;
+                        else break;
+                    }
+                }
+                if (count >= 5) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createHiddenFourTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let count = 1, gaps = 0;
+                for (let i = 1; i <= 4; i++) {
+                    const newCol = col + i;
+                    if (newCol < boardSize) {
+                        if (boardState[row][newCol] === player) count++;
+                        else if (!boardState[row][newCol]) gaps++;
+                        else break;
+                    }
+                }
+                for (let i = 1; i <= 4; i++) {
+                    const newCol = col - i;
+                    if (newCol >= 0) {
+                        if (boardState[row][newCol] === player) count++;
+                        else if (!boardState[row][newCol]) gaps++;
+                        else break;
+                    }
+                }
+                if (count === 4 && gaps <= 1) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createFenceTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let fenceCount = 0;
+                for (let offset = -2; offset <= 2; offset += 2) {
+                    const checkRow = row + offset;
+                    if (checkRow >= 0 && checkRow < boardSize) {
+                        let count = 1;
+                        for (let i = 1; i < winConditionLength; i++) {
+                            const newCol = col + i;
+                            if (newCol < boardSize && boardState[checkRow][newCol] === player) count++;
+                        }
+                        if (count >= 4) fenceCount++;
+                    }
+                }
+                if (fenceCount >= 2) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function createTripleDiagonalComboTrap(player) {
+            for (const { row, col } of getPotentialMoves()) {
+                boardState[row][col] = player;
+                let diagonalCount = 0;
+                for (const { rowDir, colDir } of [{ rowDir: 1, colDir: 1 }, { rowDir: 1, colDir: -1 }]) {
+                    let count = 1;
+                    for (let i = 1; i < winConditionLength; i++) {
+                        const newRow = row + i * rowDir;
+                        const newCol = col + i * colDir;
+                        if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize && boardState[newRow][newCol] === player) count++;
+                    }
+                    if (count >= 3) diagonalCount++;
+                }
+                if (diagonalCount >= 3) {
+                    boardState[row][col] = null;
+                    return { row, col };
+                }
+                boardState[row][col] = null;
+            }
+            return null;
+        }
+
+        function blockMultipleThreeInARow(player) {
+            const directions = [
+                { rowDir: 0, colDir: 1 },
+                { rowDir: 1, colDir: 0 },
+                { rowDir: 1, colDir: 1 },
+                { rowDir: 1, colDir: -1 }
+            ];
+            let threats = [];
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    if (boardState[row][col] === player) {
+                        for (const dir of directions) {
+                            let count = 1;
+                            let startRow = row, startCol = col;
+                            for (let i = 1; i < winConditionLength; i++) {
+                                const newRow = row + i * dir.rowDir;
+                                const newCol = col + i * dir.colDir;
+                                if (newRow >= boardSize || newCol >= boardSize || newRow < 0 || newCol < 0 || boardState[newRow][newCol] !== player) break;
+                                count++;
+                                startRow = newRow;
+                                startCol = newCol;
+                            }
+                            if (count >= 3) {
+                                const blockForwardRow = startRow + dir.rowDir;
+                                const blockForwardCol = startCol + dir.colDir;
+                                const blockBackwardRow = row - dir.rowDir;
+                                const blockBackwardCol = col - dir.colDir;
+                                if (blockForwardRow >= 0 && blockForwardRow < boardSize && 
+                                    blockForwardCol >= 0 && blockForwardCol < boardSize && 
+                                    !boardState[blockForwardRow][blockForwardCol]) {
+                                    threats.push({ row: blockForwardRow, col: blockForwardCol });
+                                }
+                                if (blockBackwardRow >= 0 && blockBackwardRow < boardSize && 
+                                    blockBackwardCol >= 0 && blockBackwardCol < boardSize && 
+                                    !boardState[blockBackwardRow][blockBackwardCol]) {
+                                    threats.push({ row: blockBackwardRow, col: blockBackwardCol });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (threats.length > 0) {
+                const threatCount = new Map();
+                threats.forEach(threat => {
+                    const key = `${threat.row},${threat.col}`;
+                    threatCount.set(key, (threatCount.get(key) || 0) + 1);
+                });
+                let bestThreat = null;
+                let maxCount = 0;
+                threatCount.forEach((count, key) => {
+                    if (count > maxCount) {
+                        maxCount = count;
+                        const [row, col] = key.split(',').map(Number);
+                        bestThreat = { row, col };
+                    }
+                });
+                return bestThreat;
+            }
+            return null;
+        }
+
+        function occupyCenter() {
+            const center = Math.floor(boardSize / 2);
+            if (!boardState[center][center]) return { row: center, col: center };
+            return null;
+        }
+
+        function runAlphaBeta(player, depth) {
+            let XX, YY;
+            alphabeta(player, -Infinity, Infinity, depth, (row, col) => {
+                XX = row;
+                YY = col;
+            });
+            return (XX !== undefined && YY !== undefined) ? { row: XX, col: YY } : null;
+        }
+
+        function alphabeta(XO, alpha, beta, depth, setBestMove) {
+            if (checkWin(computerPlayer)) return XO === computerPlayer ? Infinity : -Infinity;
+            if (checkWin(humanPlayer)) return XO === humanPlayer ? -Infinity : Infinity;
+            if (depth === 0 || !boardState.flat().includes(null)) return evaluateBoard();
+
+            const moves = getPotentialMoves();
+            moves.sort((a, b) => evaluateBoardMove(b.row, b.col, XO) - evaluateBoardMove(a.row, a.col, XO));
+            let bestMove = null;
+
+            if (XO === computerPlayer) {
+                for (const move of moves) {
+                    boardState[move.row][move.col] = XO;
+                    const score = alphabeta(humanPlayer, alpha, beta, depth - 1, setBestMove);
+                    boardState[move.row][move.col] = null;
+                    if (score > alpha) {
+                        alpha = score;
+                        bestMove = move;
+                    }
+                    if (alpha >= beta) break;
+                }
+                if (depth === Math.max(4, depth) && bestMove) setBestMove(bestMove.row, bestMove.col);
+                return alpha;
+            } else {
+                for (const move of moves) {
+                    boardState[move.row][move.col] = XO;
+                    const score = alphabeta(computerPlayer, alpha, beta, depth - 1, setBestMove);
+                    boardState[move.row][move.col] = null;
+                    if (score < beta) {
+                        beta = score;
+                    }
+                    if (alpha >= beta) break;
+                }
+                return beta;
+            }
+        }
+
+        function evaluateBoardMove(row, col, player) {
+            boardState[row][col] = player;
+            const score = evaluateBoard();
+            boardState[row][col] = null;
+            return score;
+        }
+
+        function evaluateBoard() {
+            let score = 0;
+            const patterns = [
+                { pattern: new RegExp(`${computerPlayer.repeat(winConditionLength)}`), score: 1000000 },
+                { pattern: new RegExp(`${humanPlayer.repeat(winConditionLength)}`), score: -1000000 },
+                { pattern: new RegExp(`0${computerPlayer.repeat(4)}0`), score: 100000 },
+                { pattern: new RegExp(`0${humanPlayer.repeat(4)}0`), score: -100000 },
+                { pattern: new RegExp(`0${computerPlayer.repeat(3)}0`), score: 10000 },
+                { pattern: new RegExp(`0${humanPlayer.repeat(3)}0`), score: -10000 },
+                { pattern: new RegExp(`0${computerPlayer.repeat(2)}0`), score: 1000 },
+                { pattern: new RegExp(`0${humanPlayer.repeat(2)}0`), score: -1000 }
+            ];
+            const directions = [
+                { rowDir: 0, colDir: 1 },
+                { rowDir: 1, colDir: 0 },
+                { rowDir: 1, colDir: 1 },
+                { rowDir: 1, colDir: -1 }
+            ];
+
+            for (const dir of directions) {
+                for (let row = 0; row < boardSize; row++) {
+                    for (let col = 0; col < boardSize; col++) {
+                        let boardStr = '';
+                        for (let i = -winConditionLength; i <= winConditionLength; i++) {
+                            const r = row + i * dir.rowDir;
+                            const c = col + i * dir.colDir;
+                            if (r >= 0 && r < boardSize && c >= 0 && c < boardSize) {
+                                boardStr += boardState[r][c] || '0';
+                            }
+                        }
+                        for (const { pattern, score: patternScore } of patterns) {
+                            score += (boardStr.match(pattern) || []).length * patternScore;
+                        }
+                    }
+                }
+            }
+            return score;
+        }
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open("CaroAI_DB", 1);
+                request.onupgradeneeded = event => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains("matches")) {
+                        db.createObjectStore("matches", { keyPath: "id", autoIncrement: true });
+                    }
+                };
+                request.onsuccess = event => resolve(event.target.result);
+                request.onerror = event => reject(event.target.error);
+            });
+        }
+
+        async function saveMatchData(gameData) {
+            const db = await openDB();
+            const transaction = db.transaction("matches", "readwrite");
+            transaction.objectStore("matches").add(gameData);
+        }
+
+        async function getPastMatches(limit = 10) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const request = db.transaction("matches", "readonly").objectStore("matches").getAll();
+                request.onsuccess = () => resolve(request.result.slice(-limit));
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function saveGameResult(winner) {
+            await saveMatchData({
+                moves: currentGameMoves,
+                winner: winner,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        async function analyzePastGames(limit = 10) {
+            const pastGames = await getPastMatches(limit);
+            const moveScores = new Map();
+            pastGames.forEach(game => {
+                game.moves.forEach(move => {
+                    const key = `${move.row},${move.col}`;
+                    if (!moveScores.has(key)) moveScores.set(key, { wins: 0, total: 0 });
+                    const stats = moveScores.get(key);
+                    stats.total++;
+                    if (game.winner === move.player) stats.wins++;
+                });
+            });
+            const bestMoves = [];
+            moveScores.forEach((stats, key) => {
+                const [row, col] = key.split(',').map(Number);
+                const winRate = stats.wins / stats.total;
+                if (stats.total > 1 && winRate > 0.5) bestMoves.push({ row, col, winRate });
+            });
+            return bestMoves.sort((a, b) => b.winRate - a.winRate);
+        }
+    </script>
+    <footer>
+        <div class="footer-container">
+            <div class="social-icons">
+                <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@thanh.sang70" target="_blank"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <p>© 2025 NTS. Được thiết kế bởi <a href="#">Nguyễn Thanh Sang</a>.</p>
+        </div>
+    </footer>
 </body>
 </html>
