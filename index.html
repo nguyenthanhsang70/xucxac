@@ -28,7 +28,7 @@
         border-radius: 12px;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         width: 100%;
-        max-width: 600px; /* Increased width for better text accommodation */
+        max-width: 600px;
         text-align: center;
         position: relative;
         transition: transform 0.3s ease;
@@ -64,10 +64,22 @@
     }
 
     h1 {
-        color: #2c3e50;
+        color: transparent;
         font-size: 28px;
         margin-bottom: 25px;
         font-weight: 600;
+        background: linear-gradient(45deg, #007bff, #28a745); /* Gradient from blue to green */
+        -webkit-background-clip: text;
+        background-clip: text;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        transition: transform 0.3s ease, background 0.5s ease;
+    }
+
+    h1:hover {
+        transform: scale(1.05); /* Slight scale effect on hover */
+        background: linear-gradient(45deg, #28a745, #007bff); /* Reverse gradient on hover */
+        -webkit-background-clip: text;
+        background-clip: text;
     }
 
     #question {
@@ -75,13 +87,13 @@
         font-size: 20px;
         margin-bottom: 20px;
         line-height: 1.6;
-        text-align: left; /* Align question text left for better readability */
+        text-align: left;
     }
 
     .options-container {
         display: flex;
         flex-direction: column;
-        gap: 10px; /* Space between answer options */
+        gap: 10px;
         margin-bottom: 20px;
     }
 
@@ -95,8 +107,8 @@
         border-radius: 8px;
         cursor: pointer;
         transition: background-color 0.3s ease, transform 0.2s ease;
-        text-align: left; /* Align answer text left */
-        word-wrap: break-word; /* Ensure long text wraps */
+        text-align: left;
+        word-wrap: break-word;
     }
 
     label:hover {
@@ -107,7 +119,7 @@
     input[type="radio"] {
         margin-right: 10px;
         cursor: pointer;
-        flex-shrink: 0; /* Prevent radio button from shrinking */
+        flex-shrink: 0;
     }
 
     button {
@@ -123,19 +135,19 @@
     }
 
     button#check {
-        background-color: #28a745;
+        background-color: #00FF99;
     }
 
     button#next {
-        background-color: #007bff;
+        background-color: #0099CC;
     }
 
     button#previous {
-        background-color: #6c757d;
+        background-color: #33CCCC;
     }
 
     button#restart {
-        background-color: #e67e22;
+        background-color: #FFCCCC;
     }
 
     button:hover {
@@ -153,7 +165,7 @@
         font-size: 18px;
         color: #e74c3c;
         font-weight: 500;
-        text-align: left; /* Align message text left */
+        text-align: left;
         line-height: 1.5;
     }
 
