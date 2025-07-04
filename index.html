@@ -1,272 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quay Tên Ngẫu Nhiên - NTS</title>
-    <link rel="icon" type="image/png" href="logos3.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #6b7280, #1e3a8a);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            overflow-x: hidden;
-        }
-        .content {
-            flex: 1;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-        h2 {
-            font-size: 3em;
-            font-weight: 700;
-            color: #fefcbf;
-            margin-bottom: 30px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-            animation: fadeIn 1s ease-in;
-        }
-        textarea {
-            width: 90%;
-            max-width: 500px;
-            height: 180px;
-            padding: 20px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 15px;
-            background-color: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            resize: none;
-            margin-bottom: 30px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        textarea:focus {
-            outline: none;
-            transform: scale(1.02);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        button {
-            padding: 15px 40px;
-            font-size: 1.2em;
-            font-weight: 600;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        button#spinButton {
-            background: linear-gradient(90deg, #ff3b3b, #ff6f61);
-            color: #fff;
-        }
-        button#spinButton:hover {
-            background: linear-gradient(90deg, #e02a2a, #e55b50);
-            transform: translateY(-3px);
-        }
-        button#refreshButton {
-            background: linear-gradient(90deg, #7c3aed, #a855f7);
-            color: #fff;
-        }
-        button#refreshButton:hover {
-            background: linear-gradient(90deg, #6b21a8, #9333ea);
-            transform: translateY(-3px);
-        }
-        .back-container {
-            margin-top: 20px;
-        }
-        .back-container a {
-            text-decoration: none;
-            font-size: 1.2em;
-            color: #fefcbf;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-        .back-container a:hover {
-            color: #Facc15;
-            transform: translateX(-5px);
-        }
-        .result {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin: 30px 0;
-            color: #fefcbf;
-            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-            min-height: 70px;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        .result span {
-            display: inline-block;
-            animation: slide-in 0.8s ease-out;
-        }
-        @keyframes slide-in {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        footer {
-            background: linear-gradient(135deg, #1e3a8a, #6b7280);
-            color: #fff;
-            padding: 2rem 0;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
-        }
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 1rem;
-        }
-        .social-icons a {
-            font-size: 1.5rem;
-            color: #fefcbf;
-            transition: all 0.3s ease;
-        }
-        .social-icons a:hover {
-            color: #facc15;
-            transform: scale(1.2);
-        }
-        footer p {
-            margin: 0;
-            font-size: 1rem;
-            line-height: 1.5;
-        }
-        footer a {
-            color: #facc15;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-        @media (max-width: 600px) {
-            h2 {
-                font-size: 2.2em;
-            }
-            textarea {
-                width: 95%;
-                font-size: 1em;
-                height: 150px;
-            }
-            button {
-                font-size: 1em;
-                padding: 12px 30px;
-            }
-            .back-container a {
-                font-size: 1em;
-            }
-            .result {
-                font-size: 2em;
-            }
-            .social-icons a {
-                font-size: 1.25rem;
-            }
-            footer p {
-                font-size: 0.9em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Trang Chủ NTS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="logos3.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .parallax {
+      background-attachment: fixed;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    .gradient-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      animation: drift 12s infinite ease-in-out;
+    }
+    .particle:nth-child(1) { width: 60px; height: 60px; top: 15%; left: 10%; animation-duration: 9s; }
+    .particle:nth-child(2) { width: 120px; height: 120px; bottom: 25%; right: 10%; animation-duration: 14s; }
+    .particle:nth-child(3) { width: 180px; height: 180px; top: 50%; left: 35%; animation-duration: 16s; }
+    @keyframes drift {
+      0% { transform: translate(0, 0); opacity: 0.3; }
+      50% { transform: translate(30px, -20px); opacity: 0.6; }
+      100% { transform: translate(0, 0); opacity: 0.3; }
+    }
+    .animate-slide-up {
+      animation: slideUp 1s ease-out;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .music-control {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .music-control:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 1);
+    }
+    .tooltip {
+      position: absolute;
+      right: 60px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 14px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .music-control:hover .tooltip {
+      opacity: 1;
+    }
+  </style>
 </head>
-<body>
-    <div class="content">
-        <h2>Quay Tên Ngẫu Nhiên</h2>
-        <textarea id="nameList" placeholder="Nhập danh sách tên, mỗi tên một dòng"></textarea>
-        <div class="button-container">
-            <button id="spinButton" onclick="spinName()">
-                <i class="fas fa-sync-alt"></i> Quay Tên
-            </button>
-            <button id="refreshButton" onclick="refreshList()">
-                <i class="fas fa-undo"></i> Làm mới
-            </button>
-        </div>
-        <div class="result" id="result"></div>
-        <div class="back-container">
-            <a href="game.html">
-                <i class="fas fa-arrow-left"></i> Quay lại
-            </a>
-        </div>
+<body class="font-inter bg-gray-100 text-gray-900">
+  <!-- Audio element for background music -->
+  <audio id="backgroundMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    Trình duyệt của bạn không hỗ trợ phần tử âm thanh.
+  </audio>
+
+  <!-- Music control button -->
+  <div class="music-control" id="musicControl" title="Bật/Tắt nhạc nền">
+    <i class="fas fa-music text-indigo-600"></i>
+    <span class="tooltip">Bật/Tắt nhạc nền</span>
+  </div>
+
+  <header class="parallax h-screen flex items-center justify-center text-center text-white relative" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80')">
+    <div class="gradient-overlay"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="relative z-10 animate-slide-up">
+      <h1 class="text-5xl md:text-7xl font-bold tracking-tight uppercase">Trang Chủ NTS</h1>
+      <p class="mt-4 text-xl md:text-2xl max-w-2xl mx-auto italic">Chào mừng bạn đến với NTS - Nơi kết nối và chinh phục mọi thử thách!</p>
     </div>
-    <audio id="resultSound" src="sound.mp3" preload="auto"></audio>
-    <footer>
-        <div class="social-icons">
-            <a href="https://www.facebook.com/YOUR_FACEBOOK_PAGE" target="_blank">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://www.instagram.com/YOUR_INSTAGRAM_PROFILE" target="_blank">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://www.tiktok.com/YOUR_TIKTOK_PROFILE" target="_blank">
-                <i class="fab fa-tiktok"></i>
-            </a>
+  </header>
+
+  <section class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Thử Thách Bản Thân</h3>
+          <p class="text-gray-600 mb-6">Khám phá trò chơi thú vị do NTS phát triển!</p>
+          <a href="game.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Chơi Ngay</a>
         </div>
-        <p>© 2025 NTS. Được thiết kế bởi <a href="#">Nguyễn Thanh Sang</a>.</p>
-    </footer>
-    <script>
-        let intervalId;
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Tỏ Tình</h3>
+          <p class="text-gray-600 mb-6">Anh không cần cả thế giới, anh chỉ cần em!</p>
+          <a href="totinh.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Tỏ Tình Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Happy Birthday</h3>
+          <p class="text-gray-600 mb-6">Born to shine, Happy Birthday!</p>
+          <a href="chucmungsinhnhat.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Gửi Lời Chúc Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Ngày Quan Trọng</h3>
+          <p class="text-gray-600 mb-6">Hãy đánh dấu ngay những ngày quan trọng này!</p>
+          <a href="ngayquantrong.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Kiểm Tra Thiết Bị</h3>
+          <p class="text-gray-600 mb-6">Kiểm tra hôm nay - An toàn ngày mai!</p>
+          <a href="hoso.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Kiểm Tra Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Bể Cá 3D</h3>
+          <p class="text-gray-600 mb-6">Một đại dương thu nhỏ, cả thế giới trong tầm mắt!</p>
+          <a href="beca.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Hộp Không Gian 3D</h3>
+          <p class="text-gray-600 mb-6">Khám phá và trải nghiệm không gian 3D!</p>
+          <a href="khampha.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
+          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Lịch Sử NTS</h3>
+          <p class="text-gray-600 mb-6">Dấu ấn thời đại, bứt phá tương lai.</p>
+          <a href="lichsu.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        function spinName() {
-            const names = document.getElementById("nameList").value.trim().split("\n").filter(name => name);
-            if (names.length === 0) {
-                alert("Vui lòng nhập ít nhất một tên!");
-                return;
-            }
-            const resultElement = document.getElementById("result");
-            const sound = document.getElementById("resultSound");
-            let count = 0;
-            const totalIterations = 30;
-            clearInterval(intervalId);
-            intervalId = setInterval(() => {
-                const randomIndex = Math.floor(Math.random() * names.length);
-                resultElement.textContent = "Đang quay: " + names[randomIndex];
-                count++;
-                if (count >= totalIterations) {
-                    clearInterval(intervalId);
-                    const finalName = names[Math.floor(Math.random() * names.length)];
-                    resultElement.innerHTML = `<span>${finalName}</span>`;
-                    sound.play().catch(error => {
-                        console.error("Error playing sound:", error);
-                    });
-                }
-            }, 100);
-        }
+  <footer class="bg-indigo-900 text-white py-12 text-center">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-center space-x-6 mb-4">
+        <a href="https://www.facebook.com" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
+          <i class="fab fa-facebook-f text-xl"></i>
+        </a>
+        <a href="https://www.instagram.com" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
+          <i class="fab fa-instagram text-xl"></i>
+        </a>
+        <a href="https://www.tiktok.com/@thanh.sang70" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
+          <i class="fab fa-tiktok text-xl"></i>
+        </a>
+      </div>
+      <p class="text-lg">© 2025 NTS. Được thiết kế với bởi <a href="https://www.tiktok.com/@thanh.sang70" class="text-purple-400 hover:text-white transition">Nguyễn Thanh Sang</a>.</p>
+    </div>
+  </footer>
 
-        function refreshList() {
-            document.getElementById("nameList").value = "";
-            document.getElementById("result").textContent = "";
+  <script>
+    // Background music control
+    document.addEventListener('DOMContentLoaded', function() {
+      const music = document.getElementById('backgroundMusic');
+      const musicControl = document.getElementById('musicControl');
+      let isPlaying = false;
+      
+      // Try to play music automatically (may be blocked by browser)
+      const playPromise = music.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.then(_ => {
+          isPlaying = true;
+          musicControl.innerHTML = '<i class="fas fa-pause text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
+        })
+        .catch(error => {
+          isPlaying = false;
+          musicControl.innerHTML = '<i class="fas fa-play text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
+        });
+      }
+      
+      // Toggle play/pause when button is clicked
+      musicControl.addEventListener('click', function() {
+        if (isPlaying) {
+          music.pause();
+          musicControl.innerHTML = '<i class="fas fa-play text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
+        } else {
+          music.play();
+          musicControl.innerHTML = '<i class="fas fa-pause text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
         }
-    </script>
+        isPlaying = !isPlaying;
+      });
+      
+      // Lower volume to make it background music
+      music.volume = 0.3;
+    });
+  </script>
 </body>
 </html>
