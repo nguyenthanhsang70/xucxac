@@ -1,216 +1,475 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Trang Chủ NTS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="logos3.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .parallax {
-      background-attachment: fixed;
-      background-position: center;
-      background-size: cover;
-      position: relative;
-    }
-    .card-hover {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
-    .gradient-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
-    }
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      animation: drift 12s infinite ease-in-out;
-    }
-    .particle:nth-child(1) { width: 60px; height: 60px; top: 15%; left: 10%; animation-duration: 9s; }
-    .particle:nth-child(2) { width: 120px; height: 120px; bottom: 25%; right: 10%; animation-duration: 14s; }
-    .particle:nth-child(3) { width: 180px; height: 180px; top: 50%; left: 35%; animation-duration: 16s; }
-    @keyframes drift {
-      0% { transform: translate(0, 0); opacity: 0.3; }
-      50% { transform: translate(30px, -20px); opacity: 0.6; }
-      100% { transform: translate(0, 0); opacity: 0.3; }
-    }
-    .animate-slide-up {
-      animation: slideUp 1s ease-out;
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .music-control {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-    .music-control:hover {
-      transform: scale(1.1);
-      background: rgba(255, 255, 255, 1);
-    }
-    .tooltip {
-      position: absolute;
-      right: 60px;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 14px;
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-    .music-control:hover .tooltip {
-      opacity: 1;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiểm tra thiết bị - NTS</title>
+<link rel="icon" type="image/png" href="logos3.png">
+<style>
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #000;
+    color: #0f0;
+    text-align: left;
+    padding: 20px;
+    overflow: hidden;
+    margin: 0;
+    cursor: none;
+    position: relative;
+    background: linear-gradient(0deg, rgba(0, 15, 0, 0.9), rgba(0, 30, 0, 0.95));
+  }
+  .warning {
+    font-size: 32px;
+    color: #f00;
+    animation: flicker 0.15s infinite alternate, glitch-text 0.5s infinite;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px #f00, 0 0 20px #0f0;
+    letter-spacing: 2px;
+  }
+  @keyframes flicker {
+    from { opacity: 1; }
+    to { opacity: 0.4; }
+  }
+  @keyframes glitch-text {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    60% { transform: translate(-1px, 1px); }
+    100% { transform: translate(0, 0); }
+  }
+  .button {
+    margin: 15px 5px;
+    padding: 8px 15px;
+    font-size: 18px;
+    background-color: transparent;
+    border: 2px solid #0f0;
+    color: #0f0;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+    text-shadow: 0 0 5px #0f0;
+    position: relative;
+    overflow: hidden;
+  }
+  .button:hover {
+    background-color: rgba(0, 255, 0, 0.2);
+    box-shadow: 0 0 15px #0f0;
+    transform: scale(1.05);
+  }
+  .button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.3), transparent);
+    transition: 0.5s;
+  }
+  .button:hover::after {
+    left: 100%;
+  }
+  .code {
+    margin-top: 15px;
+    color: #0f0;
+    white-space: pre-wrap;
+    max-height: 70vh;
+    overflow-y: auto;
+    line-height: 1.4;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border: 1px solid #0f0;
+    border-radius: 5px;
+    animation: code-scroll 0.2s infinite;
+    text-shadow: 0 0 5px #0f0;
+  }
+  .code .error { color: #f00; text-shadow: 0 0 8px #f00; }
+  .code .warning { color: #ff0; text-shadow: 0 0 8px #ff0; }
+  .code .info { color: #0f0; text-shadow: 0 0 8px #0f0; }
+  .scary-message {
+    font-size: 24px;
+    color: #ff0;
+    animation: shake 0.05s infinite, glitch-text 0.3s infinite;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px #ff0;
+  }
+  @keyframes shake {
+    0% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    100% { transform: translateX(-4px); }
+  }
+  .hacked-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    color: #f00;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: glitch 0.4s infinite;
+    text-shadow: 0 0 15px #f00;
+    font-size: 20px;
+  }
+  @keyframes glitch {
+    0% { transform: skewX(0deg); }
+    15% { transform: skewX(15deg) scale(1.02); }
+    30% { transform: skewX(-15deg) scale(0.98); }
+    45% { transform: skewX(10deg); }
+    60% { transform: skewX(-10deg); }
+    100% { transform: skewX(0deg); }
+  }
+  .noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: repeating-linear-gradient(45deg, rgba(0,0,0,0.2), rgba(255,0,0,0.1) 2px);
+    opacity: 0.3;
+    animation: scanline 1.5s infinite linear;
+  }
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+  .matrix-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.6;
+  }
+  .code-line {
+    opacity: 0;
+    animation: type 0.5s forwards;
+  }
+  @keyframes type {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
 </head>
-<body class="font-inter bg-gray-100 text-gray-900">
-  <!-- Audio element for background music -->
-  <audio id="backgroundMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    Trình duyệt của bạn không hỗ trợ phần tử âm thanh.
-  </audio>
+<body>
 
-  <!-- Music control button -->
-  <div class="music-control" id="musicControl" title="Bật/Tắt nhạc nền">
-    <i class="fas fa-music text-indigo-600"></i>
-    <span class="tooltip">Bật/Tắt nhạc nền</span>
-  </div>
+<div class="warning">*** CRITICAL SYSTEM BREACH DETECTED ***</div>
+<p id="systemAlert">[System] Unauthorized access detected at 192.168.1.1 - <span id="realTime">03/14/2025 14:32:07</span></p>
+<div class="scary-message">!!! TERMINATE ALL PROCESSES IMMEDIATELY !!!</div>
+<button class="button" id="shutdownButton">[SYS_SHUTDOWN]</button>
+<a href="index.html" class="button" id="backButton">[ESCAPE TO SAFETY]</a>
+<div class="code" id="codeOutput"></div>
+<div class="noise"></div>
+<canvas id="matrixCanvas" class="matrix-rain"></canvas>
 
-  <header class="parallax h-screen flex items-center justify-center text-center text-white relative" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80')">
-    <div class="gradient-overlay"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="relative z-10 animate-slide-up">
-      <h1 class="text-5xl md:text-7xl font-bold tracking-tight uppercase">Trang Chủ NTS</h1>
-      <p class="mt-4 text-xl md:text-2xl max-w-2xl mx-auto italic">Chào mừng bạn đến với NTS - Nơi kết nối và chinh phục mọi thử thách!</p>
-    </div>
-  </header>
+<script>
+  // Matrix rain effect
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  const chars = '01';
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+  const drops = Array(Math.floor(columns)).fill(1);
 
-  <section class="bg-white py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
-          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Thử Thách Bản Thân</h3>
-          <p class="text-gray-600 mb-6">Khám phá trò chơi thú vị do NTS phát triển!</p>
-          <a href="game.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Chơi Ngay</a>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
-          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Tỏ Tình</h3>
-          <p class="text-gray-600 mb-6">Anh không cần cả thế giới, anh chỉ cần em!</p>
-          <a href="totinh.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Tỏ Tình Ngay</a>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
-          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Happy Birthday</h3>
-          <p class="text-gray-600 mb-6">Born to shine, Happy Birthday!</p>
-          <a href="chucmungsinhnhat.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Gửi Lời Chúc Ngay</a>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
-          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Ngày Quan Trọng</h3>
-          <p class="text-gray-600 mb-6">Hãy đánh dấu ngay những ngày quan trọng này!</p>
-          <a href="ngayquantrong.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
-          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Kiểm Tra Thiết Bị</h3>
-          <p class="text-gray-600 mb-6">Kiểm tra hôm nay - An toàn ngày mai!</p>
-          <a href="hoso.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Kiểm Tra Ngay</a>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
-          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Bể Cá 3D</h3>
-          <p class="text-gray-600 mb-6">Một đại dương thu nhỏ, cả thế giới trong tầm mắt!</p>
-          <a href="beca.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
-          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Hộp Không Gian 3D</h3>
-          <p class="text-gray-600 mb-6">Khám phá và trải nghiệm không gian 3D!</p>
-          <a href="khampha.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-lg text-center">
-          <h3 class="text-2xl font-semibold text-indigo-900 mb-3">Lịch Sử NTS</h3>
-          <p class="text-gray-600 mb-6">Dấu ấn thời đại, bứt phá tương lai.</p>
-          <a href="lichsu.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">Xem Ngay</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#0f0';
+    ctx.font = fontSize + 'px Courier New';
 
-  <footer class="bg-indigo-900 text-white py-12 text-center">
-    <div class="container mx-auto px-4">
-      <div class="flex justify-center space-x-6 mb-4">
-        <a href="https://www.facebook.com" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
-          <i class="fab fa-facebook-f text-xl"></i>
-        </a>
-        <a href="https://www.instagram.com" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
-          <i class="fab fa-instagram text-xl"></i>
-        </a>
-        <a href="https://www.tiktok.com/@thanh.sang70" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
-          <i class="fab fa-tiktok text-xl"></i>
-        </a>
-      </div>
-      <p class="text-lg">© 2025 NTS. Được thiết kế với bởi <a href="https://www.tiktok.com/@thanh.sang70" class="text-purple-400 hover:text-white transition">Nguyễn Thanh Sang</a>.</p>
-    </div>
-  </footer>
-
-  <script>
-    // Background music control
-    document.addEventListener('DOMContentLoaded', function() {
-      const music = document.getElementById('backgroundMusic');
-      const musicControl = document.getElementById('musicControl');
-      let isPlaying = false;
-      
-      // Try to play music automatically (may be blocked by browser)
-      const playPromise = music.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.then(_ => {
-          isPlaying = true;
-          musicControl.innerHTML = '<i class="fas fa-pause text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
-        })
-        .catch(error => {
-          isPlaying = false;
-          musicControl.innerHTML = '<i class="fas fa-play text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
-        });
+    for (let i = 0; i < drops.length; i++) {
+      const text = chars.charAt(Math.floor(Math.random() * chars.length));
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
       }
-      
-      // Toggle play/pause when button is clicked
-      musicControl.addEventListener('click', function() {
-        if (isPlaying) {
-          music.pause();
-          musicControl.innerHTML = '<i class="fas fa-play text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
-        } else {
-          music.play();
-          musicControl.innerHTML = '<i class="fas fa-pause text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
-        }
-        isPlaying = !isPlaying;
-      });
-      
-      // Lower volume to make it background music
-      music.volume = 0.3;
-    });
-  </script>
+      drops[i]++;
+    }
+  }
+  setInterval(drawMatrix, 50);
+
+  // Danh sách thiết bị giả lập
+  const devices = {
+    cpu: { name: "CPU: Intel i7-9700K @ 3.60GHz", status: "OK", usage: 10, temp: 45 },
+    ram: { name: "RAM: 16GB DDR4 @ 3200MHz", status: "OK", usage: 35, capacity: 16 },
+    gpu: { name: "GPU: NVIDIA RTX 3080", status: "OK", usage: 5, temp: 50 },
+    storage: { name: "Storage: Samsung SSD 1TB (C:)", status: "OK", freeSpace: 650, totalSpace: 1000 },
+    network: { name: "Network: Intel Ethernet I219-V", status: "OK", traffic: "0 MB/s" }
+  };
+
+  // Mã giả lập theo từng thiết bị
+  const deviceAttacks = {
+    cpu: [
+      `[INFO] ${devices.cpu.name} - Status: Nominal, Usage: ${devices.cpu.usage}%, Temp: ${devices.cpu.temp}°C`,
+      `[WARNING] Kernel interrupt detected - CPU usage spiked to 85% (IRQ #13)`,
+      `[ERROR] Thermal sensor alert: CPU temp reached 92°C - Initiating emergency throttle (Code: 0x00001337)`,
+      `[CRITICAL] Rogue process detected: "sys32k.exe" (PID: 1337) - Privilege escalation attempt via CVE-2025-0133`
+    ],
+    ram: [
+      `[INFO] ${devices.ram.name} - Status: Stable, Usage: ${devices.ram.usage}% (${(devices.ram.usage * devices.ram.capacity / 100).toFixed(1)}GB/${devices.ram.capacity}GB)`,
+      `[WARNING] Memory allocation failure - Page fault at 0x7FFF0000, usage at 92%`,
+      `[ERROR] Unhandled exception: Memory corruption detected - Buffer overflow at 0x80000000`,
+      `[CRITICAL] RAM compromised: Malicious payload injecting shellcode - Integrity check failed`
+    ],
+    gpu: [
+      `[INFO] ${devices.gpu.name} - Status: Idle, Usage: ${devices.gpu.usage}%, Temp: ${devices.gpu.temp}°C`,
+      `[WARNING] GPU core overload - Usage spiked to 78%, unknown DirectX process (dx12hook.dll)`,
+      `[ERROR] Driver crash: nvlddmkm.sys - Exception code 0xC0000005, GPU reset failed`,
+      `[CRITICAL] GPU hijacked: Compute shader executing cryptomining kernel - VRAM locked`
+    ],
+    storage: [
+      `[INFO] ${devices.storage.name} - Status: Healthy, Free: ${devices.storage.freeSpace}GB/${devices.storage.totalSpace}GB`,
+      `[WARNING] Disk I/O anomaly: Sequential write detected - Encryption active (25% complete)`,
+      `[ERROR] Filesystem failure: NTFS partition table corrupted - Error 0x80070570`,
+      `[CRITICAL] MBR overwritten: Bootloader replaced with ransom payload - Disk signature: 0xDEADBEEF`
+    ],
+    network: [
+      `[INFO] ${devices.network.name} - Status: Connected, Traffic: ${devices.network.traffic}`,
+      `[WARNING] Anomalous outbound traffic: 148 MB/s to 45.32.12.78:1337 (TOR exit node)`,
+      `[ERROR] Security breach: Firewall rule #1001 bypassed via UDP/443 - Session hijacked`,
+      `[CRITICAL] NIC disabled: Remote command executed - ARP poisoning detected`
+    ]
+  };
+
+  // Hàm định dạng thời gian thực
+  function getCurrentTimestamp() {
+    const now = new Date();
+    const dateString = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+    const timeString = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    return `[${dateString} ${timeString}]`;
+  }
+
+  // Hàm cập nhật thời gian thực cho systemAlert
+  let realTimeInterval = null;
+  function updateRealTime() {
+    const realTimeElement = document.getElementById('realTime');
+    if (realTimeElement) {
+      const now = new Date();
+      const dateString = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+      const timeString = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      realTimeElement.innerText = `${dateString} ${timeString}`;
+    }
+  }
+
+  // Cập nhật thời gian ban đầu và sau đó mỗi giây
+  updateRealTime();
+  realTimeInterval = setInterval(updateRealTime, 1000);
+
+  document.getElementById('shutdownButton').addEventListener('click', function () {
+    const button = this;
+    button.classList.add('loading');
+    button.disabled = true;
+    button.innerText = "[SYS_SHUTDOWN] - ACCESS DENIED";
+
+    setTimeout(() => {
+      startShutdown();
+    }, 1500);
+  });
+
+  document.getElementById('backButton').addEventListener('click', function (e) {
+    // Không ngăn chặn hành động nhấp vào nút khi đã crash
+  });
+
+  function startShutdown() {
+    const codeOutput = document.getElementById('codeOutput');
+    let cpuTemp = devices.cpu.temp;
+    let cpuUsage = devices.cpu.usage;
+    let gpuUsage = devices.gpu.usage;
+    let freeSpace = devices.storage.freeSpace;
+    let networkTraffic = 0;
+    let encryptionProgress = 25;
+
+    const indices = {
+      cpu: 0,
+      ram: 0,
+      gpu: 0,
+      storage: 0,
+      network: 0
+    };
+
+    const deviceKeys = Object.keys(deviceAttacks);
+    let attackComplete = false;
+
+    const interval = setInterval(() => {
+      if (!attackComplete) {
+        const randomDelay = Math.random() * 500 + 200;
+        setTimeout(() => {
+          const device = deviceKeys[Math.floor(Math.random() * deviceKeys.length)];
+          const currentIndex = indices[device];
+
+          if (currentIndex < deviceAttacks[device].length) {
+            const message = `${getCurrentTimestamp()} ${deviceAttacks[device][currentIndex]}`;
+            codeOutput.innerHTML += `<div class="code-line ${getMessageType(message)}">${message}</div>`;
+
+            // Cập nhật trạng thái thiết bị
+            if (device === "cpu") {
+              if (message.includes("CPU usage spiked")) {
+                cpuUsage = 85;
+                cpuTemp += 10;
+                devices.cpu.status = "UNSTABLE";
+                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.cpu.name} - Usage: ${cpuUsage}%, Temp: ${cpuTemp}°C - Core 0-3 overloaded</div>`;
+              }
+              if (message.includes("Thermal sensor alert")) {
+                cpuTemp = 92;
+                codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] ${devices.cpu.name} - Temp: ${cpuTemp}°C - Hardware damage imminent</div>`;
+              }
+              if (message.includes("Rogue process detected")) {
+                devices.cpu.status = "INFECTED";
+              }
+            }
+            if (device === "ram") {
+              if (message.includes("Memory allocation failure")) {
+                devices.ram.usage = 92;
+                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.ram.name} - Usage: ${devices.ram.usage}% (${(devices.ram.usage * devices.ram.capacity / 100).toFixed(1)}GB/${devices.ram.capacity}GB) - Swap file saturated</div>`;
+              }
+              if (message.includes("RAM compromised")) {
+                devices.ram.status = "INFECTED";
+              }
+            }
+            if (device === "gpu") {
+              if (message.includes("GPU core overload")) {
+                gpuUsage = 78;
+                devices.gpu.temp += 15;
+                devices.gpu.status = "UNSTABLE";
+                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.gpu.name} - Usage: ${gpuUsage}%, Temp: ${devices.gpu.temp}°C - Fan speed: 95%</div>`;
+              }
+              if (message.includes("GPU hijacked")) {
+                devices.gpu.status = "INFECTED";
+              }
+            }
+            if (device === "storage") {
+              if (message.includes("Encryption active")) {
+                freeSpace -= 150;
+                devices.storage.status = "UNSTABLE";
+                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.storage.name} - Encryption: ${encryptionProgress + 25}% - Free space: ${freeSpace}GB</div>`;
+              }
+              if (message.includes("MBR overwritten")) {
+                freeSpace = 0;
+                devices.storage.status = "INFECTED";
+                codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [CRITICAL] ${devices.storage.name} - Disk locked, Free space: ${freeSpace}GB</div>`;
+              }
+            }
+            if (device === "network") {
+              if (message.includes("Anomalous outbound traffic")) {
+                networkTraffic = "148 MB/s";
+                devices.network.status = "UNSTABLE";
+                codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] ${devices.network.name} - Traffic: ${networkTraffic} - DNS spoofing detected</div>`;
+              }
+              if (message.includes("NIC disabled")) {
+                devices.network.status = "INFECTED";
+              }
+            }
+
+            codeOutput.scrollTop = codeOutput.scrollHeight;
+            indices[device]++;
+
+            // Thêm hiệu ứng lag hệ thống
+            if (Math.random() > 0.8) {
+              codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [SYSTEM] Kernel panic - Response delayed: ${Math.floor(Math.random() * 500)}ms</div>`;
+              document.body.style.pointerEvents = 'none';
+              setTimeout(() => {
+                document.body.style.pointerEvents = 'auto';
+              }, Math.random() * 1200);
+            }
+
+            attackComplete = deviceKeys.every(key => indices[key] >= deviceAttacks[key].length);
+            if (attackComplete) {
+              codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [CRITICAL] System integrity lost - All partitions encrypted (Key: AES-256-XTS)</div>`;
+              codeOutput.scrollTop = codeOutput.scrollHeight;
+              setTimeout(() => {
+                clearInterval(interval);
+                simulateCrash();
+              }, 2500);
+            }
+          }
+        }, randomDelay);
+      }
+    }, 300);
+  }
+
+  function getMessageType(message) {
+    if (message.includes('[ERROR]') || message.includes('[CRITICAL]')) return 'error';
+    if (message.includes('[WARNING]')) return 'warning';
+    return 'info';
+  }
+
+  function simulateCrash() {
+    // Check if scary-message exists before updating
+    const scaryMessage = document.querySelector('.scary-message');
+    if (scaryMessage) {
+      scaryMessage.innerText = "!!! SYSTEM FULLY COMPROMISED - DATA ENCRYPTED !!!";
+    }
+
+    // Clear the realTime interval to prevent updates after DOM replacement
+    if (realTimeInterval) {
+      clearInterval(realTimeInterval);
+      realTimeInterval = null;
+    }
+
+    let lagInterval = setInterval(() => {
+      document.body.style.opacity = Math.random() * 0.5 + 0.5;
+    }, 75);
+
+    setTimeout(() => {
+      clearInterval(lagInterval);
+      document.body.innerHTML = `
+        <div class="hacked-screen">
+          <h1>*** SYSTEM LOCKDOWN INITIATED ***</h1>
+          <p style="color:#0f0; text-shadow: 0 0 10px #0f0;">All files encrypted with AES-256-XTS. Decryption key held by remote server.</p>
+          <p style="color:#ff0; text-shadow: 0 0 10px #ff0;">Attacking host: 45.32.12.78 (TOR) - Session ID: X9Z3R7K9</p>
+          <p style="font-size:16px;">
+            To regain access, transfer 0.05 BTC to:<br>
+            <span style="color:#0f0; text-shadow: 0 0 8px #0f0;">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span><br>
+            Email key request to: x9z3r@darknet.onion (TOR required)<br>
+            Include Session ID in payment memo.
+          </p>
+          <div id="countdown" style="color:#f00; animation: flicker 0.2s infinite; text-shadow: 0 0 10px #f00;">
+            TIME REMAINING: 00:09:59
+          </div>
+          <p style="color:#f00; font-size:14px; text-shadow: 0 0 8px #f00;">Failure to comply will result in permanent data wipe.</p>
+          <a href="index.html" class="button" style="margin-top: 20px;">[EXIT SIMULATION]</a>
+        </div>
+      `;
+      startCountdown();
+    }, 2000);
+  }
+
+  function startCountdown() {
+    let timeLeft = 10 * 60 - 1;
+    const countdownElement = document.getElementById('countdown');
+    if (!countdownElement) return; // Prevent error if countdown element is missing
+
+    const countdownInterval = setInterval(() => {
+      if (timeLeft >= 0) {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        countdownElement.innerText = `TIME REMAINING: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        timeLeft--;
+      } else {
+        clearInterval(countdownInterval);
+        countdownElement.innerText = "TIME REMAINING: 00:00 - SYSTEM LOCKED";
+      }
+    }, 1000);
+  }
+
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('keydown', e => e.preventDefault());
+</script>
 </body>
 </html>
