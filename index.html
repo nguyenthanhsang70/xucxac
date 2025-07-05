@@ -75,11 +75,11 @@
     margin-top: 15px;
     color: #0f0;
     white-space: pre-wrap;
-    max-height: 70vh;
+    max-height: 60vh;
     overflow-y: auto;
     line-height: 1.4;
     background: rgba(0, 0, 0, 0.8);
-    padding: 10px;
+    padding: 15px;
     border: 1px solid #0f0;
     border-radius: 5px;
     animation: code-scroll 0.2s infinite;
@@ -166,11 +166,12 @@
 </style>
 </head>
 <body>
-
+<audio id="alertSound" src="https://www.myinstants.com/media/sounds/alarm.mp3" preload="auto"></audio>
 <div class="warning">*** CRITICAL SYSTEM BREACH DETECTED ***</div>
-<p id="systemAlert">[System] Unauthorized access detected at 192.168.1.1 - <span id="realTime">03/14/2025 14:32:07</span></p>
-<div class="scary-message">!!! TERMINATE ALL PROCESSES IMMEDIATELY !!!</div>
+<p id="systemAlert">[System] Unauthorized access detected at 192.168.1.1 - <span id="realTime">07/05/2025 14:27:00</span></p>
+<div class="scary-message" id="scaryMessage">!!! TERMINATE ALL PROCESSES IMMEDIATELY !!!</div>
 <button class="button" id="shutdownButton">[SYS_SHUTDOWN]</button>
+<button class="button" id="counterButton">[COUNTERMEASURE]</button>
 <a href="index.html" class="button" id="backButton">[ESCAPE TO SAFETY]</a>
 <div class="code" id="codeOutput"></div>
 <div class="noise"></div>
@@ -204,6 +205,12 @@
   }
   setInterval(drawMatrix, 50);
 
+  // Play alert sound
+  const alertSound = document.getElementById('alertSound');
+  function playAlertSound() {
+    alertSound.play().catch(() => console.log("Audio playback failed"));
+  }
+
   // Danh sách thiết bị giả lập
   const devices = {
     cpu: { name: "CPU: Intel i7-9700K @ 3.60GHz", status: "OK", usage: 10, temp: 45 },
@@ -219,31 +226,36 @@
       `[INFO] ${devices.cpu.name} - Status: Nominal, Usage: ${devices.cpu.usage}%, Temp: ${devices.cpu.temp}°C`,
       `[WARNING] Kernel interrupt detected - CPU usage spiked to 85% (IRQ #13)`,
       `[ERROR] Thermal sensor alert: CPU temp reached 92°C - Initiating emergency throttle (Code: 0x00001337)`,
-      `[CRITICAL] Rogue process detected: "sys32k.exe" (PID: 1337) - Privilege escalation attempt via CVE-2025-0133`
+      `[CRITICAL] Rogue process detected: "sys32k.exe" (PID: 1337) - Exploiting CVE-2025-0133`,
+      `[CRITICAL] CPU microcode hijacked: Malicious firmware update detected`
     ],
     ram: [
       `[INFO] ${devices.ram.name} - Status: Stable, Usage: ${devices.ram.usage}% (${(devices.ram.usage * devices.ram.capacity / 100).toFixed(1)}GB/${devices.ram.capacity}GB)`,
       `[WARNING] Memory allocation failure - Page fault at 0x7FFF0000, usage at 92%`,
       `[ERROR] Unhandled exception: Memory corruption detected - Buffer overflow at 0x80000000`,
-      `[CRITICAL] RAM compromised: Malicious payload injecting shellcode - Integrity check failed`
+      `[CRITICAL] RAM compromised: Shellcode injection via rowhammer attack`,
+      `[CRITICAL] Memory encryption bypassed: AES key extracted`
     ],
     gpu: [
       `[INFO] ${devices.gpu.name} - Status: Idle, Usage: ${devices.gpu.usage}%, Temp: ${devices.gpu.temp}°C`,
       `[WARNING] GPU core overload - Usage spiked to 78%, unknown DirectX process (dx12hook.dll)`,
       `[ERROR] Driver crash: nvlddmkm.sys - Exception code 0xC0000005, GPU reset failed`,
-      `[CRITICAL] GPU hijacked: Compute shader executing cryptomining kernel - VRAM locked`
+      `[CRITICAL] GPU hijacked: Cryptomining kernel active - VRAM locked`,
+      `[CRITICAL] GPU firmware compromised: Unauthorized DMA access`
     ],
     storage: [
       `[INFO] ${devices.storage.name} - Status: Healthy, Free: ${devices.storage.freeSpace}GB/${devices.storage.totalSpace}GB`,
       `[WARNING] Disk I/O anomaly: Sequential write detected - Encryption active (25% complete)`,
       `[ERROR] Filesystem failure: NTFS partition table corrupted - Error 0x80070570`,
-      `[CRITICAL] MBR overwritten: Bootloader replaced with ransom payload - Disk signature: 0xDEADBEEF`
+      `[CRITICAL] MBR overwritten: Bootloader replaced with ransom payload`,
+      `[CRITICAL] Storage locked: All files encrypted with AES-256-XTS`
     ],
     network: [
       `[INFO] ${devices.network.name} - Status: Connected, Traffic: ${devices.network.traffic}`,
       `[WARNING] Anomalous outbound traffic: 148 MB/s to 45.32.12.78:1337 (TOR exit node)`,
-      `[ERROR] Security breach: Firewall rule #1001 bypassed via UDP/443 - Session hijacked`,
-      `[CRITICAL] NIC disabled: Remote command executed - ARP poisoning detected`
+      `[ERROR] Security breach: Firewall rule #1001 bypassed via UDP/443`,
+      `[CRITICAL] NIC disabled: ARP poisoning detected`,
+      `[CRITICAL] Network exfiltration: 500GB data leaked to remote server`
     ]
   };
 
@@ -271,19 +283,39 @@
   updateRealTime();
   realTimeInterval = setInterval(updateRealTime, 1000);
 
+  // Xử lý nút Shutdown
   document.getElementById('shutdownButton').addEventListener('click', function () {
     const button = this;
     button.classList.add('loading');
     button.disabled = true;
     button.innerText = "[SYS_SHUTDOWN] - ACCESS DENIED";
-
+    playAlertSound();
+    codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] Shutdown attempt failed: Admin privileges revoked</div>`;
     setTimeout(() => {
       startShutdown();
     }, 1500);
   });
 
+  // Xử lý nút Countermeasure
+  document.getElementById('counterButton').addEventListener('click', function () {
+    const button = this;
+    button.disabled = true;
+    button.innerText = "[COUNTERMEASURE] - FAILED";
+    playAlertSound();
+    codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] Countermeasure attempt failed: Malware blocked firewall reset</div>`;
+    codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] Unauthorized process escalated: rootkit detected</div>`;
+    codeOutput.scrollTop = codeOutput.scrollHeight;
+    setTimeout(() => {
+      button.innerText = "[COUNTERMEASURE] - DISABLED";
+    }, 2000);
+  });
+
+  // Xử lý nút Back
   document.getElementById('backButton').addEventListener('click', function (e) {
-    // Không ngăn chặn hành động nhấp vào nút khi đã crash
+    e.preventDefault();
+    codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] Navigation blocked: Browser sandbox compromised</div>`;
+    codeOutput.scrollTop = codeOutput.scrollHeight;
+    playAlertSound();
   });
 
   function startShutdown() {
@@ -331,6 +363,7 @@
               }
               if (message.includes("Rogue process detected")) {
                 devices.cpu.status = "INFECTED";
+                playAlertSound();
               }
             }
             if (device === "ram") {
@@ -340,6 +373,7 @@
               }
               if (message.includes("RAM compromised")) {
                 devices.ram.status = "INFECTED";
+                playAlertSound();
               }
             }
             if (device === "gpu") {
@@ -351,18 +385,21 @@
               }
               if (message.includes("GPU hijacked")) {
                 devices.gpu.status = "INFECTED";
+                playAlertSound();
               }
             }
             if (device === "storage") {
               if (message.includes("Encryption active")) {
                 freeSpace -= 150;
+                encryptionProgress += 25;
                 devices.storage.status = "UNSTABLE";
-                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.storage.name} - Encryption: ${encryptionProgress + 25}% - Free space: ${freeSpace}GB</div>`;
+                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.storage.name} - Encryption: ${encryptionProgress}% - Free space: ${freeSpace}GB</div>`;
               }
               if (message.includes("MBR overwritten")) {
                 freeSpace = 0;
                 devices.storage.status = "INFECTED";
                 codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [CRITICAL] ${devices.storage.name} - Disk locked, Free space: ${freeSpace}GB</div>`;
+                playAlertSound();
               }
             }
             if (device === "network") {
@@ -373,6 +410,7 @@
               }
               if (message.includes("NIC disabled")) {
                 devices.network.status = "INFECTED";
+                playAlertSound();
               }
             }
 
@@ -410,13 +448,11 @@
   }
 
   function simulateCrash() {
-    // Check if scary-message exists before updating
-    const scaryMessage = document.querySelector('.scary-message');
+    const scaryMessage = document.getElementById('scaryMessage');
     if (scaryMessage) {
       scaryMessage.innerText = "!!! SYSTEM FULLY COMPROMISED - DATA ENCRYPTED !!!";
     }
 
-    // Clear the realTime interval to prevent updates after DOM replacement
     if (realTimeInterval) {
       clearInterval(realTimeInterval);
       realTimeInterval = null;
@@ -446,6 +482,7 @@
           <a href="index.html" class="button" style="margin-top: 20px;">[EXIT SIMULATION]</a>
         </div>
       `;
+      playAlertSound();
       startCountdown();
     }, 2000);
   }
@@ -453,7 +490,7 @@
   function startCountdown() {
     let timeLeft = 10 * 60 - 1;
     const countdownElement = document.getElementById('countdown');
-    if (!countdownElement) return; // Prevent error if countdown element is missing
+    if (!countdownElement) return;
 
     const countdownInterval = setInterval(() => {
       if (timeLeft >= 0) {
@@ -464,6 +501,7 @@
       } else {
         clearInterval(countdownInterval);
         countdownElement.innerText = "TIME REMAINING: 00:00 - SYSTEM LOCKED";
+        playAlertSound();
       }
     }, 1000);
   }
