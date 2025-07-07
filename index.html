@@ -3,462 +3,475 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Memory Card Game - 20 Pairs</title>
-<link rel="icon" type="png" href="logos3.png">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Bể Cá 3D - NTS</title>
+<link rel="icon" type="image/png" href="logos3.png">
 <style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #6200ea, #3700b3);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  body, html {
     margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  header {
-    text-align: center;
-    margin-bottom: 20px;
-    width: 100%;
-  }
-  header h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background: linear-gradient(90deg, #ff00c7, #ff9f00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
-  }
-  .game-info {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 15px;
-    font-weight: bold;
-  }
-  .game-info span {
-    background: rgba(0, 0, 0, 0.2);
-    padding: 5px 15px;
-    border-radius: 20px;
-  }
-  .game-board {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 8px;
-    width: 100%;
-    max-width: 800px;
-    perspective: 1000px;
-  }
-  .card {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.5s;
-    cursor: pointer;
-    border-radius: 6px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  .card.flipped {
-    transform: rotateY(180deg);
-  }
-  .card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 6px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 0;
     overflow: hidden;
-  }
-  .card-front {
-    background: linear-gradient(135deg, #ff00c7, #ff9f00);
-  }
-  .card-back {
-    background: #ffffff;
-    transform: rotateY(180deg);
-  }
-  .card-back img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    background: linear-gradient(180deg, #1e90ff, #87cefa, #b0e0e6);
+    font-family: Arial, sans-serif;
+    position: relative;
   }
-  .card.matched {
-    visibility: hidden;
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.3s ease;
+  canvas {
+    display: block;
   }
-  .controls {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-    width: 100%;
-    max-width: 400px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .controls button, .controls a {
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-    flex: 1;
-    min-width: 120px;
+    font-size: 16px;
+    z-index: 10;
   }
-  .controls button.restart-btn {
-    background: linear-gradient(90deg, #ff00c7, #ff9f00);
-    color: white;
+  .back-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
   }
-  .controls button.restart-btn:hover {
-    background: linear-gradient(90deg, #ff9f00, #ff00c7);
-  }
-  .controls a.back-btn {
-    background: linear-gradient(90deg, #03dac6, #018786);
-    color: white;
-    text-decoration: none;
-  }
-  .controls a.back-btn:hover {
-    background: linear-gradient(90deg, #018786, #03dac6);
-  }
-  .timer {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 10px;
-  }
-  .win-message {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+  .sound-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s;
+    gap: 10px;
+    z-index: 10;
   }
-  .win-message.show {
-    opacity: 1;
-    pointer-events: all;
-  }
-  .win-message h2 {
-    font-size: 3rem;
-    background: linear-gradient(90deg, #ff00c7, #ff9f00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 20px;
-  }
-  .win-message p {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
-  }
-  .win-message button {
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    background: linear-gradient(90deg, #03dac6, #018786);
+  .sound-btn {
+    padding: 8px 15px;
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 14px;
   }
-
-  @media (max-width: 900px) {
-    .game-board {
-      grid-template-columns: repeat(6, 1fr);
-      max-width: 600px;
-    }
+  .sound-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
   }
-
-  @media (max-width: 700px) {
-    .game-board {
-      grid-template-columns: repeat(5, 1fr);
-      max-width: 500px;
-    }
+  .volume-slider {
+    width: 100px;
   }
-
-  @media (max-width: 500px) {
-    header h1 {
-      font-size: 1.8rem;
+  @media (max-width: 480px) {
+    .back-button, .sound-btn {
+      padding: 8px 12px;
+      font-size: 12px;
     }
-    .game-board {
-      grid-template-columns: repeat(4, 1fr);
-      max-width: 400px;
-      gap: 6px;
-    }
-    .controls button, .controls a {
-      padding: 10px;
-      font-size: 14px;
-      min-width: 100px;
-    }
-    .win-message h2 {
-      font-size: 2rem;
-    }
-    .win-message p {
-      font-size: 1.2rem;
+    .volume-slider {
+      width: 80px;
     }
   }
 </style>
 </head>
 <body>
-
-<header>
-  <h1>Memory Card Game - 20 Pairs</h1>
-</header>
-
-<div class="game-info">
-  <span id="moves">Nước đi: 0</span>
-  <span id="pairs">Cặp: 0/20</span>
-  <span class="timer" id="timer">00:00</span>
+<button class="back-button" onclick="window.location.href='index.html'">Quay Lại</button>
+<div class="sound-controls">
+  <button class="sound-btn" id="soundToggle">🔊 Bật âm thanh</button>
+  <input type="range" class="volume-slider" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
 </div>
-
-<div class="game-board" id="gameBoard"></div>
-
-<div class="controls">
-  <button class="restart-btn" id="restartBtn">Chơi Lại</button>
-  <a href="game.html" class="back-btn" id="backBtn">Quay Lại</a>
-</div>
-
-<div class="win-message" id="winMessage">
-  <h2>Chúc mừng!</h2>
-  <p id="winStats">Bạn hoàn thành trong 0 nước đi và 00:00</p>
-  <button id="playAgainBtn">Chơi lại</button>
-</div>
-
+<canvas id="aquarium"></canvas>
+<audio id="waterSound" loop>
+  <source src="bien.mp3" type="audio/mp3">
+</audio>
+<audio id="feedSound">
+  <source src="caan.mp3" type="audio/mp3">
+</audio>
+<audio id="bubbleSound">
+  <source src="bubble.mp3" type="audio/mp3">
+</audio>
 <script>
-  // Card images - you should replace these with your actual 20 image paths
-  const cardImages = [
-    'thẻ1.jpg', 'the2.jpg', 'the3.jpg', 'the4.jpg', 
-    'Designer1.jpeg', 'the5.jpg', 'the6.jpg', 'the7.jpg',
-    'the8.jpg', 'the9.jpg', 'the10.jpg', 'the11.jpg',
-    'the12.jpg', 'the13.jpg', 'the14.jpg', 'the15.jpg',
-    'the16.jpg', 'the17.jpg', 'the18.jpg', 'the19.jpg',
-    'the20.jpg'
-  ];
+const canvas = document.getElementById('aquarium');
+const ctx = canvas.getContext('2d');
+const waterSound = document.getElementById('waterSound');
+const feedSound = document.getElementById('feedSound');
+const bubbleSound = document.getElementById('bubbleSound');
+const soundToggle = document.getElementById('soundToggle');
+const volumeControl = document.getElementById('volumeControl');
 
-  // Game state
-  let gameState = {
-    cards: [],
-    flippedCards: [],
-    matchedPairs: 0,
-    moves: 0,
-    timer: 0,
-    timerInterval: null,
-    canFlip: true,
-    totalPairs: 20
-  };
+// Set canvas size
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-  // DOM elements
-  const elements = {
-    gameBoard: document.getElementById('gameBoard'),
-    restartBtn: document.getElementById('restartBtn'),
-    backBtn: document.getElementById('backBtn'),
-    movesDisplay: document.getElementById('moves'),
-    pairsDisplay: document.getElementById('pairs'),
-    timerDisplay: document.getElementById('timer'),
-    winMessage: document.getElementById('winMessage'),
-    winStats: document.getElementById('winStats'),
-    playAgainBtn: document.getElementById('playAgainBtn')
-  };
+// Sound control
+let isSoundOn = false;
 
-  // Initialize the game
-  function initGame() {
-    setupEventListeners();
-    createBoard();
+soundToggle.addEventListener('click', () => {
+  isSoundOn = !isSoundOn;
+  if (isSoundOn) {
+    waterSound.play().catch(e => console.log('Autoplay prevented:', e));
+    soundToggle.textContent = '🔇 Tắt âm thanh';
+  } else {
+    waterSound.pause();
+    soundToggle.textContent = '🔊 Bật âm thanh';
   }
+});
 
-  // Set up event listeners
-  function setupEventListeners() {
-    elements.restartBtn.addEventListener('click', createBoard);
-    elements.playAgainBtn.addEventListener('click', createBoard);
+volumeControl.addEventListener('input', () => {
+  const volume = volumeControl.value;
+  waterSound.volume = volume;
+  feedSound.volume = volume;
+  bubbleSound.volume = volume;
+});
+
+// Try to autoplay with user gesture
+document.body.addEventListener('click', () => {
+  if (!isSoundOn) {
+    waterSound.play().then(() => {
+      isSoundOn = true;
+      soundToggle.textContent = '🔇 Tắt âm thanh';
+    }).catch(e => console.log('Autoplay prevented:', e));
   }
+}, { once: true });
 
-  // Create game board with 20 pairs
-  function createBoard() {
-    resetGameState();
-    clearInterval(gameState.timerInterval);
-    
-    // Create 20 pairs of cards
-    gameState.cards = [];
-    for (let i = 0; i < gameState.totalPairs; i++) {
-      const cardValue = String.fromCharCode(65 + (i % 26)); // A-Z
-      const imgIndex = i % cardImages.length;
-      gameState.cards.push(
-        { value: cardValue, image: cardImages[imgIndex] },
-        { value: cardValue, image: cardImages[imgIndex] }
-      );
+// Day/Night toggle
+let clickCount = 0;
+let isDay = true;
+
+function toggleDayNight() {
+  isDay = !isDay;
+  if (isDay) {
+    document.body.style.background = 'linear-gradient(180deg, #1e90ff, #87cefa, #b0e0e6)';
+    waterSound.pause();
+    waterSound.currentTime = 0;
+    waterSound.play().catch(e => console.log('Play failed:', e));
+  } else {
+    document.body.style.background = 'linear-gradient(180deg, #000033, #000066, #191970)';
+    waterSound.pause();
+    // Optional: Play different night sound here if desired
+    waterSound.play().catch(e => console.log('Play failed:', e));
+  }
+}
+
+// Fish object
+function Fish(x, y, size, color, speed) {
+  this.x = x;
+  this.y = y;
+  this.size = size;
+  this.color = color;
+  this.speed = speed;
+  this.angle = Math.random() * Math.PI * 2;
+  this.targetX = null;
+  this.targetY = null;
+  this.wiggle = Math.random() * 0.1;
+  this.lastBubbleTime = 0;
+}
+
+Fish.prototype.draw = function() {
+  ctx.save();
+  ctx.translate(this.x, this.y);
+  ctx.rotate(this.angle);
+
+  // Shadow
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetX = 5;
+  ctx.shadowOffsetY = 5;
+
+  // Body
+  const gradient = ctx.createRadialGradient(0, 0, this.size / 4, 0, 0, this.size);
+  gradient.addColorStop(0, this.color);
+  gradient.addColorStop(1, 'rgba(0, 0, 0, 0.2)');
+  ctx.fillStyle = gradient;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.quadraticCurveTo(this.size / 2, -this.size / 4, this.size, 0);
+  ctx.quadraticCurveTo(this.size / 2, this.size / 4, 0, 0);
+  ctx.fill();
+
+  // Reset shadow
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+
+  // Tail with wiggle
+  const tailWiggle = Math.sin(Date.now() / 100 + this.x) * 0.2;
+  const tailGradient = ctx.createLinearGradient(-this.size, 0, -this.size / 2, 0);
+  tailGradient.addColorStop(0, 'rgba(255, 255, 255, 0.7)');
+  tailGradient.addColorStop(1, 'rgba(255, 255, 255, 0.3)');
+  ctx.fillStyle = tailGradient;
+  ctx.beginPath();
+  ctx.moveTo(-this.size / 2, 0);
+  ctx.lineTo(-this.size, -this.size / 3 + tailWiggle * this.size);
+  ctx.lineTo(-this.size, this.size / 3 - tailWiggle * this.size);
+  ctx.closePath();
+  ctx.fill();
+
+  // Eye
+  ctx.fillStyle = 'white';
+  ctx.beginPath();
+  ctx.arc(this.size / 4, -this.size / 10, this.size / 10, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = 'black';
+  ctx.beginPath();
+  ctx.arc(this.size / 4, -this.size / 10, this.size / 15, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+};
+
+Fish.prototype.update = function() {
+  // Play bubble sound occasionally
+  const now = Date.now();
+  if (now - this.lastBubbleTime > 3000 + Math.random() * 5000) {
+    if (isSoundOn) {
+      bubbleSound.currentTime = 0;
+      bubbleSound.play().catch(e => console.log('Bubble sound failed:', e));
     }
-    
-    shuffleCards();
-    renderBoard();
-    startTimer();
+    this.lastBubbleTime = now;
   }
 
-  // Reset game state
-  function resetGameState() {
-    gameState.flippedCards = [];
-    gameState.matchedPairs = 0;
-    gameState.moves = 0;
-    gameState.timer = 0;
-    gameState.canFlip = true;
-    
-    updateUI();
-    hideWinMessage();
-  }
+  if (this.targetX !== null && this.targetY !== null) {
+    const dx = this.targetX - this.x;
+    const dy = this.targetY - this.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
-  // Shuffle cards
-  function shuffleCards() {
-    for (let i = gameState.cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [gameState.cards[i], gameState.cards[j]] = [gameState.cards[j], gameState.cards[i]];
-    }
-  }
-
-  // Render game board
-  function renderBoard() {
-    elements.gameBoard.innerHTML = '';
-    
-    gameState.cards.forEach((card, index) => {
-      const cardElement = document.createElement('div');
-      cardElement.classList.add('card');
-      cardElement.dataset.index = index;
-
-      const frontElement = document.createElement('div');
-      frontElement.classList.add('card-front');
-
-      const backElement = document.createElement('div');
-      backElement.classList.add('card-back');
-
-      const imgElement = document.createElement('img');
-      imgElement.src = card.image;
-      imgElement.alt = card.value;
-      backElement.appendChild(imgElement);
-
-      cardElement.appendChild(frontElement);
-      cardElement.appendChild(backElement);
-
-      cardElement.addEventListener('click', () => handleCardClick(cardElement));
-      elements.gameBoard.appendChild(cardElement);
-    });
-  }
-
-  // Handle card click
-  function handleCardClick(cardElement) {
-    if (!gameState.canFlip || cardElement.classList.contains('flipped') || cardElement.classList.contains('matched')) {
-      return;
-    }
-
-    const cardIndex = parseInt(cardElement.dataset.index);
-    flipCard(cardElement);
-    gameState.flippedCards.push({ element: cardElement, index: cardIndex });
-
-    if (gameState.flippedCards.length === 2) {
-      gameState.moves++;
-      updateUI();
-      checkForMatch();
-    }
-  }
-
-  // Flip card
-  function flipCard(cardElement) {
-    cardElement.classList.add('flipped');
-  }
-
-  // Check for match
-  function checkForMatch() {
-    gameState.canFlip = false;
-    const [firstCard, secondCard] = gameState.flippedCards;
-
-    if (gameState.cards[firstCard.index].value === gameState.cards[secondCard.index].value) {
-      // Match found
-      setTimeout(() => {
-        firstCard.element.classList.add('matched');
-        secondCard.element.classList.add('matched');
-        gameState.matchedPairs++;
-        gameState.flippedCards = [];
-        gameState.canFlip = true;
-        updateUI();
-        
-        // Check for win
-        if (gameState.matchedPairs === gameState.totalPairs) {
-          endGame();
-        }
-      }, 300);
+    if (distance > this.speed) {
+      this.angle = Math.atan2(dy, dx) + Math.sin(Date.now() / 500) * this.wiggle;
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed;
     } else {
-      // No match
-      setTimeout(() => {
-        firstCard.element.classList.remove('flipped');
-        secondCard.element.classList.remove('flipped');
-        gameState.flippedCards = [];
-        gameState.canFlip = true;
-      }, 800); // Slightly faster flip back for challenge
+      this.targetX = null;
+      this.targetY = null;
+      this.speed = Math.random() * 2 + 0.5;
     }
+  } else {
+    this.angle += (Math.random() - 0.5) * 0.1;
+    this.x += Math.cos(this.angle) * this.speed;
+    this.y += Math.sin(this.angle) * this.speed;
+
+    if (this.x < 0 || this.x > canvas.width) this.angle = Math.PI - this.angle + (Math.random() - 0.5) * 0.2;
+    if (this.y < 0 || this.y > canvas.height) this.angle = -this.angle + (Math.random() - 0.5) * 0.2;
+  }
+};
+
+// Create fish
+const fishes = [];
+for (let i = 0; i < 50; i++) {
+  const size = Math.random() * 30 + 10;
+  const x = Math.random() * canvas.width;
+  const y = Math.random() * canvas.height;
+  const hue = Math.random() * 360;
+  const color = `hsl(${hue}, 70%, ${50 + Math.random() * 20}%)`;
+  const speed = Math.random() * 2 + 0.5;
+  fishes.push(new Fish(x, y, size, color, speed));
+}
+
+// Feed particles
+let feedParticles = [];
+
+function FeedParticle(x, y) {
+  this.x = x;
+  this.y = y;
+  this.size = Math.random() * 5 + 2;
+  this.speedY = Math.random() * 2 + 1;
+  this.alpha = 1;
+}
+
+FeedParticle.prototype.update = function() {
+  this.y += this.speedY;
+  this.alpha -= 0.02;
+};
+
+FeedParticle.prototype.draw = function() {
+  ctx.fillStyle = `rgba(255, 215, 0, ${this.alpha})`;
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+  ctx.fill();
+};
+
+function drawFeed() {
+  feedParticles = feedParticles.filter(p => p.alpha > 0);
+  feedParticles.forEach(particle => {
+    particle.update();
+    particle.draw();
+  });
+}
+
+// Bubble object
+function Bubble(x, y, size, speed) {
+  this.x = x;
+  this.y = y;
+  this.size = size;
+  this.speed = speed;
+  this.wiggle = Math.random() * 2 - 1;
+}
+
+Bubble.prototype.update = function() {
+  this.y -= this.speed;
+  this.x += Math.sin(Date.now() / 200 + this.y) * this.wiggle;
+  if (this.y < 0) this.y = canvas.height;
+};
+
+Bubble.prototype.draw = function() {
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+  ctx.fill();
+};
+
+// Create bubbles
+const bubbles = [];
+for (let i = 0; i < 20; i++) {
+  bubbles.push(new Bubble(Math.random() * canvas.width, canvas.height, Math.random() * 4 + 1, Math.random() * 2 + 1));
+}
+
+// Decorations
+function drawDecorations() {
+  // Sand
+  const sandGradient = ctx.createLinearGradient(0, canvas.height - 100, 0, canvas.height);
+  sandGradient.addColorStop(0, '#f4a460');
+  sandGradient.addColorStop(1, '#d2b48c');
+  ctx.fillStyle = sandGradient;
+  ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+
+  // Rocks
+  ctx.fillStyle = '#8b4513';
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetX = 5;
+  ctx.shadowOffsetY = 5;
+
+  ctx.beginPath();
+  ctx.moveTo(100, canvas.height - 100);
+  ctx.quadraticCurveTo(150, canvas.height - 200, 250, canvas.height - 100);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(400, canvas.height - 100);
+  ctx.quadraticCurveTo(450, canvas.height - 180, 550, canvas.height - 100);
+  ctx.fill();
+
+  ctx.shadowBlur = 0;
+
+  // Seaweed
+  const seaweedColors = ['#228B22', '#32CD32', '#00FA9A'];
+  for (let i = 0; i < 10; i++) {
+    const x = Math.random() * canvas.width;
+    const height = Math.random() * 150 + 50;
+    const color = seaweedColors[Math.floor(Math.random() * seaweedColors.length)];
+    drawSeaweed(x, canvas.height - 100, height, color);
+  }
+}
+
+function drawSeaweed(x, y, height, color) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  const sway = Math.sin(Date.now() / 500 + x) * 15;
+  ctx.moveTo(x, y);
+  ctx.bezierCurveTo(x + sway, y - height / 3, x - sway, y - (height * 2 / 3), x, y - height);
+  ctx.stroke();
+
+  // Additional leaves
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 3; i++) {
+    const leafY = y - height * (i + 1) / 4;
+    const leafSway = Math.sin(Date.now() / 600 + x + i) * 10;
+    ctx.beginPath();
+    ctx.moveTo(x, leafY);
+    ctx.quadraticCurveTo(x + leafSway, leafY - 10, x + leafSway * 2, leafY - 20);
+    ctx.stroke();
+  }
+}
+
+// Water effect
+function drawWaterEffect() {
+  const lightX = canvas.width / 2 + Math.sin(Date.now() / 1000) * 100;
+  const lightY = canvas.height / 4 + Math.cos(Date.now() / 1500) * 50;
+  const gradient = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, 300);
+  gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+  gradient.addColorStop(0.5, 'rgba(173, 216, 230, 0.2)');
+  gradient.addColorStop(1, 'rgba(0, 191, 255, 0)');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+// Animation loop
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawWaterEffect();
+  drawDecorations();
+
+  bubbles.forEach(bubble => {
+    bubble.update();
+    bubble.draw();
+  });
+
+  fishes.forEach(fish => {
+    fish.update();
+    fish.draw();
+  });
+
+  drawFeed();
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+// Event listeners
+canvas.addEventListener('mousedown', (e) => {
+  clickCount++;
+  if (clickCount === 3) {
+    toggleDayNight();
+    clickCount = 0;
   }
 
-  // Start timer
-  function startTimer() {
-    clearInterval(gameState.timerInterval);
-    gameState.timer = 0;
-    updateTimerDisplay();
-    
-    gameState.timerInterval = setInterval(() => {
-      gameState.timer++;
-      updateTimerDisplay();
-    }, 1000);
+  const feedX = e.clientX;
+  const feedY = e.clientY;
+  if (isSoundOn) {
+    feedSound.currentTime = 0;
+    feedSound.play().catch(e => console.log('Feed sound failed:', e));
+  }
+  for (let i = 0; i < 10; i++) {
+    feedParticles.push(new FeedParticle(feedX + (Math.random() - 0.5) * 20, feedY));
   }
 
-  // Update timer display
-  function updateTimerDisplay() {
-    const minutes = Math.floor(gameState.timer / 60).toString().padStart(2, '0');
-    const seconds = (gameState.timer % 60).toString().padStart(2, '0');
-    elements.timerDisplay.textContent = `${minutes}:${seconds}`;
+  fishes.forEach(fish => {
+    fish.targetX = feedX;
+    fish.targetY = feedY;
+    fish.speed = Math.random() * 3 + 2;
+  });
+});
+
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  clickCount++;
+  if (clickCount === 3) {
+    toggleDayNight();
+    clickCount = 0;
   }
 
-  // Update UI
-  function updateUI() {
-    elements.movesDisplay.textContent = `Nước đi: ${gameState.moves}`;
-    elements.pairsDisplay.textContent = `Cặp: ${gameState.matchedPairs}/${gameState.totalPairs}`;
+  const touch = e.touches[0];
+  const feedX = touch.clientX;
+  const feedY = touch.clientY;
+  if (isSoundOn) {
+    feedSound.currentTime = 0;
+    feedSound.play().catch(e => console.log('Feed sound failed:', e));
+  }
+  for (let i = 0; i < 10; i++) {
+    feedParticles.push(new FeedParticle(feedX + (Math.random() - 0.5) * 20, feedY));
   }
 
-  // End game
-  function endGame() {
-    clearInterval(gameState.timerInterval);
-    showWinMessage();
-  }
+  fishes.forEach(fish => {
+    fish.targetX = feedX;
+    fish.targetY = feedY;
+    fish.speed = Math.random() * 3 + 2;
+  });
+});
 
-  // Show win message
-  function showWinMessage() {
-    const minutes = Math.floor(gameState.timer / 60).toString().padStart(2, '0');
-    const seconds = (gameState.timer % 60).toString().padStart(2, '0');
-    elements.winStats.textContent = `Bạn hoàn thành trong ${gameState.moves} nước đi và ${minutes}:${seconds}`;
-    elements.winMessage.classList.add('show');
-  }
-
-  // Hide win message
-  function hideWinMessage() {
-    elements.winMessage.classList.remove('show');
-  }
-
-  // Initialize the game when the page loads
-  window.addEventListener('DOMContentLoaded', initGame);
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 </script>
-
 </body>
 </html>
