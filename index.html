@@ -3,511 +3,515 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kiểm tra thiết bị - NTS</title>
-<link rel="icon" type="image/png" href="logos3.png">
+<title>Memory Card Game - NTS</title>
+<link rel="icon" type="png" href="logos3.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   body {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #000;
-    color: #0f0;
-    text-align: left;
-    padding: 20px;
-    overflow: hidden;
-    margin: 0;
-    cursor: none;
-    position: relative;
-    background: linear-gradient(0deg, rgba(0, 15, 0, 0.9), rgba(0, 30, 0, 0.95));
-  }
-  .warning {
-    font-size: 32px;
-    color: #f00;
-    animation: flicker 0.15s infinite alternate, glitch-text 0.5s infinite;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px #f00, 0 0 20px #0f0;
-    letter-spacing: 2px;
-  }
-  @keyframes flicker {
-    from { opacity: 1; }
-    to { opacity: 0.4; }
-  }
-  @keyframes glitch-text {
-    0% { transform: translate(0, 0); }
-    20% { transform: translate(-2px, 2px); }
-    40% { transform: translate(2px, -2px); }
-    60% { transform: translate(-1px, 1px); }
-    100% { transform: translate(0, 0); }
-  }
-  .button {
-    margin: 15px 5px;
-    padding: 8px 15px;
-    font-size: 18px;
-    background-color: transparent;
-    border: 2px solid #0f0;
-    color: #0f0;
-    cursor: pointer;
-    text-transform: uppercase;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.2s ease;
-    text-shadow: 0 0 5px #0f0;
-    position: relative;
-    overflow: hidden;
-  }
-  .button:hover {
-    background-color: rgba(0, 255, 0, 0.2);
-    box-shadow: 0 0 15px #0f0;
-    transform: scale(1.05);
-  }
-  .button::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.3), transparent);
-    transition: 0.5s;
-  }
-  .button:hover::after {
-    left: 100%;
-  }
-  .code {
-    margin-top: 15px;
-    color: #0f0;
-    white-space: pre-wrap;
-    max-height: 60vh;
-    overflow-y: auto;
-    line-height: 1.4;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 15px;
-    border: 1px solid #0f0;
-    border-radius: 5px;
-    animation: code-scroll 0.2s infinite;
-    text-shadow: 0 0 5px #0f0;
-  }
-  .code .error { color: #f00; text-shadow: 0 0 8px #f00; }
-  .code .warning { color: #ff0; text-shadow: 0 0 8px #ff0; }
-  .code .info { color: #0f0; text-shadow: 0 0 8px #0f0; }
-  .scary-message {
-    font-size: 24px;
-    color: #ff0;
-    animation: shake 0.05s infinite, glitch-text 0.3s infinite;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px #ff0;
-  }
-  @keyframes shake {
-    0% { transform: translateX(-4px); }
-    50% { transform: translateX(4px); }
-    100% { transform: translateX(-4px); }
-  }
-  .hacked-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
-    color: #f00;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #6200ea, #3700b3);
+    color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-    animation: glitch 0.4s infinite;
-    text-shadow: 0 0 15px #f00;
-    font-size: 20px;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
   }
-  @keyframes glitch {
-    0% { transform: skewX(0deg); }
-    15% { transform: skewX(15deg) scale(1.02); }
-    30% { transform: skewX(-15deg) scale(0.98); }
-    45% { transform: skewX(10deg); }
-    60% { transform: skewX(-10deg); }
-    100% { transform: skewX(0deg); }
-  }
-  .noise {
-    position: fixed;
-    top: 0;
-    left: 0;
+  header {
+    text-align: center;
+    margin-bottom: 20px;
     width: 100%;
-    height: 100%;
-    pointer-events: none;
-    background: repeating-linear-gradient(45deg, rgba(0,0,0,0.2), rgba(255,0,0,0.1) 2px);
-    opacity: 0.3;
-    animation: scanline 1.5s infinite linear;
   }
-  @keyframes scanline {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100%); }
+  header h1 {
+    font-size: 4vw;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #ff00c7, #ff9f00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
   }
-  .matrix-rain {
-    position: fixed;
-    top: 0;
-    left: 0;
+  .difficulty-controls {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .difficulty-controls button {
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+  .difficulty-controls button.active {
+    background: linear-gradient(90deg, #ff00c7, #ff9f00);
+    box-shadow: 0 0 10px rgba(255, 0, 199, 0.5);
+  }
+  .difficulty-controls button:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  .game-info {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
+    max-width: 600px;
+    margin-bottom: 15px;
+    font-weight: bold;
   }
-  canvas {
+  .game-info span {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+  }
+  .game-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    perspective: 1000px;
+  }
+  .card {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  .card.flipped {
+    transform: rotateY(180deg);
+  }
+  .card-front, .card-back {
     position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .card-front {
+    background: linear-gradient(135deg, #ff00c7, #ff9f00);
+  }
+  .card-back {
+    background: #ffffff;
+    transform: rotateY(180deg);
+  }
+  .card-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card.matched {
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+  }
+  .controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 300px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .controls button, .controls a {
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+  }
+  .controls button.restart-btn {
+    background: linear-gradient(90deg, #ff00c7, #ff9f00);
+    color: white;
+  }
+  .controls button.restart-btn:hover {
+    background: linear-gradient(90deg, #ff9f00, #ff00c7);
+  }
+  .controls a.back-btn {
+    background: linear-gradient(90deg, #03dac6, #018786);
+    color: white;
+    text-decoration: none;
+  }
+  .controls a.back-btn:hover {
+    background: linear-gradient(90deg, #018786, #03dac6);
+  }
+  .timer {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  .win-message {
+    position: fixed;
     top: 0;
     left: 0;
-    opacity: 0.6;
-  }
-  .code-line {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
     opacity: 0;
-    animation: type 0.5s forwards;
+    pointer-events: none;
+    transition: opacity 0.5s;
   }
-  @keyframes type {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  .win-message.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .win-message h2 {
+    font-size: 3rem;
+    background: linear-gradient(90deg, #ff00c7, #ff9f00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+  }
+  .win-message p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+  .win-message button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background: linear-gradient(90deg, #03dac6, #018786);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    header h1 {
+      font-size: 8vw;
+    }
+    .game-board {
+      gap: 8px;
+    }
+    .card {
+      border-radius: 6px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    header h1 {
+      font-size: 10vw;
+    }
+    .difficulty-controls button {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .controls button, .controls a {
+      padding: 10px;
+      font-size: 14px;
+      min-width: 100px;
+    }
+    .win-message h2 {
+      font-size: 2rem;
+    }
+    .win-message p {
+      font-size: 1.2rem;
+    }
   }
 </style>
 </head>
 <body>
-<audio id="alertSound" src="https://www.myinstants.com/media/sounds/alarm.mp3" preload="auto"></audio>
-<div class="warning">*** CRITICAL SYSTEM BREACH DETECTED ***</div>
-<p id="systemAlert">[System] Unauthorized access detected at 192.168.1.1 - <span id="realTime">07/05/2025 14:27:00</span></p>
-<div class="scary-message" id="scaryMessage">!!! TERMINATE ALL PROCESSES IMMEDIATELY !!!</div>
-<button class="button" id="shutdownButton">[SYS_SHUTDOWN]</button>
-<button class="button" id="counterButton">[COUNTERMEASURE]</button>
-<a href="index.html" class="button" id="backButton">[ESCAPE TO SAFETY]</a>
-<div class="code" id="codeOutput"></div>
-<div class="noise"></div>
-<canvas id="matrixCanvas" class="matrix-rain"></canvas>
+
+<header>
+  <h1>Memory Card Game</h1>
+  <div class="difficulty-controls">
+    <button class="difficulty-btn active" data-difficulty="easy">Dễ</button>
+    <button class="difficulty-btn" data-difficulty="medium">Trung bình</button>
+    <button class="difficulty-btn" data-difficulty="hard">Khó</button>
+    <button class="difficulty-btn" data-difficulty="expert">Siêu khó</button>
+  </div>
+</header>
+
+<div class="game-info">
+  <span id="moves">Nước đi: 0</span>
+  <span id="pairs">Cặp: 0/6</span>
+  <span class="timer" id="timer">00:00</span>
+</div>
+
+<div class="game-board" id="gameBoard"></div>
+
+<div class="controls">
+  <button class="restart-btn" id="restartBtn">Chơi Lại</button>
+  <a href="game.html" class="back-btn" id="backBtn">Quay Lại</a>
+</div>
+
+<div class="win-message" id="winMessage">
+  <h2>Chúc mừng!</h2>
+  <p id="winStats">Bạn hoàn thành trong 0 nước đi và 00:00</p>
+  <button id="playAgainBtn">Chơi lại</button>
+</div>
 
 <script>
-  // Matrix rain effect
-  const canvas = document.getElementById('matrixCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
-  const chars = '01';
-  const fontSize = 14;
-  const columns = canvas.width / fontSize;
-  const drops = Array(Math.floor(columns)).fill(1);
-
-  function drawMatrix() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#0f0';
-    ctx.font = fontSize + 'px Courier New';
-
-    for (let i = 0; i < drops.length; i++) {
-      const text = chars.charAt(Math.floor(Math.random() * chars.length));
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i]++;
-    }
-  }
-  setInterval(drawMatrix, 50);
-
-  // Play alert sound
-  const alertSound = document.getElementById('alertSound');
-  function playAlertSound() {
-    alertSound.play().catch(() => console.log("Audio playback failed"));
-  }
-
-  // Danh sách thiết bị giả lập
-  const devices = {
-    cpu: { name: "CPU: Intel i7-9700K @ 3.60GHz", status: "OK", usage: 10, temp: 45 },
-    ram: { name: "RAM: 16GB DDR4 @ 3200MHz", status: "OK", usage: 35, capacity: 16 },
-    gpu: { name: "GPU: NVIDIA RTX 3080", status: "OK", usage: 5, temp: 50 },
-    storage: { name: "Storage: Samsung SSD 1TB (C:)", status: "OK", freeSpace: 650, totalSpace: 1000 },
-    network: { name: "Network: Intel Ethernet I219-V", status: "OK", traffic: "0 MB/s" }
+  // Game configuration
+  const config = {
+    easy: { pairs: 6, flipSpeed: 1000 },
+    medium: { pairs: 8, flipSpeed: 800 },
+    hard: { pairs: 10, flipSpeed: 600 },
+    expert: { pairs: 12, flipSpeed: 400 }
   };
 
-  // Mã giả lập theo từng thiết bị
-  const deviceAttacks = {
-    cpu: [
-      `[INFO] ${devices.cpu.name} - Status: Nominal, Usage: ${devices.cpu.usage}%, Temp: ${devices.cpu.temp}°C`,
-      `[WARNING] Kernel interrupt detected - CPU usage spiked to 85% (IRQ #13)`,
-      `[ERROR] Thermal sensor alert: CPU temp reached 92°C - Initiating emergency throttle (Code: 0x00001337)`,
-      `[CRITICAL] Rogue process detected: "sys32k.exe" (PID: 1337) - Exploiting CVE-2025-0133`,
-      `[CRITICAL] CPU microcode hijacked: Malicious firmware update detected`
-    ],
-    ram: [
-      `[INFO] ${devices.ram.name} - Status: Stable, Usage: ${devices.ram.usage}% (${(devices.ram.usage * devices.ram.capacity / 100).toFixed(1)}GB/${devices.ram.capacity}GB)`,
-      `[WARNING] Memory allocation failure - Page fault at 0x7FFF0000, usage at 92%`,
-      `[ERROR] Unhandled exception: Memory corruption detected - Buffer overflow at 0x80000000`,
-      `[CRITICAL] RAM compromised: Shellcode injection via rowhammer attack`,
-      `[CRITICAL] Memory encryption bypassed: AES key extracted`
-    ],
-    gpu: [
-      `[INFO] ${devices.gpu.name} - Status: Idle, Usage: ${devices.gpu.usage}%, Temp: ${devices.gpu.temp}°C`,
-      `[WARNING] GPU core overload - Usage spiked to 78%, unknown DirectX process (dx12hook.dll)`,
-      `[ERROR] Driver crash: nvlddmkm.sys - Exception code 0xC0000005, GPU reset failed`,
-      `[CRITICAL] GPU hijacked: Cryptomining kernel active - VRAM locked`,
-      `[CRITICAL] GPU firmware compromised: Unauthorized DMA access`
-    ],
-    storage: [
-      `[INFO] ${devices.storage.name} - Status: Healthy, Free: ${devices.storage.freeSpace}GB/${devices.storage.totalSpace}GB`,
-      `[WARNING] Disk I/O anomaly: Sequential write detected - Encryption active (25% complete)`,
-      `[ERROR] Filesystem failure: NTFS partition table corrupted - Error 0x80070570`,
-      `[CRITICAL] MBR overwritten: Bootloader replaced with ransom payload`,
-      `[CRITICAL] Storage locked: All files encrypted with AES-256-XTS`
-    ],
-    network: [
-      `[INFO] ${devices.network.name} - Status: Connected, Traffic: ${devices.network.traffic}`,
-      `[WARNING] Anomalous outbound traffic: 148 MB/s to 45.32.12.78:1337 (TOR exit node)`,
-      `[ERROR] Security breach: Firewall rule #1001 bypassed via UDP/443`,
-      `[CRITICAL] NIC disabled: ARP poisoning detected`,
-      `[CRITICAL] Network exfiltration: 500GB data leaked to remote server`
-    ]
+  // Card images - you should replace these with your actual image paths
+  const cardImages = [
+    'thẻ1.jpg', 'the2.jpg', 'the3.jpg', 'the4.jpg', 
+    'Designer1.jpeg', 'the5.jpg', 'the6.jpg', 'the7.jpg',
+    'the8.jpg', 'the9.jpg', 'the10.jpg', 'the11.jpg'
+  ];
+
+  // Game state
+  let gameState = {
+    cards: [],
+    flippedCards: [],
+    matchedPairs: 0,
+    moves: 0,
+    timer: 0,
+    timerInterval: null,
+    currentDifficulty: 'easy',
+    canFlip: true
   };
 
-  // Hàm định dạng thời gian thực
-  function getCurrentTimestamp() {
-    const now = new Date();
-    const dateString = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-    const timeString = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    return `[${dateString} ${timeString}]`;
+  // DOM elements
+  const elements = {
+    gameBoard: document.getElementById('gameBoard'),
+    restartBtn: document.getElementById('restartBtn'),
+    backBtn: document.getElementById('backBtn'),
+    movesDisplay: document.getElementById('moves'),
+    pairsDisplay: document.getElementById('pairs'),
+    timerDisplay: document.getElementById('timer'),
+    winMessage: document.getElementById('winMessage'),
+    winStats: document.getElementById('winStats'),
+    playAgainBtn: document.getElementById('playAgainBtn'),
+    difficultyBtns: document.querySelectorAll('.difficulty-btn')
+  };
+
+  // Initialize the game
+  function initGame() {
+    setupEventListeners();
+    createBoard();
   }
 
-  // Hàm cập nhật thời gian thực cho systemAlert
-  let realTimeInterval = null;
-  function updateRealTime() {
-    const realTimeElement = document.getElementById('realTime');
-    if (realTimeElement) {
-      const now = new Date();
-      const dateString = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-      const timeString = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      realTimeElement.innerText = `${dateString} ${timeString}`;
+  // Set up event listeners
+  function setupEventListeners() {
+    elements.restartBtn.addEventListener('click', createBoard);
+    elements.playAgainBtn.addEventListener('click', createBoard);
+    
+    elements.difficultyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        setDifficulty(btn.dataset.difficulty);
+      });
+    });
+  }
+
+  // Set game difficulty
+  function setDifficulty(difficulty) {
+    gameState.currentDifficulty = difficulty;
+    elements.difficultyBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.difficulty === difficulty);
+    });
+    createBoard();
+  }
+
+  // Create game board
+  function createBoard() {
+    resetGameState();
+    clearInterval(gameState.timerInterval);
+    
+    const difficultyConfig = config[gameState.currentDifficulty];
+    const pairsCount = difficultyConfig.pairs;
+    
+    // Create pairs of cards
+    gameState.cards = [];
+    for (let i = 0; i < pairsCount; i++) {
+      const cardValue = String.fromCharCode(65 + i); // A, B, C, etc.
+      gameState.cards.push(
+        { value: cardValue, image: cardImages[i % cardImages.length] },
+        { value: cardValue, image: cardImages[i % cardImages.length] }
+      );
+    }
+    
+    shuffleCards();
+    renderBoard();
+    startTimer();
+  }
+
+  // Reset game state
+  function resetGameState() {
+    gameState.flippedCards = [];
+    gameState.matchedPairs = 0;
+    gameState.moves = 0;
+    gameState.timer = 0;
+    gameState.canFlip = true;
+    
+    updateUI();
+    hideWinMessage();
+  }
+
+  // Shuffle cards
+  function shuffleCards() {
+    for (let i = gameState.cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [gameState.cards[i], gameState.cards[j]] = [gameState.cards[j], gameState.cards[i]];
     }
   }
 
-  // Cập nhật thời gian ban đầu và sau đó mỗi giây
-  updateRealTime();
-  realTimeInterval = setInterval(updateRealTime, 1000);
+  // Render game board
+  function renderBoard() {
+    elements.gameBoard.innerHTML = '';
+    elements.gameBoard.style.gridTemplateColumns = `repeat(${Math.min(6, Math.ceil(Math.sqrt(gameState.cards.length)))}, 1fr)`;
+    
+    gameState.cards.forEach((card, index) => {
+      const cardElement = document.createElement('div');
+      cardElement.classList.add('card');
+      cardElement.dataset.index = index;
 
-  // Xử lý nút Shutdown
-  document.getElementById('shutdownButton').addEventListener('click', function () {
-    const button = this;
-    button.classList.add('loading');
-    button.disabled = true;
-    button.innerText = "[SYS_SHUTDOWN] - ACCESS DENIED";
-    playAlertSound();
-    codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] Shutdown attempt failed: Admin privileges revoked</div>`;
-    setTimeout(() => {
-      startShutdown();
-    }, 1500);
-  });
+      const frontElement = document.createElement('div');
+      frontElement.classList.add('card-front');
 
-  // Xử lý nút Countermeasure
-  document.getElementById('counterButton').addEventListener('click', function () {
-    const button = this;
-    button.disabled = true;
-    button.innerText = "[COUNTERMEASURE] - FAILED";
-    playAlertSound();
-    codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] Countermeasure attempt failed: Malware blocked firewall reset</div>`;
-    codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] Unauthorized process escalated: rootkit detected</div>`;
-    codeOutput.scrollTop = codeOutput.scrollHeight;
-    setTimeout(() => {
-      button.innerText = "[COUNTERMEASURE] - DISABLED";
-    }, 2000);
-  });
+      const backElement = document.createElement('div');
+      backElement.classList.add('card-back');
 
-  // Xử lý nút Back
-  document.getElementById('backButton').addEventListener('click', function (e) {
-    e.preventDefault();
-    codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] Navigation blocked: Browser sandbox compromised</div>`;
-    codeOutput.scrollTop = codeOutput.scrollHeight;
-    playAlertSound();
-  });
+      const imgElement = document.createElement('img');
+      imgElement.src = card.image;
+      imgElement.alt = card.value;
+      backElement.appendChild(imgElement);
 
-  function startShutdown() {
-    const codeOutput = document.getElementById('codeOutput');
-    let cpuTemp = devices.cpu.temp;
-    let cpuUsage = devices.cpu.usage;
-    let gpuUsage = devices.gpu.usage;
-    let freeSpace = devices.storage.freeSpace;
-    let networkTraffic = 0;
-    let encryptionProgress = 25;
+      cardElement.appendChild(frontElement);
+      cardElement.appendChild(backElement);
 
-    const indices = {
-      cpu: 0,
-      ram: 0,
-      gpu: 0,
-      storage: 0,
-      network: 0
-    };
-
-    const deviceKeys = Object.keys(deviceAttacks);
-    let attackComplete = false;
-
-    const interval = setInterval(() => {
-      if (!attackComplete) {
-        const randomDelay = Math.random() * 500 + 200;
-        setTimeout(() => {
-          const device = deviceKeys[Math.floor(Math.random() * deviceKeys.length)];
-          const currentIndex = indices[device];
-
-          if (currentIndex < deviceAttacks[device].length) {
-            const message = `${getCurrentTimestamp()} ${deviceAttacks[device][currentIndex]}`;
-            codeOutput.innerHTML += `<div class="code-line ${getMessageType(message)}">${message}</div>`;
-
-            // Cập nhật trạng thái thiết bị
-            if (device === "cpu") {
-              if (message.includes("CPU usage spiked")) {
-                cpuUsage = 85;
-                cpuTemp += 10;
-                devices.cpu.status = "UNSTABLE";
-                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.cpu.name} - Usage: ${cpuUsage}%, Temp: ${cpuTemp}°C - Core 0-3 overloaded</div>`;
-              }
-              if (message.includes("Thermal sensor alert")) {
-                cpuTemp = 92;
-                codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] ${devices.cpu.name} - Temp: ${cpuTemp}°C - Hardware damage imminent</div>`;
-              }
-              if (message.includes("Rogue process detected")) {
-                devices.cpu.status = "INFECTED";
-                playAlertSound();
-              }
-            }
-            if (device === "ram") {
-              if (message.includes("Memory allocation failure")) {
-                devices.ram.usage = 92;
-                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.ram.name} - Usage: ${devices.ram.usage}% (${(devices.ram.usage * devices.ram.capacity / 100).toFixed(1)}GB/${devices.ram.capacity}GB) - Swap file saturated</div>`;
-              }
-              if (message.includes("RAM compromised")) {
-                devices.ram.status = "INFECTED";
-                playAlertSound();
-              }
-            }
-            if (device === "gpu") {
-              if (message.includes("GPU core overload")) {
-                gpuUsage = 78;
-                devices.gpu.temp += 15;
-                devices.gpu.status = "UNSTABLE";
-                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.gpu.name} - Usage: ${gpuUsage}%, Temp: ${devices.gpu.temp}°C - Fan speed: 95%</div>`;
-              }
-              if (message.includes("GPU hijacked")) {
-                devices.gpu.status = "INFECTED";
-                playAlertSound();
-              }
-            }
-            if (device === "storage") {
-              if (message.includes("Encryption active")) {
-                freeSpace -= 150;
-                encryptionProgress += 25;
-                devices.storage.status = "UNSTABLE";
-                codeOutput.innerHTML += `<div class="code-line warning">${getCurrentTimestamp()} [WARNING] ${devices.storage.name} - Encryption: ${encryptionProgress}% - Free space: ${freeSpace}GB</div>`;
-              }
-              if (message.includes("MBR overwritten")) {
-                freeSpace = 0;
-                devices.storage.status = "INFECTED";
-                codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [CRITICAL] ${devices.storage.name} - Disk locked, Free space: ${freeSpace}GB</div>`;
-                playAlertSound();
-              }
-            }
-            if (device === "network") {
-              if (message.includes("Anomalous outbound traffic")) {
-                networkTraffic = "148 MB/s";
-                devices.network.status = "UNSTABLE";
-                codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [ERROR] ${devices.network.name} - Traffic: ${networkTraffic} - DNS spoofing detected</div>`;
-              }
-              if (message.includes("NIC disabled")) {
-                devices.network.status = "INFECTED";
-                playAlertSound();
-              }
-            }
-
-            codeOutput.scrollTop = codeOutput.scrollHeight;
-            indices[device]++;
-
-            // Thêm hiệu ứng lag hệ thống
-            if (Math.random() > 0.8) {
-              codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [SYSTEM] Kernel panic - Response delayed: ${Math.floor(Math.random() * 500)}ms</div>`;
-              document.body.style.pointerEvents = 'none';
-              setTimeout(() => {
-                document.body.style.pointerEvents = 'auto';
-              }, Math.random() * 1200);
-            }
-
-            attackComplete = deviceKeys.every(key => indices[key] >= deviceAttacks[key].length);
-            if (attackComplete) {
-              codeOutput.innerHTML += `<div class="code-line error">${getCurrentTimestamp()} [CRITICAL] System integrity lost - All partitions encrypted (Key: AES-256-XTS)</div>`;
-              codeOutput.scrollTop = codeOutput.scrollHeight;
-              setTimeout(() => {
-                clearInterval(interval);
-                simulateCrash();
-              }, 2500);
-            }
-          }
-        }, randomDelay);
-      }
-    }, 300);
+      cardElement.addEventListener('click', () => handleCardClick(cardElement));
+      elements.gameBoard.appendChild(cardElement);
+    });
   }
 
-  function getMessageType(message) {
-    if (message.includes('[ERROR]') || message.includes('[CRITICAL]')) return 'error';
-    if (message.includes('[WARNING]')) return 'warning';
-    return 'info';
-  }
-
-  function simulateCrash() {
-    const scaryMessage = document.getElementById('scaryMessage');
-    if (scaryMessage) {
-      scaryMessage.innerText = "!!! SYSTEM FULLY COMPROMISED - DATA ENCRYPTED !!!";
+  // Handle card click
+  function handleCardClick(cardElement) {
+    if (!gameState.canFlip || cardElement.classList.contains('flipped') || cardElement.classList.contains('matched')) {
+      return;
     }
 
-    if (realTimeInterval) {
-      clearInterval(realTimeInterval);
-      realTimeInterval = null;
+    const cardIndex = parseInt(cardElement.dataset.index);
+    flipCard(cardElement);
+    gameState.flippedCards.push({ element: cardElement, index: cardIndex });
+
+    if (gameState.flippedCards.length === 2) {
+      gameState.moves++;
+      updateUI();
+      checkForMatch();
     }
-
-    let lagInterval = setInterval(() => {
-      document.body.style.opacity = Math.random() * 0.5 + 0.5;
-    }, 75);
-
-    setTimeout(() => {
-      clearInterval(lagInterval);
-      document.body.innerHTML = `
-        <div class="hacked-screen">
-          <h1>*** SYSTEM LOCKDOWN INITIATED ***</h1>
-          <p style="color:#0f0; text-shadow: 0 0 10px #0f0;">All files encrypted with AES-256-XTS. Decryption key held by remote server.</p>
-          <p style="color:#ff0; text-shadow: 0 0 10px #ff0;">Attacking host: 45.32.12.78 (TOR) - Session ID: X9Z3R7K9</p>
-          <p style="font-size:16px;">
-            To regain access, transfer 0.05 BTC to:<br>
-            <span style="color:#0f0; text-shadow: 0 0 8px #0f0;">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span><br>
-            Email key request to: x9z3r@darknet.onion (TOR required)<br>
-            Include Session ID in payment memo.
-          </p>
-          <div id="countdown" style="color:#f00; animation: flicker 0.2s infinite; text-shadow: 0 0 10px #f00;">
-            TIME REMAINING: 00:09:59
-          </div>
-          <p style="color:#f00; font-size:14px; text-shadow: 0 0 8px #f00;">Failure to comply will result in permanent data wipe.</p>
-          <a href="index.html" class="button" style="margin-top: 20px;">[EXIT SIMULATION]</a>
-        </div>
-      `;
-      playAlertSound();
-      startCountdown();
-    }, 2000);
   }
 
-  function startCountdown() {
-    let timeLeft = 10 * 60 - 1;
-    const countdownElement = document.getElementById('countdown');
-    if (!countdownElement) return;
+  // Flip card
+  function flipCard(cardElement) {
+    cardElement.classList.add('flipped');
+  }
 
-    const countdownInterval = setInterval(() => {
-      if (timeLeft >= 0) {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        countdownElement.innerText = `TIME REMAINING: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        timeLeft--;
-      } else {
-        clearInterval(countdownInterval);
-        countdownElement.innerText = "TIME REMAINING: 00:00 - SYSTEM LOCKED";
-        playAlertSound();
-      }
+  // Check for match
+  function checkForMatch() {
+    gameState.canFlip = false;
+    const [firstCard, secondCard] = gameState.flippedCards;
+    const difficultyConfig = config[gameState.currentDifficulty];
+
+    if (gameState.cards[firstCard.index].value === gameState.cards[secondCard.index].value) {
+      // Match found
+      setTimeout(() => {
+        firstCard.element.classList.add('matched');
+        secondCard.element.classList.add('matched');
+        gameState.matchedPairs++;
+        gameState.flippedCards = [];
+        gameState.canFlip = true;
+        updateUI();
+        
+        // Check for win
+        if (gameState.matchedPairs === gameState.cards.length / 2) {
+          endGame();
+        }
+      }, 300);
+    } else {
+      // No match
+      setTimeout(() => {
+        firstCard.element.classList.remove('flipped');
+        secondCard.element.classList.remove('flipped');
+        gameState.flippedCards = [];
+        gameState.canFlip = true;
+      }, difficultyConfig.flipSpeed);
+    }
+  }
+
+  // Start timer
+  function startTimer() {
+    clearInterval(gameState.timerInterval);
+    gameState.timer = 0;
+    updateTimerDisplay();
+    
+    gameState.timerInterval = setInterval(() => {
+      gameState.timer++;
+      updateTimerDisplay();
     }, 1000);
   }
 
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  document.addEventListener('keydown', e => e.preventDefault());
+  // Update timer display
+  function updateTimerDisplay() {
+    const minutes = Math.floor(gameState.timer / 60).toString().padStart(2, '0');
+    const seconds = (gameState.timer % 60).toString().padStart(2, '0');
+    elements.timerDisplay.textContent = `${minutes}:${seconds}`;
+  }
+
+  // Update UI
+  function updateUI() {
+    elements.movesDisplay.textContent = `Nước đi: ${gameState.moves}`;
+    elements.pairsDisplay.textContent = `Cặp: ${gameState.matchedPairs}/${gameState.cards.length / 2}`;
+  }
+
+  // End game
+  function endGame() {
+    clearInterval(gameState.timerInterval);
+    showWinMessage();
+  }
+
+  // Show win message
+  function showWinMessage() {
+    const minutes = Math.floor(gameState.timer / 60).toString().padStart(2, '0');
+    const seconds = (gameState.timer % 60).toString().padStart(2, '0');
+    elements.winStats.textContent = `Bạn hoàn thành trong ${gameState.moves} nước đi và ${minutes}:${seconds}`;
+    elements.winMessage.classList.add('show');
+  }
+
+  // Hide win message
+  function hideWinMessage() {
+    elements.winMessage.classList.remove('show');
+  }
+
+  // Initialize the game when the page loads
+  window.addEventListener('DOMContentLoaded', initGame);
 </script>
+
 </body>
 </html>
