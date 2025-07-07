@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Memory Card Game - NTS</title>
+<title>Memory Card Game - 20 Pairs</title>
 <link rel="icon" type="png" href="logos3.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -26,7 +26,7 @@
     width: 100%;
   }
   header h1 {
-    font-size: 4vw;
+    font-size: 2.5rem;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -35,36 +35,11 @@
     -webkit-text-fill-color: transparent;
     margin-bottom: 10px;
   }
-  .difficulty-controls {
-    margin-bottom: 20px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .difficulty-controls button {
-    padding: 8px 15px;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-  }
-  .difficulty-controls button.active {
-    background: linear-gradient(90deg, #ff00c7, #ff9f00);
-    box-shadow: 0 0 10px rgba(255, 0, 199, 0.5);
-  }
-  .difficulty-controls button:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
   .game-info {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     margin-bottom: 15px;
     font-weight: bold;
   }
@@ -75,10 +50,10 @@
   }
   .game-board {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     perspective: 1000px;
   }
   .card {
@@ -88,8 +63,8 @@
     transform-style: preserve-3d;
     transition: transform 0.5s;
     cursor: pointer;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   .card.flipped {
     transform: rotateY(180deg);
@@ -99,7 +74,7 @@
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    border-radius: 8px;
+    border-radius: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -128,7 +103,7 @@
     display: flex;
     gap: 10px;
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -205,25 +180,28 @@
     cursor: pointer;
   }
 
-  @media (max-width: 768px) {
-    header h1 {
-      font-size: 8vw;
-    }
+  @media (max-width: 900px) {
     .game-board {
-      gap: 8px;
-    }
-    .card {
-      border-radius: 6px;
+      grid-template-columns: repeat(6, 1fr);
+      max-width: 600px;
     }
   }
 
-  @media (max-width: 480px) {
-    header h1 {
-      font-size: 10vw;
+  @media (max-width: 700px) {
+    .game-board {
+      grid-template-columns: repeat(5, 1fr);
+      max-width: 500px;
     }
-    .difficulty-controls button {
-      padding: 6px 12px;
-      font-size: 12px;
+  }
+
+  @media (max-width: 500px) {
+    header h1 {
+      font-size: 1.8rem;
+    }
+    .game-board {
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 400px;
+      gap: 6px;
     }
     .controls button, .controls a {
       padding: 10px;
@@ -242,18 +220,12 @@
 <body>
 
 <header>
-  <h1>Memory Card Game</h1>
-  <div class="difficulty-controls">
-    <button class="difficulty-btn active" data-difficulty="easy">Dễ</button>
-    <button class="difficulty-btn" data-difficulty="medium">Trung bình</button>
-    <button class="difficulty-btn" data-difficulty="hard">Khó</button>
-    <button class="difficulty-btn" data-difficulty="expert">Siêu khó</button>
-  </div>
+  <h1>Memory Card Game - 20 Pairs</h1>
 </header>
 
 <div class="game-info">
   <span id="moves">Nước đi: 0</span>
-  <span id="pairs">Cặp: 0/6</span>
+  <span id="pairs">Cặp: 0/20</span>
   <span class="timer" id="timer">00:00</span>
 </div>
 
@@ -271,19 +243,14 @@
 </div>
 
 <script>
-  // Game configuration
-  const config = {
-    easy: { pairs: 6, flipSpeed: 1000 },
-    medium: { pairs: 8, flipSpeed: 800 },
-    hard: { pairs: 10, flipSpeed: 600 },
-    expert: { pairs: 12, flipSpeed: 400 }
-  };
-
-  // Card images - you should replace these with your actual image paths
+  // Card images - you should replace these with your actual 20 image paths
   const cardImages = [
     'thẻ1.jpg', 'the2.jpg', 'the3.jpg', 'the4.jpg', 
     'Designer1.jpeg', 'the5.jpg', 'the6.jpg', 'the7.jpg',
-    'the8.jpg', 'the9.jpg', 'the10.jpg', 'the11.jpg'
+    'the8.jpg', 'the9.jpg', 'the10.jpg', 'the11.jpg',
+    'the12.jpg', 'the13.jpg', 'the14.jpg', 'the15.jpg',
+    'the16.jpg', 'the17.jpg', 'the18.jpg', 'the19.jpg',
+    'the20.jpg'
   ];
 
   // Game state
@@ -294,8 +261,8 @@
     moves: 0,
     timer: 0,
     timerInterval: null,
-    currentDifficulty: 'easy',
-    canFlip: true
+    canFlip: true,
+    totalPairs: 20
   };
 
   // DOM elements
@@ -308,8 +275,7 @@
     timerDisplay: document.getElementById('timer'),
     winMessage: document.getElementById('winMessage'),
     winStats: document.getElementById('winStats'),
-    playAgainBtn: document.getElementById('playAgainBtn'),
-    difficultyBtns: document.querySelectorAll('.difficulty-btn')
+    playAgainBtn: document.getElementById('playAgainBtn')
   };
 
   // Initialize the game
@@ -322,38 +288,21 @@
   function setupEventListeners() {
     elements.restartBtn.addEventListener('click', createBoard);
     elements.playAgainBtn.addEventListener('click', createBoard);
-    
-    elements.difficultyBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        setDifficulty(btn.dataset.difficulty);
-      });
-    });
   }
 
-  // Set game difficulty
-  function setDifficulty(difficulty) {
-    gameState.currentDifficulty = difficulty;
-    elements.difficultyBtns.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.difficulty === difficulty);
-    });
-    createBoard();
-  }
-
-  // Create game board
+  // Create game board with 20 pairs
   function createBoard() {
     resetGameState();
     clearInterval(gameState.timerInterval);
     
-    const difficultyConfig = config[gameState.currentDifficulty];
-    const pairsCount = difficultyConfig.pairs;
-    
-    // Create pairs of cards
+    // Create 20 pairs of cards
     gameState.cards = [];
-    for (let i = 0; i < pairsCount; i++) {
-      const cardValue = String.fromCharCode(65 + i); // A, B, C, etc.
+    for (let i = 0; i < gameState.totalPairs; i++) {
+      const cardValue = String.fromCharCode(65 + (i % 26)); // A-Z
+      const imgIndex = i % cardImages.length;
       gameState.cards.push(
-        { value: cardValue, image: cardImages[i % cardImages.length] },
-        { value: cardValue, image: cardImages[i % cardImages.length] }
+        { value: cardValue, image: cardImages[imgIndex] },
+        { value: cardValue, image: cardImages[imgIndex] }
       );
     }
     
@@ -385,7 +334,6 @@
   // Render game board
   function renderBoard() {
     elements.gameBoard.innerHTML = '';
-    elements.gameBoard.style.gridTemplateColumns = `repeat(${Math.min(6, Math.ceil(Math.sqrt(gameState.cards.length)))}, 1fr)`;
     
     gameState.cards.forEach((card, index) => {
       const cardElement = document.createElement('div');
@@ -437,7 +385,6 @@
   function checkForMatch() {
     gameState.canFlip = false;
     const [firstCard, secondCard] = gameState.flippedCards;
-    const difficultyConfig = config[gameState.currentDifficulty];
 
     if (gameState.cards[firstCard.index].value === gameState.cards[secondCard.index].value) {
       // Match found
@@ -450,7 +397,7 @@
         updateUI();
         
         // Check for win
-        if (gameState.matchedPairs === gameState.cards.length / 2) {
+        if (gameState.matchedPairs === gameState.totalPairs) {
           endGame();
         }
       }, 300);
@@ -461,7 +408,7 @@
         secondCard.element.classList.remove('flipped');
         gameState.flippedCards = [];
         gameState.canFlip = true;
-      }, difficultyConfig.flipSpeed);
+      }, 800); // Slightly faster flip back for challenge
     }
   }
 
@@ -487,7 +434,7 @@
   // Update UI
   function updateUI() {
     elements.movesDisplay.textContent = `Nước đi: ${gameState.moves}`;
-    elements.pairsDisplay.textContent = `Cặp: ${gameState.matchedPairs}/${gameState.cards.length / 2}`;
+    elements.pairsDisplay.textContent = `Cặp: ${gameState.matchedPairs}/${gameState.totalPairs}`;
   }
 
   // End game
