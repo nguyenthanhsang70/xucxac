@@ -1,477 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bể Cá 3D - NTS</title>
-<link rel="icon" type="image/png" href="logos3.png">
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, #1e90ff, #87cefa, #b0e0e6);
-    font-family: Arial, sans-serif;
-    position: relative;
-  }
-  canvas {
-    display: block;
-  }
-  .back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    padding: 10px 20px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    z-index: 10;
-  }
-  .back-button:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-  .sound-controls {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 10;
-  }
-  .sound-btn {
-    padding: 8px 15px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  .sound-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-  .volume-slider {
-    width: 100px;
-  }
-  @media (max-width: 480px) {
-    .back-button, .sound-btn {
-      padding: 8px 12px;
-      font-size: 12px;
-    }
-    .volume-slider {
-      width: 80px;
-    }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Game - NTS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="icon" type="image/png" href="logos3.png">
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0e7ff, #a5b4fc);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .game-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        .game-card img {
+            transition: transform 0.3s ease;
+        }
+        .game-card:hover img {
+            transform: scale(1.05);
+        }
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .music-control:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 1);
+        }
+        .tooltip {
+            position: absolute;
+            right: 60px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .music-control:hover .tooltip {
+            opacity: 1;
+        }
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 30px;
+            }
+            header p {
+                font-size: 16px;
+            }
+            .content h2 {
+                font-size: 26px;
+            }
+            .game-section h2 {
+                font-size: 28px;
+            }
+            .game-section a {
+                font-size: 16px;
+                padding: 12px 25px;
+            }
+            .social-icons a {
+                font-size: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-<button class="back-button" onclick="window.location.href='index.html'">Quay Lại</button>
-<div class="sound-controls">
-  <button class="sound-btn" id="soundToggle">🔊 Bật âm thanh</button>
-  <input type="range" class="volume-slider" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
-</div>
-<canvas id="aquarium"></canvas>
-<audio id="waterSound" loop>
-  <source src="bien.mp3" type="audio/mp3">
-</audio>
-<audio id="feedSound">
-  <source src="caan.mp3" type="audio/mp3">
-</audio>
-<audio id="bubbleSound">
-  <source src="bubble.mp3" type="audio/mp3">
-</audio>
-<script>
-const canvas = document.getElementById('aquarium');
-const ctx = canvas.getContext('2d');
-const waterSound = document.getElementById('waterSound');
-const feedSound = document.getElementById('feedSound');
-const bubbleSound = document.getElementById('bubbleSound');
-const soundToggle = document.getElementById('soundToggle');
-const volumeControl = document.getElementById('volumeControl');
+    <!-- Audio element for background music -->
+    <audio id="backgroundMusic" loop>
+        <source src="nhacnen.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ phần tử âm thanh.
+    </audio>
 
-// Set canvas size
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    <!-- Music control button -->
+    <div class="music-control" id="musicControl" title="Bật/Tắt nhạc nền">
+        <i class="fas fa-music text-indigo-600"></i>
+        <span class="tooltip">Bật/Tắt nhạc nền</span>
+    </div>
 
-// Sound control
-let isSoundOn = false;
+    <header class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-6 relative">
+        <a href="index.html" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center transition-colors duration-300">
+            <i class="fas fa-arrow-left mr-2"></i> 
+        </a>
+        <h1 class="text-3xl md:text-4xl font-bold text-center tracking-tight">Danh Sách Game</h1>
+    </header>
 
-soundToggle.addEventListener('click', () => {
-  isSoundOn = !isSoundOn;
-  if (isSoundOn) {
-    waterSound.play().catch(e => console.log('Autoplay prevented:', e));
-    soundToggle.textContent = '🔇 Tắt âm thanh';
-  } else {
-    waterSound.pause();
-    soundToggle.textContent = '🔊 Bật âm thanh';
-  }
-});
+    <main class="flex-grow container mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div class="game-card bg-white rounded-2xl overflow-hidden shadow-lg max-w-xs">
+                <div class="overflow-hidden">
+                    <img src="dice-dices-vector-image-logo-260nw-2514727833.webp" alt="Game 1" class="w-full h-40 object-cover">
+                </div>
+                <div class="p-6">
+                    <h2 class="text-md font-semibold text-gray-800 mb-2 text-center">Xúc Xắc</h2>
+                    <p class="text-gray-600 text-sm mb-4 text-center">Trò chơi may rủi đầy kịch tính. Nơi người chơi chờ đợi kết quả bất ngờ.</p>
+                    <div class="text-center">
+                        <a href="xucxac.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">Chơi Ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="game-card bg-white rounded-2xl overflow-hidden shadow-lg max-w-xs">
+                <div class="overflow-hidden">
+                    <img src="hinhquayten.png" alt="Game 2" class="w-full h-40 object-cover">
+                </div>
+                <div class="p-6">
+                    <h2 class="text-md font-semibold text-gray-800 mb-2 text-center">Quay Tên</h2>
+                    <p class="text-gray-600 text-sm mb-4 text-center">Trò chơi may rủi thú vị. Gây phấn khích cho mọi người tham gia!</p>
+                    <div class="text-center">
+                        <a href="quayten.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">Chơi Ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="game-card bg-white rounded-2xl overflow-hidden shadow-lg max-w-xs">
+                <div class="overflow-hidden">
+                    <img src="screenshot_1739700866.png" alt="Game 3" class="w-full h-40 object-cover">
+                </div>
+                <div class="p-6">
+                    <h2 class="text-md font-semibold text-gray-800 mb-2 text-center">Đua Số Ngẫu Nhiên</h2>
+                    <p class="text-gray-600 text-sm mb-4 text-center">Game đua số mang đến trải nghiệm gay cấn và thú vị cho mọi người tham gia!</p>
+                    <div class="text-center">
+                        <a href="dua.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">Chơi Ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="game-card bg-white rounded-2xl overflow-hidden shadow-lg max-w-xs">
+                <div class="overflow-hidden">
+                    <img src="thi-dau-co-caro.jpg" alt="Game 4" class="w-full h-40 object-cover">
+                </div>
+                <div class="p-6">
+                    <h2 class="text-md font-semibold text-gray-800 mb-2 text-center">Cờ CaRo</h2>
+                    <p class="text-gray-600 text-sm mb-4 text-center">Trò chơi trí tuệ hấp dẫn, tư duy nhạy bén, tạo nên những trận đấu gay cấn và đầy kịch tính!</p>
+                    <div class="text-center">
+                        <a href="caro.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">Chơi Ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="game-card bg-white rounded-2xl overflow-hidden shadow-lg max-w-xs">
+                <div class="overflow-hidden">
+                    <img src="solitaire-classic.jpg" alt="Game 5" class="w-full h-40 object-cover">
+                </div>
+                <div class="p-6">
+                    <h2 class="text-md font-semibold text-gray-800 mb-2 text-center">Đánh Bài</h2>
+                    <p class="text-gray-600 text-sm mb-4 text-center">Game đánh bài là thể loại trò chơi sử dụng bộ bài (thường là bài Tây 52 lá).</p>
+                    <div class="text-center">
+                        <a href="danhbai.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">Chơi Ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="game-card bg-white rounded-2xl overflow-hidden shadow-lg max-w-xs">
+                <div class="overflow-hidden">
+                    <img src="dovui.jpg" alt="Game 6" class="w-full h-40 object-cover">
+                </div>
+                <div class="p-6">
+                    <h2 class="text-md font-semibold text-gray-800 mb-2 text-center">Đố Vui</h2>
+                    <p class="text-gray-600 text-sm mb-4 text-center">Game Đố Vui là trò chơi trí tuệ giúp bạn rèn luyện tư duy logic, khả năng suy luận và sự sáng tạo qua hàng loạt câu hỏi thú vị.</p>
+                    <div class="text-center">
+                        <a href="dovui.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">Chơi Ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="game-card bg-white rounded-2xl overflow-hidden shadow-lg max-w-xs">
+                <div class="overflow-hidden">
+                    <img src="mecung.jpg" alt="Game 8" class="w-full h-40 object-cover">
+                </div>
+                <div class="p-6">
+                    <h2 class="text-md font-semibold text-gray-800 mb-2 text-center">Mê Cung</h2>
+                    <p class="text-gray-600 text-sm mb-4 text-center">Game mê cung là thể loại trò chơi trong đó người chơi phải tìm đường thoát khỏi một mê cung phức tạp.</p>
+                    <div class="text-center">
+                        <a href="mecung.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">Chơi Ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="game-card bg-white rounded-2xl overflow-hidden shadow-lg max-w-xs">
+                <div class="overflow-hidden">
+                    <img src="MemoryCardGame1.jpg" alt="Game 9" class="w-full h-40 object-cover">
+                </div>
+                <div class="p-6">
+                    <h2 class="text-md font-semibold text-gray-800 mb-2 text-center">Memory Card Game</h2>
+                    <p class="text-gray-600 text-sm mb-4 text-center">Memory Card Game là trò chơi rèn luyện trí nhớ, nơi người chơi phải tìm ra các cặp thẻ giống nhau trong một bộ thẻ úp xuống.</p>
+                    <div class="text-center">
+                        <a href="cardgame.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">Chơi Ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="game-card bg-white rounded-2xl overflow-hidden shadow-lg max-w-xs">
+                <div class="overflow-hidden">
+                    <img src="ttnthcp.jpg" alt="Game 10" class="w-full h-40 object-cover">
+                </div>
+                <div class="p-6">
+                    <h2 class="text-md font-semibold text-gray-800 mb-2 text-center">Thử Thách, Nói Thật Hay Chịu Phạt Ngẫu Nhiên</h2>
+                    <p class="text-gray-600 text-sm mb-4 text-center">Trò chơi vui nhộn, nơi người chơi phải lựa chọn giữa thực hiện thử thách, trả lời câu hỏi thật lòng, hoặc chấp nhận hình phạt ngẫu nhiên.</p>
+                    <div class="text-center">
+                        <a href="tthcp.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">Chơi Ngay</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-volumeControl.addEventListener('input', () => {
-  const volume = volumeControl.value;
-  waterSound.volume = volume;
-  feedSound.volume = volume;
-  bubbleSound.volume = volume;
-});
+    <footer class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="https://www.facebook.com" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
+                    <i class="fab fa-facebook-f text-xl"></i>
+                </a>
+                <a href="https://www.instagram.com" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
+                    <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="https://www.tiktok.com/@thanh.sang70" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
+                    <i class="fab fa-tiktok text-xl"></i>
+                </a>
+            </div>
+            <p class="text-center text-sm">© 2025 NTS. Được thiết kế bởi <a href="https://www.tiktok.com/@thanh.sang70" class="text-indigo-200 hover:underline">Nguyễn Thanh Sang</a>.</p>
+        </div>
+    </footer>
 
-// Try to autoplay with user gesture
-document.body.addEventListener('click', () => {
-  if (!isSoundOn) {
-    waterSound.play().then(() => {
-      isSoundOn = true;
-      soundToggle.textContent = '🔇 Tắt âm thanh';
-    }).catch(e => console.log('Autoplay prevented:', e));
-  }
-}, { once: true });
+    <script>
+        // Background music control
+        document.addEventListener('DOMContentLoaded', function() {
+            const music = document.getElementById('backgroundMusic');
+            const musicControl = document.getElementById('musicControl');
+            let isPlaying = false;
 
-// Day/Night toggle
-let clickCount = 0;
-let isDay = true;
+            // Try to play music automatically (may be blocked by browser)
+            const playPromise = music.play();
 
-function toggleDayNight() {
-  isDay = !isDay;
-  if (isDay) {
-    document.body.style.background = 'linear-gradient(180deg, #1e90ff, #87cefa, #b0e0e6)';
-    waterSound.pause();
-    waterSound.currentTime = 0;
-    waterSound.play().catch(e => console.log('Play failed:', e));
-  } else {
-    document.body.style.background = 'linear-gradient(180deg, #000033, #000066, #191970)';
-    waterSound.pause();
-    // Optional: Play different night sound here if desired
-    waterSound.play().catch(e => console.log('Play failed:', e));
-  }
-}
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    isPlaying = true;
+                    musicControl.innerHTML = '<i class="fas fa-pause text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
+                })
+                .catch(error => {
+                    isPlaying = false;
+                    musicControl.innerHTML = '<i class="fas fa-play text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
+                });
+            }
 
-// Fish object
-function Fish(x, y, size, color, speed) {
-  this.x = x;
-  this.y = y;
-  this.size = size;
-  this.color = color;
-  this.speed = speed;
-  this.angle = Math.random() * Math.PI * 2;
-  this.targetX = null;
-  this.targetY = null;
-  this.wiggle = Math.random() * 0.1;
-  this.lastBubbleTime = 0;
-}
+            // Toggle play/pause when button is clicked
+            musicControl.addEventListener('click', function() {
+                if (isPlaying) {
+                    music.pause();
+                    musicControl.innerHTML = '<i class="fas fa-play text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
+                } else {
+                    music.play();
+                    musicControl.innerHTML = '<i class="fas fa-pause text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
+                }
+                isPlaying = !isPlaying;
+            });
 
-Fish.prototype.draw = function() {
-  ctx.save();
-  ctx.translate(this.x, this.y);
-  ctx.rotate(this.angle);
-
-  // Shadow
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetX = 5;
-  ctx.shadowOffsetY = 5;
-
-  // Body
-  const gradient = ctx.createRadialGradient(0, 0, this.size / 4, 0, 0, this.size);
-  gradient.addColorStop(0, this.color);
-  gradient.addColorStop(1, 'rgba(0, 0, 0, 0.2)');
-  ctx.fillStyle = gradient;
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.quadraticCurveTo(this.size / 2, -this.size / 4, this.size, 0);
-  ctx.quadraticCurveTo(this.size / 2, this.size / 4, 0, 0);
-  ctx.fill();
-
-  // Reset shadow
-  ctx.shadowBlur = 0;
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 0;
-
-  // Tail with wiggle
-  const tailWiggle = Math.sin(Date.now() / 100 + this.x) * 0.2;
-  const tailGradient = ctx.createLinearGradient(-this.size, 0, -this.size / 2, 0);
-  tailGradient.addColorStop(0, 'rgba(255, 255, 255, 0.7)');
-  tailGradient.addColorStop(1, 'rgba(255, 255, 255, 0.3)');
-  ctx.fillStyle = tailGradient;
-  ctx.beginPath();
-  ctx.moveTo(-this.size / 2, 0);
-  ctx.lineTo(-this.size, -this.size / 3 + tailWiggle * this.size);
-  ctx.lineTo(-this.size, this.size / 3 - tailWiggle * this.size);
-  ctx.closePath();
-  ctx.fill();
-
-  // Eye
-  ctx.fillStyle = 'white';
-  ctx.beginPath();
-  ctx.arc(this.size / 4, -this.size / 10, this.size / 10, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = 'black';
-  ctx.beginPath();
-  ctx.arc(this.size / 4, -this.size / 10, this.size / 15, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.restore();
-};
-
-Fish.prototype.update = function() {
-  // Play bubble sound occasionally
-  const now = Date.now();
-  if (now - this.lastBubbleTime > 3000 + Math.random() * 5000) {
-    if (isSoundOn) {
-      bubbleSound.currentTime = 0;
-      bubbleSound.play().catch(e => console.log('Bubble sound failed:', e));
-    }
-    this.lastBubbleTime = now;
-  }
-
-  if (this.targetX !== null && this.targetY !== null) {
-    const dx = this.targetX - this.x;
-    const dy = this.targetY - this.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance > this.speed) {
-      this.angle = Math.atan2(dy, dx) + Math.sin(Date.now() / 500) * this.wiggle;
-      this.x += Math.cos(this.angle) * this.speed;
-      this.y += Math.sin(this.angle) * this.speed;
-    } else {
-      this.targetX = null;
-      this.targetY = null;
-      this.speed = Math.random() * 2 + 0.5;
-    }
-  } else {
-    this.angle += (Math.random() - 0.5) * 0.1;
-    this.x += Math.cos(this.angle) * this.speed;
-    this.y += Math.sin(this.angle) * this.speed;
-
-    if (this.x < 0 || this.x > canvas.width) this.angle = Math.PI - this.angle + (Math.random() - 0.5) * 0.2;
-    if (this.y < 0 || this.y > canvas.height) this.angle = -this.angle + (Math.random() - 0.5) * 0.2;
-  }
-};
-
-// Create fish
-const fishes = [];
-for (let i = 0; i < 50; i++) {
-  const size = Math.random() * 30 + 10;
-  const x = Math.random() * canvas.width;
-  const y = Math.random() * canvas.height;
-  const hue = Math.random() * 360;
-  const color = `hsl(${hue}, 70%, ${50 + Math.random() * 20}%)`;
-  const speed = Math.random() * 2 + 0.5;
-  fishes.push(new Fish(x, y, size, color, speed));
-}
-
-// Feed particles
-let feedParticles = [];
-
-function FeedParticle(x, y) {
-  this.x = x;
-  this.y = y;
-  this.size = Math.random() * 5 + 2;
-  this.speedY = Math.random() * 2 + 1;
-  this.alpha = 1;
-}
-
-FeedParticle.prototype.update = function() {
-  this.y += this.speedY;
-  this.alpha -= 0.02;
-};
-
-FeedParticle.prototype.draw = function() {
-  ctx.fillStyle = `rgba(255, 215, 0, ${this.alpha})`;
-  ctx.beginPath();
-  ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-  ctx.fill();
-};
-
-function drawFeed() {
-  feedParticles = feedParticles.filter(p => p.alpha > 0);
-  feedParticles.forEach(particle => {
-    particle.update();
-    particle.draw();
-  });
-}
-
-// Bubble object
-function Bubble(x, y, size, speed) {
-  this.x = x;
-  this.y = y;
-  this.size = size;
-  this.speed = speed;
-  this.wiggle = Math.random() * 2 - 1;
-}
-
-Bubble.prototype.update = function() {
-  this.y -= this.speed;
-  this.x += Math.sin(Date.now() / 200 + this.y) * this.wiggle;
-  if (this.y < 0) this.y = canvas.height;
-};
-
-Bubble.prototype.draw = function() {
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-  ctx.beginPath();
-  ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-  ctx.fill();
-};
-
-// Create bubbles
-const bubbles = [];
-for (let i = 0; i < 20; i++) {
-  bubbles.push(new Bubble(Math.random() * canvas.width, canvas.height, Math.random() * 4 + 1, Math.random() * 2 + 1));
-}
-
-// Decorations
-function drawDecorations() {
-  // Sand
-  const sandGradient = ctx.createLinearGradient(0, canvas.height - 100, 0, canvas.height);
-  sandGradient.addColorStop(0, '#f4a460');
-  sandGradient.addColorStop(1, '#d2b48c');
-  ctx.fillStyle = sandGradient;
-  ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
-
-  // Rocks
-  ctx.fillStyle = '#8b4513';
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetX = 5;
-  ctx.shadowOffsetY = 5;
-
-  ctx.beginPath();
-  ctx.moveTo(100, canvas.height - 100);
-  ctx.quadraticCurveTo(150, canvas.height - 200, 250, canvas.height - 100);
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.moveTo(400, canvas.height - 100);
-  ctx.quadraticCurveTo(450, canvas.height - 180, 550, canvas.height - 100);
-  ctx.fill();
-
-  ctx.shadowBlur = 0;
-
-  // Seaweed
-  const seaweedColors = ['#228B22', '#32CD32', '#00FA9A'];
-  for (let i = 0; i < 10; i++) {
-    const x = Math.random() * canvas.width;
-    const height = Math.random() * 150 + 50;
-    const color = seaweedColors[Math.floor(Math.random() * seaweedColors.length)];
-    drawSeaweed(x, canvas.height - 100, height, color);
-  }
-}
-
-function drawSeaweed(x, y, height, color) {
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 5;
-  ctx.beginPath();
-  const sway = Math.sin(Date.now() / 500 + x) * 15;
-  ctx.moveTo(x, y);
-  ctx.bezierCurveTo(x + sway, y - height / 3, x - sway, y - (height * 2 / 3), x, y - height);
-  ctx.stroke();
-
-  // Additional leaves
-  ctx.lineWidth = 2;
-  for (let i = 0; i < 3; i++) {
-    const leafY = y - height * (i + 1) / 4;
-    const leafSway = Math.sin(Date.now() / 600 + x + i) * 10;
-    ctx.beginPath();
-    ctx.moveTo(x, leafY);
-    ctx.quadraticCurveTo(x + leafSway, leafY - 10, x + leafSway * 2, leafY - 20);
-    ctx.stroke();
-  }
-}
-
-// Water effect
-function drawWaterEffect() {
-  const lightX = canvas.width / 2 + Math.sin(Date.now() / 1000) * 100;
-  const lightY = canvas.height / 4 + Math.cos(Date.now() / 1500) * 50;
-  const gradient = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, 300);
-  gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
-  gradient.addColorStop(0.5, 'rgba(173, 216, 230, 0.2)');
-  gradient.addColorStop(1, 'rgba(0, 191, 255, 0)');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-// Animation loop
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  drawWaterEffect();
-  drawDecorations();
-
-  bubbles.forEach(bubble => {
-    bubble.update();
-    bubble.draw();
-  });
-
-  fishes.forEach(fish => {
-    fish.update();
-    fish.draw();
-  });
-
-  drawFeed();
-
-  requestAnimationFrame(animate);
-}
-
-animate();
-
-// Event listeners
-canvas.addEventListener('mousedown', (e) => {
-  clickCount++;
-  if (clickCount === 3) {
-    toggleDayNight();
-    clickCount = 0;
-  }
-
-  const feedX = e.clientX;
-  const feedY = e.clientY;
-  if (isSoundOn) {
-    feedSound.currentTime = 0;
-    feedSound.play().catch(e => console.log('Feed sound failed:', e));
-  }
-  for (let i = 0; i < 10; i++) {
-    feedParticles.push(new FeedParticle(feedX + (Math.random() - 0.5) * 20, feedY));
-  }
-
-  fishes.forEach(fish => {
-    fish.targetX = feedX;
-    fish.targetY = feedY;
-    fish.speed = Math.random() * 3 + 2;
-  });
-});
-
-canvas.addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  clickCount++;
-  if (clickCount === 3) {
-    toggleDayNight();
-    clickCount = 0;
-  }
-
-  const touch = e.touches[0];
-  const feedX = touch.clientX;
-  const feedY = touch.clientY;
-  if (isSoundOn) {
-    feedSound.currentTime = 0;
-    feedSound.play().catch(e => console.log('Feed sound failed:', e));
-  }
-  for (let i = 0; i < 10; i++) {
-    feedParticles.push(new FeedParticle(feedX + (Math.random() - 0.5) * 20, feedY));
-  }
-
-  fishes.forEach(fish => {
-    fish.targetX = feedX;
-    fish.targetY = feedY;
-    fish.speed = Math.random() * 3 + 2;
-  });
-});
-
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-</script>
+            // Lower volume to make it background music
+            music.volume = 0.3;
+        });
+    </script>
 </body>
 </html>
