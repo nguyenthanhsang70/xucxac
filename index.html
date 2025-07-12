@@ -4,191 +4,280 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chúc Mừng Sinh Nhật</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     :root {
       --primary: #FF6B6B;
       --secondary: #FF8E8E;
       --accent: #FFD166;
       --light: #FFF5F5;
-      --dark: #4A4A4A;
+      --dark: #2D3436;
+      --gradient: linear-gradient(90deg, #ff00c7, #ff9f00);
     }
-    
+
     body {
-      font-family: 'Quicksand', sans-serif;
-      background: linear-gradient(135deg, #fff5f5 0%, #ffecec 100%);
-      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f6e6e6 0%, #ffecec 100%);
       margin: 0;
       padding: 0;
       min-height: 100vh;
       color: var(--dark);
+      overflow-x: hidden;
+      position: relative;
     }
-    
+
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
-      padding: 30px 20px;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
     }
-    
+
     h1 {
       font-family: 'Dancing Script', cursive;
-      color: var(--primary);
-      font-size: 3rem;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      font-size: 4rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+      animation: pulse 2s infinite;
     }
-    
+
     .subtitle {
       color: var(--secondary);
-      margin-bottom: 30px;
+      font-size: 1.2rem;
       font-weight: 600;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
     }
-    
+
     .input-group {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(255, 107, 107, 0.2);
+      backdrop-filter: blur(10px);
       margin-bottom: 30px;
     }
-    
+
     input {
-      padding: 12px 15px;
-      margin: 10px 0;
-      width: 80%;
-      max-width: 300px;
+      padding: 15px;
+      margin: 12px 0;
+      width: 85%;
+      max-width: 350px;
       border: 2px solid #f0f0f0;
-      border-radius: 8px;
-      font-family: 'Quicksand', sans-serif;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
       font-size: 16px;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
+      background: #fff;
     }
-    
+
     input:focus {
       border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.3);
       outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
     }
-    
+
     input::placeholder {
       color: #bbb;
+      font-style: italic;
     }
-    
-    button {
-      padding: 12px 30px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    button, .back-btn {
+      padding: 12px 35px;
       color: white;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      margin-top: 15px;
       font-size: 16px;
       font-weight: 600;
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-      transition: all 0.3s;
-      font-family: 'Quicksand', sans-serif;
+      font-family: 'Poppins', sans-serif;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 140px;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
-    
-    button:hover {
+
+    button.submit-btn, .back-btn {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+
+    button.submit-btn:hover, .back-btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
     }
-    
-    button:active {
+
+    button.submit-btn:active, .back-btn:active {
       transform: translateY(1px);
     }
-    
-    #result {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.1);
-      margin-top: 30px;
-      display: none;
-      animation: fadeIn 0.5s ease-out;
+
+    .back-btn i {
+      margin-right: 8px;
     }
-    
-    .cake {
-      font-size: 60px;
-      margin: 10px 0;
-      color: var(--primary);
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
-    
+
     .birthday-message {
-      font-size: 18px;
-      line-height: 1.6;
-      margin: 15px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
     }
-    
-    .name {
-      color: var(--primary);
-      font-weight: 600;
+
+    .birthday-message.show {
+      opacity: 1;
+      pointer-events: all;
     }
-    
-    .birthdate {
-      color: var(--secondary);
-      font-weight: 600;
+
+    .birthday-message h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3.5rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      animation: bounceIn 0.8s ease;
     }
-    
+
+    .birthday-message p {
+      font-size: 1.6rem;
+      color: white;
+      margin: 10px 0;
+      font-weight: 500;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    .birthday-message .cake {
+      font-size: 4rem;
+      margin: 20px 0;
+    }
+
+    .birthday-message button {
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+
+    .birthday-message button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+    }
+
     .confetti {
       position: fixed;
-      width: 10px;
-      height: 10px;
-      background-color: var(--accent);
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
       opacity: 0;
-      z-index: 999;
+      z-index: 99;
+      pointer-events: none;
     }
-    
-    @keyframes fadeIn {
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
-     @media (max-width: 768px) {
-            header h1 {
-                font-size: 36px;
-            }
-            header p {
-                font-size: 18px;
-            }
-            .content h2 {
-                font-size: 30px;
-            }
-            .feature {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-        }
-        @media (max-width: 480px) {
-            header h1 {
-                font-size: 30px;
-            }
-            header p {
-                font-size: 16px;
-            }
-            .content h2 {
-                font-size: 26px;
-            }
-            .section h2 {
-                font-size: 28px;
-            }
-            .section a {
-                font-size: 16px;
-                padding: 12px 25px;
-            }
-            .social-icons a {
-                font-size: 20px;
-            }
-            .back-button {
-                width: 36px; /* Slightly larger button on mobile */
-                height: 36px;
-                padding: 8px;
-            }
-            .back-button::before {
-                font-size: 20px; /* Larger icon on mobile */
-            }
-        }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 3rem;
+      }
+      .subtitle {
+        font-size: 1.1rem;
+      }
+      input {
+        width: 90%;
+      }
+      .input-group {
+        padding: 30px;
+      }
+      .birthday-message h2 {
+        font-size: 2.8rem;
+      }
+      .birthday-message p {
+        font-size: 1.4rem;
+      }
+      .birthday-message .cake {
+        font-size: 3rem;
+      }
+      .controls button, .controls .back-btn {
+        min-width: 120px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      .subtitle {
+        font-size: 1rem;
+      }
+      .input-group {
+        padding: 20px;
+      }
+      button, .back-btn {
+        padding: 10px 25px;
+        font-size: 14px;
+        min-width: 100px;
+      }
+      .birthday-message h2 {
+        font-size: 2.2rem;
+      }
+      .birthday-message p {
+        font-size: 1.2rem;
+      }
+      .birthday-message .cake {
+        font-size: 2.5rem;
+      }
+      .birthday-message button {
+        padding: 12px 30px;
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -201,16 +290,20 @@
       <input type="number" id="ngay" placeholder="Ngày sinh (1-31)" min="1" max="31"><br>
       <input type="number" id="thang" placeholder="Tháng sinh (1-12)" min="1" max="12"><br>
       <input type="number" id="nam" placeholder="Năm sinh (VD: 2000)"><br>
-      <button onclick="chucMung()">Gửi Lời Chúc</button>
+      <div class="controls">
+        <button class="submit-btn" onclick="chucMung()">Gửi Lời Chúc</button>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Pillay Lại</a>
+      </div>
     </div>
-    
-    <div id="result">
-      <div class="cake">🎂</div>
-      <p class="birthday-message"><strong>Chúc mừng sinh nhật lần thứ <span id="age"></span> của <span class="name" id="display-name"></span>!</strong></p>
-      <p class="birthday-message">Sinh ngày: <span class="birthdate" id="display-birthdate"></span></p>
-      <p class="birthday-message">Chúc bạn một ngày sinh nhật tràn ngập niềm vui, hạnh phúc và thành công trong cuộc sống!</p>
-      <div class="cake">🎉 🎊 🎈</div>
-    </div>
+  </div>
+
+  <div class="birthday-message" id="birthdayMessage">
+    <h2>Chúc Mừng Sinh Nhật!</h2>
+    <p id="messageName"></p>
+    <p id="messageBirthdate"></p>
+    <p>Chúc bạn một ngày sinh nhật tràn ngập niềm vui, hạnh phúc và thành công trong cuộc sống!</p>
+    <div class="cake">🎂</div>
+    <button onclick="hideMessage()">Đóng</button>
   </div>
 
   <script>
@@ -226,21 +319,18 @@
       }
 
       const tuoi = new Date().getFullYear() - parseInt(nam);
-      const resultDiv = document.getElementById("result");
-      
-      document.getElementById("age").textContent = tuoi;
-      document.getElementById("display-name").textContent = ten;
-      document.getElementById("display-birthdate").textContent = `${ngay}/${thang}/${nam}`;
-      
-      resultDiv.style.display = "block";
-      
-      // Create confetti effect
+      document.getElementById("messageName").textContent = `Chúc mừng sinh nhật lần thứ ${tuoi} của ${ten}!`;
+      document.getElementById("messageBirthdate").textContent = `Sinh ngày: ${ngay}/${thang}/${nam}`;
+      document.getElementById("birthdayMessage").classList.add("show");
       createConfetti();
     }
-    
+
+    function hideMessage() {
+      document.getElementById("birthdayMessage").classList.remove("show");
+    }
+
     function createConfetti() {
       const colors = ['#FF6B6B', '#FF8E8E', '#FFD166', '#06D6A0', '#118AB2'];
-      
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
@@ -250,31 +340,13 @@
         confetti.style.width = Math.random() * 10 + 5 + 'px';
         confetti.style.height = Math.random() * 10 + 5 + 'px';
         confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-        
         document.body.appendChild(confetti);
-        
+
         const animationDuration = Math.random() * 3 + 2;
-        
         confetti.style.animation = `fall ${animationDuration}s linear forwards`;
-        
-        // Add keyframes dynamically
-        const keyframes = `
-          @keyframes fall {
-            to {
-              transform: translateY(100vh) rotate(${Math.random() * 360}deg);
-              opacity: 0;
-            }
-          }
-        `;
-        
-        const style = document.createElement('style');
-        style.innerHTML = keyframes;
-        document.head.appendChild(style);
-        
-        // Remove confetti after animation
+
         setTimeout(() => {
           confetti.remove();
-          style.remove();
         }, animationDuration * 1000);
       }
     }
