@@ -1,69 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh Sách Game - NTS</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <link rel="icon" type="image/png" href="logos3.png">
-    <style>
-        body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #e0e7ff, #a5b4fc);
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .game-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .game-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-        .game-card img {
-            transition: transform 0.3s ease;
-        }
-        .game-card:hover img {
-            transform: scale(1.05);
-        }
-        .music-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .music-control:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 1);
-        }
-        .tooltip {
-            position: absolute;
-            right: 60px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        .music-control:hover .tooltip {
-            opacity: 1;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chúc Mừng Sinh Nhật</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #FF8E8E;
+      --accent: #FFD166;
+      --light: #FFF5F5;
+      --dark: #4A4A4A;
+    }
+    
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffecec 100%);
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      color: var(--dark);
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+    
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      color: var(--primary);
+      font-size: 3rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .subtitle {
+      color: var(--secondary);
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+    
+    .input-group {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.1);
+      margin-bottom: 30px;
+    }
+    
+    input {
+      padding: 12px 15px;
+      margin: 10px 0;
+      width: 80%;
+      max-width: 300px;
+      border: 2px solid #f0f0f0;
+      border-radius: 8px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    
+    input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+    }
+    
+    input::placeholder {
+      color: #bbb;
+    }
+    
+    button {
+      padding: 12px 30px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+      transition: all 0.3s;
+      font-family: 'Quicksand', sans-serif;
+    }
+    
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    #result {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.1);
+      margin-top: 30px;
+      display: none;
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    .cake {
+      font-size: 60px;
+      margin: 10px 0;
+      color: var(--primary);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .birthday-message {
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 15px 0;
+    }
+    
+    .name {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .birthdate {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+    
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: var(--accent);
+      opacity: 0;
+      z-index: 999;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+     @media (max-width: 768px) {
+            header h1 {
+                font-size: 36px;
+            }
+            header p {
+                font-size: 18px;
+            }
+            .content h2 {
+                font-size: 30px;
+            }
+            .feature {
+                width: 100%;
+                margin-bottom: 20px;
+            }
         }
         @media (max-width: 480px) {
             header h1 {
@@ -75,221 +170,114 @@
             .content h2 {
                 font-size: 26px;
             }
-            .game-section h2 {
+            .section h2 {
                 font-size: 28px;
             }
-            .game-section a {
+            .section a {
                 font-size: 16px;
                 padding: 12px 25px;
             }
             .social-icons a {
                 font-size: 20px;
             }
-            .game-card {
-                max-width: 200px;
+            .back-button {
+                width: 36px; /* Slightly larger button on mobile */
+                height: 36px;
+                padding: 8px;
             }
-            .game-card img {
-                executives: 100px;
-            }
-            .game-card h2 {
-                font-size: 14px;
-            }
-            .game-card p {
-                font-size: 11px;
-            }
-            .game-card a {
-                padding: 6px 12px;
-                font-size: 11px;
+            .back-button::before {
+                font-size: 20px; /* Larger icon on mobile */
             }
         }
-    </style>
+  </style>
 </head>
 <body>
-    <!-- Audio element for background music -->
-    <audio id="backgroundMusic" loop>
-        <source src="nhacnen2.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <!-- Music control button -->
-    <div class="music-control" id="musicControl" title="Bật/Tắt nhạc nền">
-        <i class="fas fa-music text-indigo-600"></i>
-        <span class="tooltip">Bật/Tắt nhạc nền</span>
+  <div class="container">
+    <h1>Chúc Mừng Sinh Nhật</h1>
+    <p class="subtitle">Nhập thông tin của bạn để nhận lời chúc đặc biệt</p>
+    
+    <div class="input-group">
+      <input type="text" id="ten" placeholder="Tên của bạn"><br>
+      <input type="number" id="ngay" placeholder="Ngày sinh (1-31)" min="1" max="31"><br>
+      <input type="number" id="thang" placeholder="Tháng sinh (1-12)" min="1" max="12"><br>
+      <input type="number" id="nam" placeholder="Năm sinh (VD: 2000)"><br>
+      <button onclick="chucMung()">Gửi Lời Chúc</button>
     </div>
+    
+    <div id="result">
+      <div class="cake">🎂</div>
+      <p class="birthday-message"><strong>Chúc mừng sinh nhật lần thứ <span id="age"></span> của <span class="name" id="display-name"></span>!</strong></p>
+      <p class="birthday-message">Sinh ngày: <span class="birthdate" id="display-birthdate"></span></p>
+      <p class="birthday-message">Chúc bạn một ngày sinh nhật tràn ngập niềm vui, hạnh phúc và thành công trong cuộc sống!</p>
+      <div class="cake">🎉 🎊 🎈</div>
+    </div>
+  </div>
 
-    <header class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-6 relative">
-        <a href="index.html" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center transition-colors duration-300">
-            <i class="fas fa-arrow-left mr-2"></i> 
-        </a>
-        <h1 class="text-3xl md:text-4xl font-bold text-center tracking-tight">Danh Sách Game</h1>
-    </header>
+  <script>
+    function chucMung() {
+      const ten = document.getElementById("ten").value.trim();
+      const ngay = document.getElementById("ngay").value;
+      const thang = document.getElementById("thang").value;
+      const nam = document.getElementById("nam").value;
 
-    <main class="flex-grow container mx-auto px-4 py-12">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg max-w-[250px]">
-                <div class="overflow-hidden">
-                    <img src="dice-dices-vector-image-logo-260nw-2514727833.webp" alt="Game 1" class="w-full h-32 object-cover">
-                </div>
-                <div class="p-4">
-                    <h2 class="text-base font-semibold text-gray-800 mb-2 text-center">Xúc Xắc</h2>
-                    <p class="text-gray-600 text-xs mb-3 text-center">Trò chơi may rủi đầy kịch tính. Nơi người chơi chờ đợi kết quả bất ngờ.</p>
-                    <div class="text-center">
-                        <a href="xucxac.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-300">Chơi Ngay</a>
-                    </div>
-                </div>
-            </div>
-            <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg max-w-[250px]">
-                <div class="overflow-hidden">
-                    <img src="hinhquayten.png" alt="Game 2" class="w-full h-32 object-cover">
-                </div>
-                <div class="p-4">
-                    <h2 class="text-base font-semibold text-gray-800 mb-2 text-center">Quay Tên</h2>
-                    <p class="text-gray-600 text-xs mb-3 text-center">Trò chơi may rủi thú vị. Gây phấn khích cho mọi người tham gia!</p>
-                    <div class="text-center">
-                        <a href="quayten.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-300">Chơi Ngay</a>
-                    </div>
-                </div>
-            </div>
-            <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg max-w-[250px]">
-                <div class="overflow-hidden">
-                    <img src="screenshot_1739700866.png" alt="Game 3" class="w-full h-32 object-cover">
-                </div>
-                <div class="p-4">
-                    <h2 class="text-base font-semibold text-gray-800 mb-2 text-center">Đua Số Ngẫu Nhiên</h2>
-                    <p class="text-gray-600 text-xs mb-3 text-center">Game đua số mang đến trải nghiệm gay cấn và thú vị cho mọi người tham gia!</p>
-                    <div class="text-center">
-                        <a href="dua.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-300">Chơi Ngay</a>
-                    </div>
-                </div>
-            </div>
-            <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg max-w-[250px]">
-                <div class="overflow-hidden">
-                    <img src="thi-dau-co-caro.jpg" alt="Game 4" class="w-full h-32 object-cover">
-                </div>
-                <div class="p-4">
-                    <h2 class="text-base font-semibold text-gray-800 mb-2 text-center">Cờ CaRo</h2>
-                    <p class="text-gray-600 text-xs mb-3 text-center">Trò chơi trí tuệ hấp dẫn, tư duy nhạy bén, tạo nên những trận đấu gay cấn và đầy kịch tính!</p>
-                    <div class="text-center">
-                        <a href="caro.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-300">Chơi Ngay</a>
-                    </div>
-                </div>
-            </div>
-            <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg max-w-[250px]">
-                <div class="overflow-hidden">
-                    <img src="solitaire-classic.jpg" alt="Game 5" class="w-full h-32 object-cover">
-                </div>
-                <div class="p-4">
-                    <h2 class="text-base font-semibold text-gray-800 mb-2 text-center">Đánh Bài</h2>
-                    <p class="text-gray-600 text-xs mb-3 text-center">Game đánh bài là thể loại trò chơi sử dụng bộ bài (thường là bài Tây 52 lá).</p>
-                    <div class="text-center">
-                        <a href="danhbai.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-300">Chơi Ngay</a>
-                    </div>
-                </div>
-            </div>
-            <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg max-w-[250px]">
-                <div class="overflow-hidden">
-                    <img src="dovui.jpg" alt="Game 6" class="w-full h-32 object-cover">
-                </div>
-                <div class="p-4">
-                    <h2 class="text-base font-semibold text-gray-800 mb-2 text-center">Đố Vui</h2>
-                    <p class="text-gray-600 text-xs mb-3 text-center">Game Đố Vui là trò chơi trí tuệ giúp bạn rèn luyện tư duy logic, khả năng suy luận và sự sáng tạo qua hàng loạt câu hỏi thú vị.</p>
-                    <div class="text-center">
-                        <a href="dovui.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-300">Chơi Ngay</a>
-                    </div>
-                </div>
-            </div>
-            <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg max-w-[250px]">
-                <div class="overflow-hidden">
-                    <img src="mecung.jpg" alt="Game 8" class="w-full h-32 object-cover">
-                </div>
-                <div class="p-4">
-                    <h2 class="text-base font-semibold text-gray-800 mb-2 text-center">Mê Cung</h2>
-                    <p class="text-gray-600 text-xs mb-3 text-center">Game mê cung là thể loại trò chơi trong đó người chơi phải tìm đường thoát khỏi một mê cung phức tạp.</p>
-                    <div class="text-center">
-                        <a href="mecung.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-300">Chơi Ngay</a>
-                    </div>
-                </div>
-            </div>
-            <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg max-w-[250px]">
-                <div class="overflow-hidden">
-                    <img src="MemoryCardGame1.jpg" alt="Game 9" class="w-full h-32 object-cover">
-                </div>
-                <div class="p-4">
-                    <h2 class="text-base font-semibold text-gray-800 mb-2 text-center">Memory Card Game</h2>
-                    <p class="text-gray-600 text-xs mb-3 text-center">Memory Card Game là trò chơi rèn luyện trí nhớ, nơi người chơi phải tìm ra các cặp thẻ giống nhau trong một bộ thẻ úp xuống.</p>
-                    <div class="text-center">
-                        <a href="cardgame.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-300">Chơi Ngay</a>
-                    </div>
-                </div>
-            </div>
-            <div class="game-card bg-white rounded-xl overflow-hidden shadow-lg max-w-[250px]">
-                <div class="overflow-hidden">
-                    <img src="ttnthcp.jpg" alt="Game 10" class="w-full h-32 object-cover">
-                </div>
-                <div class="p-4">
-                    <h2 class="text-base font-semibold text-gray-800 mb-2 text-center">Thử Thách, Nói Thật Hay Chịu Phạt Ngẫu Nhiên</h2>
-                    <p class="text-gray-600 text-xs mb-3 text-center">Trò chơi vui nhộn, nơi người chơi phải lựa chọn giữa thực hiện thử thách, trả lời câu hỏi thật lòng, hoặc chấp nhận hình phạt ngẫu nhiên.</p>
-                    <div class="text-center">
-                        <a href="tthcp.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-300">Chơi Ngay</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+      if (!ten || !ngay || !thang || !nam) {
+        alert("Vui lòng nhập đầy đủ thông tin!");
+        return;
+      }
 
-    <footer class="bg-gradient-to-r from-indigo-900 to-indigo-700 text-white py-8">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-center space-x-6 mb-4">
-                <a href="https://www.facebook.com" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
-                    <i class="fab fa-facebook-f text-xl"></i>
-                </a>
-                <a href="https://www.instagram.com" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
-                    <i class="fab fa-instagram text-xl"></i>
-                </a>
-                <a href="https://www.tiktok.com/@thanh.sang70" target="_blank" class="hover:text-indigo-200 transition-colors duration-300">
-                    <i class="fab fa-tiktok text-xl"></i>
-                </a>
-            </div>
-            <p class="text-center text-sm">© 2025 NTS. Được thiết kế bởi <a href="https://www.tiktok.com/@thanh.sang70" class="text-indigo-200 hover:underline">Nguyễn Thanh Sang</a>.</p>
-        </div>
-    </footer>
-
-    <script>
-        // Background music control
-        document.addEventListener('DOMContentLoaded', function() {
-            const music = document.getElementById('backgroundMusic');
-            const musicControl = document.getElementById('musicControl');
-            let isPlaying = false;
-
-            // Try to play music automatically (may be blocked by browser)
-            const playPromise = music.play();
-
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    isPlaying = true;
-                    musicControl.innerHTML = '<i class="fas fa-pause text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
-                })
-                .catch(error => {
-                    isPlaying = false;
-                    musicControl.innerHTML = '<i class="fas fa-play text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
-                });
+      const tuoi = new Date().getFullYear() - parseInt(nam);
+      const resultDiv = document.getElementById("result");
+      
+      document.getElementById("age").textContent = tuoi;
+      document.getElementById("display-name").textContent = ten;
+      document.getElementById("display-birthdate").textContent = `${ngay}/${thang}/${nam}`;
+      
+      resultDiv.style.display = "block";
+      
+      // Create confetti effect
+      createConfetti();
+    }
+    
+    function createConfetti() {
+      const colors = ['#FF6B6B', '#FF8E8E', '#FFD166', '#06D6A0', '#118AB2'];
+      
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = -10 + 'px';
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        
+        document.body.appendChild(confetti);
+        
+        const animationDuration = Math.random() * 3 + 2;
+        
+        confetti.style.animation = `fall ${animationDuration}s linear forwards`;
+        
+        // Add keyframes dynamically
+        const keyframes = `
+          @keyframes fall {
+            to {
+              transform: translateY(100vh) rotate(${Math.random() * 360}deg);
+              opacity: 0;
             }
-
-            // Toggle play/pause when button is clicked
-            musicControl.addEventListener('click', function() {
-                if (isPlaying) {
-                    music.pause();
-                    musicControl.innerHTML = '<i class="fas fa-play text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
-                } else {
-                    music.play();
-                    musicControl.innerHTML = '<i class="fas fa-pause text-indigo-600"></i><span class="tooltip">Bật/Tắt nhạc nền</span>';
-                }
-                isPlaying = !isPlaying;
-            });
-
-            // Lower volume to make it background music
-            music.volume = 0.3;
-        });
-    </script>
+          }
+        `;
+        
+        const style = document.createElement('style');
+        style.innerHTML = keyframes;
+        document.head.appendChild(style);
+        
+        // Remove confetti after animation
+        setTimeout(() => {
+          confetti.remove();
+          style.remove();
+        }, animationDuration * 1000);
+      }
+    }
+  </script>
 </body>
 </html>
