@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chúc Mừng Sinh Nhật</title>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #FF6B6B;
@@ -38,7 +38,7 @@
 
     h1 {
       font-family: 'Dancing Script', cursive;
-      font-size: 4rem;
+      font-size: clamp(2.5rem, 5vw, 4rem);
       background: var(--gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -49,7 +49,7 @@
 
     .subtitle {
       color: var(--secondary);
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 2vw, 1.2rem);
       font-weight: 600;
       margin-bottom: 30px;
       letter-spacing: 1px;
@@ -57,7 +57,7 @@
 
     .input-group {
       background: rgba(255, 255, 255, 0.95);
-      padding: 40px;
+      padding: clamp(20px, 5vw, 40px);
       border-radius: 20px;
       box-shadow: 0 15px 40px rgba(255, 107, 107, 0.2);
       backdrop-filter: blur(10px);
@@ -131,6 +131,7 @@
       margin-right: 8px;
     }
 
+    /* Thông báo sinh nhật */
     .birthday-message {
       position: fixed;
       top: 0;
@@ -138,14 +139,18 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 100;
+      z-index: 1000;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.5s ease;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
     }
 
     .birthday-message.show {
@@ -153,9 +158,33 @@
       pointer-events: all;
     }
 
+    .birthday-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .birthday-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,107,107,0.2) 0%, rgba(255,107,107,0) 70%);
+      animation: rotate 20s linear infinite;
+      z-index: -1;
+    }
+
     .birthday-message h2 {
       font-family: 'Dancing Script', cursive;
-      font-size: 3.5rem;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
       background: var(--gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -164,39 +193,85 @@
     }
 
     .birthday-message p {
-      font-size: 1.6rem;
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
       color: white;
       margin: 10px 0;
       font-weight: 500;
+      line-height: 1.5;
       animation: fadeInUp 0.8s ease 0.2s both;
     }
 
+    .birthday-message .highlight {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
     .birthday-message .cake {
-      font-size: 4rem;
+      font-size: clamp(3rem, 8vw, 4rem);
       margin: 20px 0;
+      display: inline-block;
+      animation: bounce 2s infinite;
     }
 
-    .birthday-message button {
-      padding: 15px 40px;
-      font-size: 1.2rem;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
+    /* Nút đóng mới - căn giữa */
+    .close-btn-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      width: 100%;
+    }
+
+    .close-btn {
+      padding: 12px 30px;
+      font-size: clamp(1rem, 2vw, 1.1rem);
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.4);
       border-radius: 50px;
+      color: white;
+      cursor: pointer;
       transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(5px);
     }
 
-    .birthday-message button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
+    .close-btn:active {
+      transform: translateY(1px);
+    }
+
+    .close-btn i {
+      font-size: 0.9em;
+    }
+
+    /* Confetti */
     .confetti {
       position: fixed;
       width: 12px;
       height: 12px;
       background: var(--accent);
       opacity: 0;
-      z-index: 99;
+      z-index: 999;
       pointer-events: none;
+      animation: fall linear forwards;
+    }
+
+    /* Hiệu ứng pháo hoa */
+    .firework {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px 5px;
+      animation: explode 1s ease-out forwards;
+      opacity: 0;
+      z-index: 998;
     }
 
     @keyframes pulse {
@@ -222,60 +297,27 @@
       }
     }
 
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 3rem;
-      }
-      .subtitle {
-        font-size: 1.1rem;
-      }
-      input {
-        width: 90%;
-      }
-      .input-group {
-        padding: 30px;
-      }
-      .birthday-message h2 {
-        font-size: 2.8rem;
-      }
-      .birthday-message p {
-        font-size: 1.4rem;
-      }
-      .birthday-message .cake {
-        font-size: 3rem;
-      }
-      .controls button, .controls .back-btn {
-        min-width: 120px;
-      }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
     }
 
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 2.5rem;
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes explode {
+      0% {
+        transform: scale(0.1);
+        opacity: 0;
       }
-      .subtitle {
-        font-size: 1rem;
+      50% {
+        opacity: 1;
       }
-      .input-group {
-        padding: 20px;
-      }
-      button, .back-btn {
-        padding: 10px 25px;
-        font-size: 14px;
-        min-width: 100px;
-      }
-      .birthday-message h2 {
-        font-size: 2.2rem;
-      }
-      .birthday-message p {
-        font-size: 1.2rem;
-      }
-      .birthday-message .cake {
-        font-size: 2.5rem;
-      }
-      .birthday-message button {
-        padding: 12px 30px;
-        font-size: 1rem;
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
       }
     }
   </style>
@@ -292,18 +334,24 @@
       <input type="number" id="nam" placeholder="Năm sinh (VD: 2000)"><br>
       <div class="controls">
         <button class="submit-btn" onclick="chucMung()">Gửi Lời Chúc</button>
-        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Pillay Lại</a>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Quay Lại</a>
       </div>
     </div>
   </div>
 
   <div class="birthday-message" id="birthdayMessage">
-    <h2>Chúc Mừng Sinh Nhật!</h2>
-    <p id="messageName"></p>
-    <p id="messageBirthdate"></p>
-    <p>Chúc bạn một ngày sinh nhật tràn ngập niềm vui, hạnh phúc và thành công trong cuộc sống!</p>
-    <div class="cake">🎂</div>
-    <button onclick="hideMessage()">Đóng</button>
+    <div class="birthday-card">
+      <h2>Chúc Mừng Sinh Nhật!</h2>
+      <p id="messageName"></p>
+      <p id="messageBirthdate"></p>
+      <p>Chúc bạn một ngày sinh nhật tràn ngập <span class="highlight">niềm vui</span>, <span class="highlight">hạnh phúc</span> và <span class="highlight">thành công</span> trong cuộc sống!</p>
+      <div class="cake">🎂</div>
+      <div class="close-btn-container">
+        <button class="close-btn" onclick="hideMessage()">
+          <i class="fas fa-times"></i> Đóng
+        </button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -321,8 +369,13 @@
       const tuoi = new Date().getFullYear() - parseInt(nam);
       document.getElementById("messageName").textContent = `Chúc mừng sinh nhật lần thứ ${tuoi} của ${ten}!`;
       document.getElementById("messageBirthdate").textContent = `Sinh ngày: ${ngay}/${thang}/${nam}`;
+      
+      // Hiển thị thông báo
       document.getElementById("birthdayMessage").classList.add("show");
+      
+      // Tạo hiệu ứng
       createConfetti();
+      createFireworks();
     }
 
     function hideMessage() {
@@ -330,15 +383,15 @@
     }
 
     function createConfetti() {
-      const colors = ['#FF6B6B', '#FF8E8E', '#FFD166', '#06D6A0', '#118AB2'];
-      for (let i = 0; i < 100; i++) {
+      const colors = ['#FF6B6B', '#FF8E8E', '#FFD166', '#06D6A0', '#118AB2', '#FFFFFF'];
+      for (let i = 0; i < 150; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         confetti.style.left = Math.random() * 100 + 'vw';
         confetti.style.top = -10 + 'px';
-        confetti.style.width = Math.random() * 10 + 5 + 'px';
-        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        confetti.style.width = Math.random() * 12 + 5 + 'px';
+        confetti.style.height = Math.random() * 12 + 5 + 'px';
         confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
         document.body.appendChild(confetti);
 
@@ -348,6 +401,23 @@
         setTimeout(() => {
           confetti.remove();
         }, animationDuration * 1000);
+      }
+    }
+
+    function createFireworks() {
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          const firework = document.createElement('div');
+          firework.className = 'firework';
+          firework.style.left = Math.random() * 100 + 'vw';
+          firework.style.top = Math.random() * 40 + 'vh';
+          firework.style.color = ['#FF6B6B', '#FFD166', '#06D6A0', '#118AB2', '#FFFFFF'][Math.floor(Math.random() * 5)];
+          document.body.appendChild(firework);
+          
+          setTimeout(() => {
+            firework.remove();
+          }, 1000);
+        }, i * 300);
       }
     }
   </script>
