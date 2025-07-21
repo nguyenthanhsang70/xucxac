@@ -1,330 +1,678 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Profile</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Merry Christmas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
-        
-        :root {
-            --primary: #6C63FF;
-            --secondary: #4D44DB;
-            --dark: #2F2E41;
-            --light: #F8F9FA;
-            --text: #495057;
-            --facebook: #1877F2;
-            --instagram: #E4405F;
-            --tiktok: #000000;
-            --youtube: #FF0000;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            touch-action: manipulation;
         }
-        
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #E2E3FE 0%, #F9F9FF 100%);
-            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #0a0a1a, #1a0033, #2d1b69);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            font-family: 'Mountains of Christmas', cursive;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            -webkit-tap-highlight-color: transparent;
         }
-        
-        .profile-card {
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #snowfall {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 420px;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            height: 100%;
+            pointer-events: none;
             z-index: 1;
         }
-        
-        .profile-card::before {
-            content: '';
+
+        .snowflake {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-            opacity: 0.1;
-            z-index: -1;
-            animation: rotate 15s linear infinite;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, white, #e6f7ff);
+            border-radius: 50%;
+            filter: blur(0.5px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            animation: snowfallAnimation linear infinite;
         }
-        
-        @keyframes rotate {
-            100% { transform: rotate(360deg); }
+
+        @keyframes snowfallAnimation {
+            0% {
+                transform: translateY(-10px) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(30px) rotate(360deg);
+                opacity: 0.3;
+            }
         }
-        
-        .avatar-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
-        }
-        
-        .avatar {
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
             border-radius: 50%;
-            border: 5px solid white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: twinkle 2s infinite alternate;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
         }
-        
-        .name {
-            font-size: clamp(22px, 5vw, 28px);
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 5px;
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
-        
-        .title {
-            font-size: clamp(14px, 3vw, 16px);
-            color: var(--primary);
-            font-weight: 500;
-            margin-bottom: 20px;
-            display: inline-block;
-            padding: 5px 15px;
-            background: rgba(108, 99, 255, 0.1);
-            border-radius: 50px;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin: 25px 0;
-        }
-        
-        .info-item {
-            background: rgba(255, 255, 255, 0.6);
-            padding: 15px;
-            border-radius: 12px;
+
+        #gift-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
             text-align: center;
+            perspective: 1000px;
+        }
+
+        #gift-box {
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
             transition: all 0.3s ease;
-            min-width: 120px;
-        }
-        
-        .info-item:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.9);
-        }
-        
-        .info-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: var(--primary);
-        }
-        
-        .info-label {
-            font-size: 12px;
-            color: var(--text);
-            margin-bottom: 3px;
-            font-weight: 500;
-        }
-        
-        .info-value {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .social-link {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+            margin: 0 auto;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 20px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
+            touch-action: none;
         }
-        
-        .social-link::before {
-            content: '';
-            position: absolute;
+
+        #gift-box:hover, #gift-box.active {
+            transform: scale(1.15) rotate(10deg);
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1));
+        }
+
+        .gift {
+            animation: floatGift 4s ease-in-out infinite;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: translateX(-100%);
-            transition: 0.5s;
-        }
-        
-        .social-link:hover {
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .social-link:hover::before {
-            transform: translateX(100%);
-        }
-        
-        .facebook { background: var(--facebook); }
-        .instagram { background: var(--instagram); }
-        .tiktok { background: var(--tiktok); }
-        .youtube { background: var(--youtube); }
-        
-        .hobbies {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        .hobbies-title {
-            font-size: 14px;
-            color: var(--text);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .hobbies-list {
+            font-size: 120px;
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
         }
-        
-        .hobby {
-            background: rgba(108, 99, 255, 0.1);
-            color: var(--primary);
-            padding: 6px 15px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 500;
+
+        @keyframes floatGift {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+            75% {
+                transform: translateY(-5px) rotate(-3deg);
+            }
+        }
+
+        #message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem; /* Reduced base font size */
+            color: #fff;
+            text-align: center;
+            z-index: 3;
+            max-width: 80%; /* Reduced from 90% */
+            padding: 30px; /* Reduced from 50px */
+            background: linear-gradient(135deg, 
+                rgba(139, 0, 0, 0.95), 
+                rgba(220, 20, 60, 0.95),
+                rgba(255, 69, 0, 0.9)
+            );
+            border-radius: 20px; /* Slightly smaller border-radius */
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.9), /* Adjusted shadow for smaller size */
+                0 0 60px rgba(255, 69, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border: 2px solid #ffd700; /* Slightly thinner border */
+            backdrop-filter: blur(8px); /* Slightly reduced blur */
+        }
+
+        .message-text {
+            font-family: 'Dancing Script', cursive;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Adjusted shadow for smaller text */
+            margin-top: 15px; /* Reduced from 20px */
+            color: #fff;
+            font-weight: bold;
+            font-size: 2rem; /* Reduced from 2.8rem */
+            animation: textGlow 3s ease-in-out infinite alternate;
+            line-height: 1.3; /* Slightly tighter line height */
+        }
+
+        #back-button {
+            margin-top: 15px; /* Reduced from 20px */
+            padding: 8px 16px; /* Reduced from 10px 20px */
+            font-family: 'Mountains of Christmas', cursive;
+            font-size: 1.2rem; /* Reduced from 1.5rem */
+            color: #fff;
+            background: linear-gradient(135deg, #ffd700, #ff4500);
+            border: 2px solid #fff;
+            border-radius: 12px; /* Slightly smaller border-radius */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.8); /* Adjusted shadow */
+            touch-action: manipulation;
+        }
+
+        #back-button:hover, #back-button:active {
+            background: linear-gradient(135deg, #ff4500, #ffd700);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 1); /* Adjusted shadow */
+        }
+
+        @keyframes textGlow {
+            0% {
+                text-shadow: 
+                    0 0 4px #ffff00, /* Adjusted for smaller text */
+                    0 0 8px #ff6600,
+                    2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            100% {
+                text-shadow: 
+                    0 0 8px #ffff00, 
+                    0 0 15px #ff6600, 
+                    0 0 20px #ffcc00,
+                    2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        .welcome-text {
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffd700;
+            font-family: 'Mountains of Christmas', cursive;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+            z-index: 2;
+            text-align: center;
+            width: 90%;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 0.7; 
+                transform: translateX(-50%) scale(1);
+            }
+            50% { 
+                opacity: 1; 
+                transform: translateX(-50%) scale(1.05);
+            }
         }
 
         /* Responsive adjustments */
-        @media (max-width: 480px) {
-            .profile-card {
-                padding: 25px 20px;
-                border-radius: 15px;
+        @media (max-width: 768px) {
+            #gift-box {
+                width: 100px;
+                height: 100px;
             }
             
-            .avatar-container {
-                width: 120px;
-                height: 120px;
+            .gift {
+                font-size: 100px;
             }
             
-            .info-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
+            .message-text {
+                font-size: 1.6rem; /* Reduced from 2rem */
             }
             
-            .info-item {
-                padding: 12px 10px;
-                min-width: 100px;
+            #message {
+                padding: 20px; /* Reduced from 30px */
+                max-width: 75%; /* Reduced from 80% */
             }
-            
-            .social-link {
-                width: 40px;
-                height: 40px;
-                font-size: 18px;
+
+            #back-button {
+                font-size: 1rem; /* Reduced from 1.2rem */
+                padding: 6px 12px; /* Reduced from 8px 16px */
+            }
+
+            .welcome-text {
+                font-size: 1.4rem;
+                bottom: 15%;
+            }
+
+            .snowflake {
+                width: 6px;
+                height: 6px;
             }
         }
 
-        @media (max-width: 350px) {
-            .info-grid {
-                grid-template-columns: 1fr;
+        @media (max-width: 480px) {
+            #gift-box {
+                width: 80px;
+                height: 80px;
             }
             
-            .hobby {
-                padding: 5px 12px;
-                font-size: 12px;
+            .gift {
+                font-size: 80px;
             }
+            
+            .message-text {
+                font-size: 1.4rem; /* Reduced from 1.6rem */
+            }
+            
+            #message {
+                padding: 15px; /* Reduced from 20px */
+                max-width: 70%; /* Reduced from 75% */
+            }
+
+            #back-button {
+                font-size: 0.9rem; /* Reduced from 1rem */
+                padding: 5px 10px; /* Reduced from 6px 12px */
+            }
+
+            .welcome-text {
+                font-size: 1.2rem;
+                bottom: 10%;
+            }
+
+            .snowflake {
+                width: 4px;
+                height: 4px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .message-text {
+                font-size: 1.2rem; /* Reduced from 1.3rem */
+            }
+            
+            #message {
+                padding: 12px; /* Further reduced */
+                max-width: 65%; /* Further reduced */
+            }
+            
+            #back-button {
+                font-size: 0.8rem; /* Reduced from 0.9rem */
+                padding: 4px 8px; /* Reduced from 5px 10px */
+            }
+
+            .welcome-text {
+                font-size: 1rem;
+            }
+        }
+
+        /* Additional animations */
+        @keyframes shake {
+            0%, 100% { transform: scale(1.2) rotate(0deg); }
+            25% { transform: scale(1.2) rotate(-15deg); }
+            50% { transform: scale(1.2) rotate(15deg); }
+            75% { transform: scale(1.2) rotate(-10deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0.8) rotateY(180deg); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1) rotateY(0deg); 
+            }
+        }
+        
+        @keyframes fadeOut {
+            from { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1) rotateY(0deg); 
+            }
+            to { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0.8) rotateY(-180deg); 
+            }
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1.3) rotate(180deg); opacity: 1; }
+            70% { transform: scale(0.9) rotate(360deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
     </style>
 </head>
+
 <body>
-    <div class="profile-card">
-        <!-- Avatar -->
-        <div class="avatar-container">
-            <img src="https://i.imgur.com/JqYeYnR.jpg" alt="Avatar" class="avatar">
-        </div>
-        
-        <!-- Tên và chức danh -->
-        <h1 class="name">NGUYỄN THANH SANG</h1>
-        <div class="title">INFORMATION TECHNOLOGY (IT)</div>
-        
-        <!-- Thông tin dạng lưới -->
-        <div class="info-grid">
-            <div class="info-item">
-                <div class="info-icon">👦</div>
-                <div class="info-label">Giới tính</div>
-                <div class="info-value">Nam</div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">🎂</div>
-                <div class="info-label">Ngày sinh</div>
-                <div class="info-value">01/01/1995</div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">💑</div>
-                <div class="info-label">Mối quan hệ</div>
-                <div class="info-value">Độc thân</div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">💻</div>
-                <div class="info-label">Ngành</div>
-                <div class="info-value">ỨNG DỤNG PHẦN MỀM</div>
-            </div>
-        </div>
-        
-        <!-- Sở thích -->
-        <div class="hobbies">
-            <div class="hobbies-title">Sở thích</div>
-            <div class="hobbies-list">
-                <div class="hobby">Nghe nhạc</div>
-                <div class="hobby">Xem phim</div>
-                <div class="hobby">Đá bóng</div>
-            </div>
-        </div>
-        
-        <!-- Mạng xã hội -->
-        <div class="social-links">
-            <a href="https://facebook.com/username" class="social-link facebook" target="_blank">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://instagram.com/username" class="social-link instagram" target="_blank">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://tiktok.com/@username" class="social-link tiktok" target="_blank">
-                <i class="fab fa-tiktok"></i>
-            </a>
-            <a href="https://youtube.com/username" class="social-link youtube" target="_blank">
-                <i class="fab fa-youtube"></i>
-            </a>
+    <div class="stars" id="stars"></div>
+    <div id="snowfall"></div>
+    
+    <div class="welcome-text">🎄 Click or Tap the Gift to Open Your Christmas Surprise! 🎁</div>
+    
+    <div id="gift-container">
+        <div id="gift-box">
+            <div class="gift">🎁</div>
         </div>
     </div>
+    
+    <div id="message">
+        <p class="message-text">
+            Chúc bạn và gia đình một mùa Giáng Sinh an lành, ngập tràn yêu thương, hạnh phúc và những điều kỳ diệu.<br>
+            Mong rằng mọi ước nguyện của bạn sẽ thành hiện thực trong mùa lễ này
+        </p>
+        <button id="back-button">Back to Gift</button>
+    </div>
+
+    <!-- Audio element for gift box click sound -->
+    <audio id="gift-sound" preload="auto">
+        <source src="https://example.com/jingle-bell.mp3" type="audio/mpeg">
+        <!-- Replace the src with a valid URL to a short festive sound (e.g., jingle bell or magical chime).
+             Suggested sources: Freesound.org, Zapsplat.com, or host your own .mp3/.wav file.
+             Note: The original 'giánginh.mp3' may not work if not hosted; use a hosted URL instead. -->
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Create beautiful twinkling stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const isMobile = window.innerWidth <= 768;
+            const starCount = isMobile ? 100 : 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                star.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Enhanced snowfall effect
+        function createSnowflake() {
+            const snowflake = document.createElement("div");
+            snowflake.className = "snowflake";
+            
+            const isMobile = window.innerWidth <= 768;
+            const size = isMobile ? Math.random() * 4 + 3 : Math.random() * 8 + 4;
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+            
+            snowflake.style.left = Math.random() * window.innerWidth + "px";
+            snowflake.style.opacity = Math.random() * 0.8 + 0.2;
+            const duration = Math.random() * 6 + 4;
+            snowflake.style.animationDuration = `${duration}s`;
+            
+            document.getElementById("snowfall").appendChild(snowflake);
+
+            setTimeout(() => {
+                if (snowflake.parentNode) {
+                    snowflake.parentNode.removeChild(snowflake);
+                }
+            }, duration * 1000);
+        }
+
+        // Show message function with enhanced animations
+        function showMessage() {
+            const giftBox = document.getElementById("gift-box");
+            const message = document.getElementById("message");
+            let timeoutId;
+
+            // Play sound
+            const giftSound = document.getElementById("gift-sound");
+            giftSound.currentTime = 0; // Reset to start
+            giftSound.play().catch((error) => {
+                console.warn("Audio playback failed:", error); // Silent failure if audio can't play
+            });
+
+            // Add shake animation to gift box
+            giftBox.style.animation = "shake 0.6s ease-in-out";
+            giftBox.style.transform = "scale(1.3)";
+            
+            createSparkles(giftBox);
+            
+            setTimeout(() => {
+                giftBox.style.transition = "all 0.5s ease-out";
+                giftBox.style.transform = "scale(0) rotate(360deg)";
+                giftBox.style.opacity = "0";
+                
+                setTimeout(() => {
+                    giftBox.style.display = "none";
+                    message.style.display = "block";
+                    message.style.animation = "fadeIn 1.5s ease-out";
+                }, 500);
+            }, 600);
+
+            // Function to hide message and show gift
+            function returnToGift() {
+                clearTimeout(timeoutId);
+                message.style.animation = "fadeOut 1.5s ease-in";
+                
+                setTimeout(() => {
+                    message.style.display = "none";
+                    giftBox.style.display = "block";
+                    giftBox.style.opacity = "1";
+                    giftBox.style.animation = "bounceIn 1.5s ease-out";
+                    giftBox.style.transform = "scale(1)";
+                    giftBox.style.transition = "none";
+                }, 1500);
+            }
+
+            // Automatic timeout
+            timeoutId = setTimeout(returnToGift, 12000);
+
+            // Back button event
+            document.getElementById("back-button").addEventListener('click', (e) => {
+                e.preventDefault();
+                returnToGift();
+            }, { once: true }); // Ensure the listener is added only once per message display
+        }
+
+        // Create sparkle effect around gift box
+        function createSparkles(element) {
+            const rect = element.getBoundingClientRect();
+            const isMobile = window.innerWidth <= 768;
+            const sparkleCount = isMobile ? 10 : 20;
+            
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.innerHTML = '✨';
+                sparkle.style.position = 'fixed';
+                sparkle.style.left = (rect.left + Math.random() * rect.width) + 'px';
+                sparkle.style.top = (rect.top + Math.random() * rect.height) + 'px';
+                sparkle.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                sparkle.style.pointerEvents = 'none';
+                sparkle.style.zIndex = '5';
+                sparkle.style.animation = `sparkleAnimation ${Math.random() * 2 + 1}s ease-out forwards`;
+                
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    if (sparkle.parentNode) {
+                        sparkle.parentNode.removeChild(sparkle);
+                    }
+                }, 3000);
+            }
+        }
+        
+        // Initialize effects when page loads
+        window.onload = function() {
+            createStars();
+            
+            const isMobile = window.innerWidth <= 768;
+            const initialSnowflakeCount = isMobile ? 30 : 60;
+            for (let i = 0; i < initialSnowflakeCount; i++) {
+                setTimeout(() => createSnowflake(), i * 100);
+            }
+            
+            setInterval(createSnowflake, isMobile ? 500 : 300);
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes sparkleAnimation {
+                    0% { 
+                        opacity: 1; 
+                        transform: translateY(0) scale(0.5) rotate(0deg); 
+                    }
+                    50% { 
+                        opacity: 1; 
+                        transform: translateY(-30px) scale(1) rotate(180deg); 
+                    }
+                    100% { 
+                        opacity: 0; 
+                        transform: translateY(-60px) scale(0.3) rotate(360deg); 
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Add interactions for gift box
+            const giftBox = document.getElementById('gift-box');
+            let isTouching = false;
+
+            // Mouse events for desktop
+            giftBox.addEventListener('mousemove', (e) => {
+                if (isTouching) return;
+                const rect = giftBox.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                giftBox.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+
+            giftBox.addEventListener('mouseenter', () => {
+                if (isTouching) return;
+                giftBox.classList.add('active');
+            });
+
+            giftBox.addEventListener('mouseleave', () => {
+                if (isTouching) return;
+                giftBox.classList.remove('active');
+                giftBox.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+            });
+
+            // Touch events for mobile
+            giftBox.addEventListener('touchstart', (e) => {
+                isTouching = true;
+                giftBox.classList.add('active');
+                e.preventDefault();
+            });
+
+            giftBox.addEventListener('touchmove', (e) => {
+                const touch = e.touches[0];
+                const rect = giftBox.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                giftBox.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+
+            giftBox.addEventListener('touchend', () => {
+                isTouching = false;
+                giftBox.classList.remove('active');
+                giftBox.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+            });
+
+            // Click/tap event for both
+            giftBox.addEventListener('click', (e) => {
+                e.preventDefault();
+                giftBox.style.animation = 'bounce 0.6s ease';
+                setTimeout(() => {
+                    giftBox.style.animation = '';
+                }, 600);
+                showMessage();
+            });
+
+            // Hover/touch effects
+            giftBox.addEventListener('mouseenter', () => {
+                if (isTouching) return;
+                giftBox.style.filter = 'drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 50px rgba(255, 69, 0, 0.8))';
+            });
+            
+            giftBox.addEventListener('mouseleave', () => {
+                if (isTouching) return;
+                giftBox.style.filter = 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.8))';
+            });
+
+            giftBox.addEventListener('touchstart', () => {
+                giftBox.style.filter = 'drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 50px rgba(255, 69, 0, 0.8))';
+            });
+
+            giftBox.addEventListener('touchend', () => {
+                giftBox.style.filter = 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.8))';
+            });
+        };
+
+        // Adjust snowflake count on window resize
+        window.addEventListener('resize', () => {
+            const snowfall = document.getElementById('snowfall');
+            while (snowfall.firstChild) {
+                snowfall.removeChild(snowfall.firstChild);
+            }
+            const isMobile = window.innerWidth <= 768;
+            const initialSnowflakeCount = isMobile ? 30 : 60;
+            for (let i = 0; i < initialSnowflakeCount; i++) {
+                setTimeout(() => createSnowflake(), i * 100);
+            }
+        });
+    </script>
 </body>
 </html>
