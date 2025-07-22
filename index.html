@@ -68,12 +68,6 @@
 
         .stars {
             position: fixed;
- const welcomeBackButton = document.getElementById("welcome-back-button");
-            welcomeBackButton.disabled = false; // Enable the button
-            welcomeBackButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                returnToGift();
-            });
             top: 0;
             left: 0;
             width: 100%;
@@ -121,7 +115,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            touch-action: none;
         }
 
         #gift-box:hover, #gift-box.active {
@@ -211,7 +204,7 @@
 
         #welcome-back-button {
             position: absolute;
-            bottom: 10%; /* Adjusted to position below welcome-text */
+            bottom: 10%;
             left: 50%;
             transform: translateX(-50%);
             padding: 8px 16px;
@@ -252,7 +245,7 @@
 
         .welcome-text {
             position: absolute;
-            bottom: 20%; /* Adjusted to make space for button */
+            bottom: 20%;
             left: 50%;
             transform: translateX(-50%);
             color: #ffd700;
@@ -451,12 +444,8 @@
         <button id="back-button">Đóng</button>
     </div>
 
-    <!-- Audio element for gift box click sound -->
     <audio id="gift-sound" preload="auto">
         <source src="https://example.com/jingle-bell.mp3" type="audio/mpeg">
-        <!-- Replace the src with a valid URL to a short festive sound (e.g., jingle bell or magical chime).
-             Suggested sources: Freesound.org, Zapsplat.com, or host your own .mp3/.wav file.
-             Note: The original 'giánginh.mp3' may not work if not hosted; use a hosted URL instead. -->
         Your browser does not support the audio element.
     </audio>
 
@@ -517,9 +506,9 @@
 
             // Play sound
             const giftSound = document.getElementById("gift-sound");
-            giftSound.currentTime = 0; // Reset to start
+            giftSound.currentTime = 0;
             giftSound.play().catch((error) => {
-                console.warn("Audio playback failed:", error); // Silent failure if audio can't play
+                console.warn("Audio playback failed:", error);
             });
 
             // Add shake animation to gift box
@@ -537,12 +526,6 @@
                     giftBox.style.display = "none";
                     message.style.display = "block";
                     message.style.animation = "fadeIn 1.5s ease-out";
-                    // Re-attach welcome back button event listener
-                    const welcomeBackButton = document.getElementById("welcome-back-button");
-                    welcomeBackButton.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        returnToGift();
-                    }, { once: true });
                 }, 500);
             }, 600);
 
@@ -558,12 +541,6 @@
                     giftBox.style.animation = "bounceIn 1.5s ease-out";
                     giftBox.style.transform = "scale(1)";
                     giftBox.style.transition = "none";
-                    // Re-attach welcome back button event listener
-                    const welcomeBackButton = document.getElementById("welcome-back-button");
-                    welcomeBackButton.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        returnToGift();
-                    }, { once: true });
                 }, 1500);
             }
 
@@ -572,6 +549,12 @@
 
             // Back button event (in message)
             document.getElementById("back-button").addEventListener('click', (e) => {
+                e.preventDefault();
+                returnToGift();
+            }, { once: true });
+
+            // Welcome back button event
+            document.getElementById("welcome-back-button").addEventListener('click', (e) => {
                 e.preventDefault();
                 returnToGift();
             }, { once: true });
@@ -625,7 +608,8 @@
                     }
                     50% { 
                         opacity: 1; 
-                        transform: translateY(-30px) scale(1) rotate(180deg); 
+                        transform:QZ
+                        translateY(-30px) scale(1) rotate(180deg); 
                     }
                     100% { 
                         opacity: 0; 
@@ -696,6 +680,15 @@
 
             // Click/tap event for both
             giftBox.addEventListener('click', (e) => {
+                e.preventDefault();
+                giftBox.style.animation = 'bounce 0.6s ease';
+                setTimeout(() => {
+                    giftBox.style.animation = '';
+                }, 600);
+                showMessage();
+            });
+
+            giftBox.addEventListener('touchend', (e) => {
                 e.preventDefault();
                 giftBox.style.animation = 'bounce 0.6s ease';
                 setTimeout(() => {
