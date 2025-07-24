@@ -3,599 +3,563 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tài Xỉu - Sic Bo</title>
+    <title>Trình tạo mã QR</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <link rel="icon" type="image/png" href="logos3.png">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-
         .container {
-            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            backdrop-filter: blur(10px);
         }
-
         h1 {
             text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            color: #ffd700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .game-board {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .player-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .balance {
-            color: #4ade80;
-            font-weight: bold;
-        }
-
-        .dice-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .die {
-            width: 60px;
-            height: 60px;
-            background: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8em;
-            font-weight: bold;
             color: #333;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
+            margin-bottom: 30px;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        .die.rolling {
-            animation: roll 1s ease-in-out;
+        .form-group {
+            margin-bottom: 25px;
         }
-
-        @keyframes roll {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(90deg); }
-            50% { transform: rotate(180deg); }
-            75% { transform: rotate(270deg); }
-            100% { transform: rotate(360deg); }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: clamp(1rem, 3vw, 1.1rem);
         }
-
-        .betting-area {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .bet-option {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid transparent;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
+        input[type="text"], input[type="url"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: clamp(14px, 3vw, 16px);
             transition: all 0.3s ease;
-            position: relative;
-            min-height: 80px;
+            background: rgba(255, 255, 255, 0.8);
         }
-
-        .bet-option:hover {
-            background: rgba(255, 255, 255, 0.2);
+        input[type="text"]:focus, input[type="url"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             transform: translateY(-2px);
         }
-
-        .bet-option.selected {
-            border-color: #ffd700;
-            background: rgba(255, 215, 0, 0.2);
-        }
-
-        .bet-option h3 {
-            font-size: 1.1em;
-            margin-bottom: 6px;
-        }
-
-        .bet-option p {
-            font-size: 0.9em;
-        }
-
-        .tai {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-        }
-
-        .xiu {
-            background: linear-gradient(135deg, #3b82f6, #1e40af);
-        }
-
-        .bet-amount {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #ffd700;
-            color: #333;
-            padding: 4px 8px;
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #667eea;
             border-radius: 12px;
-            font-weight: bold;
-            font-size: 0.7em;
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-            margin: 15px 0;
-            flex-wrap: wrap;
-        }
-
-        input[type="number"] {
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            font-size: 0.9em;
-            width: 100px;
-            text-align: center;
-        }
-
-        button {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            font-weight: bold;
-            color: #333;
+            background: rgba(102, 126, 234, 0.05);
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: clamp(12px, 3vw, 14px);
         }
-
+        input[type="file"]:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #764ba2;
+        }
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: clamp(16px, 3vw, 18px);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        button:active {
+            transform: translateY(0);
         }
-
-        .roll-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            font-size: 1em;
-            padding: 12px 25px;
-        }
-
-        .result {
+        .qr-container {
             text-align: center;
-            margin: 15px 0;
             padding: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9em;
-        }
-
-        .result.win {
-            background: rgba(16, 185, 129, 0.3);
-            border: 2px solid #10b981;
-        }
-
-        .result.lose {
-            background: rgba(239, 68, 68, 0.3);
-            border: 2px solid #ef4444;
-        }
-
-        .history {
+            background: white;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
             margin-top: 20px;
-            max-height: 150px;
-            overflow-y: auto;
         }
-
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px;
-            margin-bottom: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            font-size: 0.8em;
+        #qrcode {
+            display: inline-block;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            max-width: 100%;
         }
-
-        .quick-bet {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin: 10px 0;
-            flex-wrap: wrap;
+        #qrCanvas {
+            max-width: 100%;
+            height: auto;
         }
-
-        .quick-bet button {
-            padding: 6px 12px;
-            font-size: 0.8em;
+        .preview-container {
+            margin-top: 15px;
+            text-align: center;
         }
-
-        /* Responsive Design */
-        @media screen and (max-width: 600px) {
-            body {
-                padding: 10px;
+        #imagePreview {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .status-text {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        .status-enabled {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+        }
+        .status-disabled {
+            background: rgba(158, 158, 158, 0.1);
+            color: #666;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .qr-container {
+            animation: fadeIn 0.5s ease-out;
+        }
+        .download-button {
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+        }
+        .download-button:hover {
+            background: linear-gradient(45deg, #45a049, #5cb85c);
+        }
+        .back-button {
+            background: linear-gradient(45deg, #2196F3, #42A5F5);
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+            width: 100%;
+            padding: 12px;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: clamp(16px, 3vw, 18px);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+        }
+        .back-button:hover {
+            background: linear-gradient(45deg, #1E88E5, #3d8bfd);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(33, 150, 243, 0.3);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                border-radius: 15px;
             }
-
             h1 {
-                font-size: 1.8em;
                 margin-bottom: 20px;
             }
-
-            .container {
-                max-width: 100%;
+            .form-group {
+                margin-bottom: 20px;
             }
-
-            .game-board {
-                padding: 15px;
+            input[type="text"], input[type="url"], input[type="file"] {
+                padding: 10px 12px;
             }
-
-            .player-info {
-                flex-direction: column;
-                align-items: center;
-                font-size: 1em;
+            button {
+                padding: 12px;
             }
-
-            .dice-container {
-                gap: 10px;
-            }
-
-            .die {
-                width: 50px;
-                height: 50px;
-                font-size: 1.5em;
-            }
-
-            .betting-area {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .bet-option {
-                padding: 8px;
-                min-height: 70px;
-            }
-
-            .bet-option h3 {
-                font-size: 1em;
-            }
-
-            .bet-option p {
-                font-size: 0.8em;
-            }
-
-            .bet-amount {
-                padding: 3px 6px;
-                font-size: 0.65em;
-            }
-
-            .controls {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            input[type="number"] {
-                width: 80px;
-                font-size: 0.8em;
-            }
-
-            .roll-btn {
-                padding: 10px 20px;
-                font-size: 0.9em;
-            }
-
-            .result {
-                font-size: 0.8em;
+            .qr-container {
                 padding: 10px;
             }
-
-            .history {
-                max-height: 120px;
+            #qrcode {
+                padding: 10px;
             }
-
-            .history-item {
-                font-size: 0.75em;
+            #qrCanvas {
+                width: 280px !important;
+                height: 280px !important;
             }
         }
-
-        @media screen and (min-width: 601px) and (max-width: 900px) {
-            h1 {
-                font-size: 2.2em;
+        
+        @media (max-width: 360px) {
+            .container {
+                padding: 15px;
             }
-
-            .die {
-                width: 70px;
-                height: 70px;
-                font-size: 1.6em;
-            }
-
-            .bet-option {
-                padding: 8px;
-                min-height: 70px;
-            }
-
-            .bet-option h3 {
-                font-size: 1em;
-            }
-
-            .bet-option p {
-                font-size: 0.8em;
-            }
-
-            input[type="number"] {
-                width: 110px;
-            }
-
-            .roll-btn {
-                padding: 12px 25px;
+            #qrCanvas {
+                width: 260px !important;
+                height: 260px !important;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎲 TÀI XỈU 🎲</h1>
-        
-        <div class="game-board">
-            <div class="player-info">
-                <div>Người chơi: <span id="playerName">Player 1</span></div>
-                <div class="balance">Số dư: <span id="balance">1000</span> xu</div>
-            </div>
-
-            <div class="dice-container">
-                <div class="die" id="die1">?</div>
-                <div class="die" id="die2">?</div>
-                <div class="die" id="die3">?</div>
-            </div>
-
-            <div class="betting-area">
-                <div class="bet-option tai" id="tai-bet">
-                    <h3>TÀI</h3>
-                    <p>Tổng: 11-17</p>
-                    <div class="bet-amount" id="tai-amount" style="display: none;">0</div>
-                </div>
-                <div class="bet-option xiu" id="xiu-bet">
-                    <h3>XỈU</h3>
-                    <p>Tổng: 4-10</p>
-                    <div class="bet-amount" id="xiu-amount" style="display: none;">0</div>
-                </div>
-            </div>
-
-            <div class="controls">
-                <input type="number" id="betAmount" min="50" max="1000" value="50" placeholder="Số tiền cược">
-                <div class="quick-bet">
-                    <button onclick="setBetAmount(50)">50</button>
-                    <button onclick="setBetAmount(100)">100</button>
-                    <button onclick="setBetAmount(200)">200</button>
-                    <button onclick="setBetAmount(500)">500</button>
-                </div>
-            </div>
-
-            <div style="text-align: center;">
-                <button class="roll-btn" id="rollBtn" onclick="rollDice()">🎲 LẮC XÚC XẮC</button>
-            </div>
-
-            <div class="result" id="result">
-                Chọn Tài hoặc Xỉu và đặt cược để bắt đầu!
-            </div>
-
-            <div class="history">
-                <h3>Lịch sử (10 lần gần nhất):</h3>
-                <div id="historyList"></div>
-            </div>
+        <h1>🎨 Trình tạo mã QR</h1>
+        <div class="form-group">
+            <label for="linkInput">🔗 Nhập đường link:</label>
+            <input type="url" id="linkInput" placeholder="https://example.com" required>
+        </div>
+        <div class="form-group">
+            <label for="imageInput">🖼️ Tải ảnh lên để lấy màu:</label>
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+        <div class="preview-container">
+            <img id="imagePreview" style="display: none;" alt="Preview">
+        </div>
+        <div class="toggle-container">
+            <label class="toggle">
+                <input type="checkbox" id="colorToggle">
+                <span class="slider"></span>
+            </label>
+            <label for="colorToggle" style="margin-bottom: 0;">Kết hợp hình ảnh với QR</label>
+        </div>
+        <div id="statusText" class="status-text status-disabled">
+            Kết hợp: TẮT (mã QR đen trắng)
+        </div>
+        <button onclick="generateQR()">✨ Tạo mã QR</button>
+        <button class="download-button" onclick="downloadQR()" style="display: none;" id="downloadButton">⬇ Tải mã QR</button>
+        <a href="index.html" class="back-button">↩ Quay lại</a>
+        <div class="qr-container">
+            <div id="qrcode"></div>
         </div>
     </div>
 
     <script>
-        let balance = 1000;
-        let currentBet = { type: null, amount: 0 };
-        let gameHistory = [];
-        let isRolling = false;
+        let extractedColors = null;
+        let imageLoaded = false;
 
-        // Initialize game
-        updateBalance();
-        
-        // Bet selection
-        document.getElementById('tai-bet').addEventListener('click', () => selectBet('tai'));
-        document.getElementById('xiu-bet').addEventListener('click', () => selectBet('xiu'));
-
-        function selectBet(type) {
-            if (isRolling) return;
-            
-            const betAmount = parseInt(document.getElementById('betAmount').value) || 50;
-            
-            if (betAmount > balance) {
-                alert('Không đủ tiền! Số dư hiện tại: ' + balance + ' xu');
-                return;
+        // Xử lý tải ảnh và hiển thị preview
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    // Trích xuất màu từ ảnh
+                    extractColorsFromImage(e.target.result);
+                };
+                reader.readAsDataURL(file);
             }
+        });
 
-            if (betAmount < 50) {
-                alert('Số tiền cược tối thiểu là 50 xu!');
-                return;
-            }
-
-            // Clear previous selection
-            document.getElementById('tai-bet').classList.remove('selected');
-            document.getElementById('xiu-bet').classList.remove('selected');
-            document.getElementById('tai-amount').style.display = 'none';
-            document.getElementById('xiu-amount').style.display = 'none';
-
-            // Set new bet
-            currentBet = { type: type, amount: betAmount };
-            
-            // Update UI
-            document.getElementById(type + '-bet').classList.add('selected');
-            document.getElementById(type + '-amount').textContent = betAmount;
-            document.getElementById(type + '-amount').style.display = 'block';
-            
-            document.getElementById('result').textContent = `Đã đặt cược ${betAmount} xu vào ${type.toUpperCase()}. Nhấn "Lắc xúc xắc" để bắt đầu!`;
-            document.getElementById('result').className = 'result';
-        }
-
-        function setBetAmount(amount) {
-            document.getElementById('betAmount').value = amount;
-        }
-
-        function rollDice() {
-            if (!currentBet.type) {
-                alert('Vui lòng chọn Tài hoặc Xỉu trước!');
-                return;
-            }
-
-            if (isRolling) return;
-            isRolling = true;
-            
-            // Disable roll button
-            document.getElementById('rollBtn').disabled = true;
-            document.getElementById('rollBtn').textContent = '🎲 ĐANG LẮC...';
-
-            // Deduct bet amount
-            balance -= currentBet.amount;
-            updateBalance();
-
-            // Start rolling animation
-            const dice = ['die1', 'die2', 'die3'];
-            dice.forEach(die => {
-                document.getElementById(die).classList.add('rolling');
-                document.getElementById(die).textContent = '?';
-            });
-
-            // Generate random results after animation
-            setTimeout(() => {
-                const results = [
-                    Math.floor(Math.random() * 6) + 1,
-                    Math.floor(Math.random() * 6) + 1,
-                    Math.floor(Math.random() * 6) + 1
-                ];
-
-                // Update dice display
-                document.getElementById('die1').textContent = results[0];
-                document.getElementById('die2').textContent = results[1];
-                document.getElementById('die3').textContent = results[2];
-
-                // Remove rolling animation
-                dice.forEach(die => {
-                    document.getElementById(die).classList.remove('rolling');
-                });
-
-                // Calculate result
-                const total = results.reduce((sum, val) => sum + val, 0);
-                const outcome = (total >= 11 && total <= 17) ? 'tai' : 'xiu';
-                const won = outcome === currentBet.type;
-
-                // Update result
-                const resultElement = document.getElementById('result');
-                if (won) {
-                    balance += currentBet.amount * 2;
-                    resultElement.textContent = `🎉 THẮNG! Tổng: ${total} (${outcome.toUpperCase()}) - Thưởng: ${currentBet.amount * 2} xu`;
-                    resultElement.className = 'result win';
+        // Xử lý toggle màu sắc
+        document.getElementById('colorToggle').addEventListener('change', function() {
+            const statusText = document.getElementById('statusText');
+            if (this.checked) {
+                if (imageLoaded && extractedColors) {
+                    statusText.textContent = `Kết hợp: BẬT (QR + hình ảnh)`;
+                    statusText.className = 'status-text status-enabled';
                 } else {
-                    resultElement.textContent = `💸 THUA! Tổng: ${total} (${outcome.toUpperCase()}) - Mất: ${currentBet.amount} xu`;
-                    resultElement.className = 'result lose';
+                    statusText.textContent = 'Vui lòng tải ảnh trước!';
+                    statusText.className = 'status-text status-disabled';
+                    this.checked = false;
                 }
+            } else {
+                statusText.textContent = 'Kết hợp: TẮT (mã QR đen trắng)';
+                statusText.className = 'status-text status-disabled';
+            }
+        });
 
-                // Add to history
-                gameHistory.unshift({
-                    dice: results,
-                    total: total,
-                    outcome: outcome,
-                    bet: currentBet,
-                    won: won,
-                    winnings: won ? currentBet.amount : -currentBet.amount
-                });
-
-                // Keep only last 10 games
-                if (gameHistory.length > 10) {
-                    gameHistory = gameHistory.slice(0, 10);
+        // Trích xuất màu chủ đạo từ ảnh
+        function extractColorsFromImage(imageSrc) {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                // Resize ảnh để xử lý nhanh hơn
+                canvas.width = 100;
+                canvas.height = 100;
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                // Tính màu trung bình
+                let r = 0, g = 0, b = 0;
+                const totalPixels = data.length / 4;
+                for (let i = 0; i < data.length; i += 4) {
+                    r += data[i];
+                    g += data[i + 1];
+                    b += data[i + 2];
                 }
+                r = Math.round(r / totalPixels);
+                g = Math.round(g / totalPixels);
+                b = Math.round(b / totalPixels);
 
-                updateHistory();
-                updateBalance();
+                // Tạo màu sáng hơn cho nền
+                const lightR = Math.min(255, r + 100);
+                const lightG = Math.min(255, g + 100);
+                const lightB = Math.min(255, b + 100);
 
-                // Reset bet
-                currentBet = { type: null, amount: 0 };
-                document.getElementById('tai-bet').classList.remove('selected');
-                document.getElementById('xiu-bet').classList.remove('selected');
-                document.getElementById('tai-amount').style.display = 'none';
-                document.getElementById('xiu-amount').style.display = 'none';
+                extractedColors = {
+                    primary: `rgb(${r}, ${g}, ${b})`,
+                    light: `rgb(${lightR}, ${lightG}, ${lightB})`,
+                    hex: `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+                };
+                imageLoaded = true;
 
-                // Re-enable roll button
-                document.getElementById('rollBtn').disabled = false;
-                document.getElementById('rollBtn').textContent = '🎲 LẮC XÚC XẮC';
-                isRolling = false;
-
-                // Check if player is broke
-                if (balance <= 0) {
-                    setTimeout(() => {
-                        if (confirm('Bạn đã hết tiền! Chơi lại từ đầu?')) {
-                            balance = 1000;
-                            updateBalance();
-                            gameHistory = [];
-                            updateHistory();
-                        }
-                    }, 2000);
+                // Cập nhật trạng thái nếu toggle đang bật
+                const colorToggle = document.getElementById('colorToggle');
+                const statusText = document.getElementById('statusText');
+                if (colorToggle.checked) {
+                    statusText.textContent = `Màu sắc: BẬT (${extractedColors.primary})`;
+                    statusText.className = 'status-text status-enabled';
                 }
-
-            }, 1000);
+            };
+            img.src = imageSrc;
         }
 
-        function updateBalance() {
-            document.getElementById('balance').textContent = balance;
+        // Tạo mã QR
+        function generateQR() {
+            const link = document.getElementById('linkInput').value.trim();
+            const colorToggle = document.getElementById('colorToggle').checked;
+            const qrContainer = document.getElementById('qrcode');
+            const downloadButton = document.getElementById('downloadButton');
+
+            if (!link) {
+                alert('Vui lòng nhập đường link!');
+                downloadButton.style.display = 'none';
+                return;
+            }
+
+            // Xóa QR code cũ
+            qrContainer.innerHTML = '';
+
+            try {
+                if (colorToggle && imageLoaded) {
+                    // Tạo QR với hình ảnh
+                    createQRWithImage(link, qrContainer);
+                } else {
+                    // Tạo QR thông thường
+                    createNormalQR(link, qrContainer);
+                }
+
+                // Hiển thị nút tải xuống
+                downloadButton.style.display = 'block';
+
+                // Thêm hiệu ứng
+                qrContainer.style.opacity = '0';
+                setTimeout(() => {
+                    qrContainer.style.transition = 'opacity 0.5s ease-in';
+                    qrContainer.style.opacity = '1';
+                }, 100);
+            } catch (error) {
+                console.error('Lỗi tạo QR code:', error);
+                alert('Có lỗi xảy ra khi tạo mã QR!');
+                downloadButton.style.display = 'none';
+            }
         }
 
-        function updateHistory() {
-            const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '';
+        // Tạo QR code thông thường
+        function createNormalQR(link, container) {
+            const canvas = document.createElement('canvas');
+            canvas.id = 'qrCanvas';
             
-            gameHistory.forEach((game, index) => {
-                const item = document.createElement('div');
-                item.className = 'history-item';
-                item.innerHTML = `
-                    <span>🎲 ${game.dice.join('-')} (${game.total}) - ${game.outcome.toUpperCase()}</span>
-                    <span style="color: ${game.won ? '#10b981' : '#ef4444'}">
-                        ${game.won ? '+' : ''}${game.winnings} xu
-                    </span>
-                `;
-                historyList.appendChild(item);
+            // Tăng kích thước tối thiểu, đặc biệt cho mobile
+            const size = Math.max(300, Math.min(400, window.innerWidth - 40));
+            canvas.width = size;
+            canvas.height = size;
+            
+            container.appendChild(canvas);
+            const qr = new QRious({
+                element: canvas,
+                value: link,
+                size: size,
+                level: 'H', // High error correction
+                foreground: '#000000',
+                background: '#FFFFFF',
+                padding: 20 // Thêm padding
             });
         }
+
+        // Tạo QR code với hình ảnh overlay
+        function createQRWithImage(link, container) {
+            const canvas = document.createElement('canvas');
+            canvas.id = 'qrCanvas';
+            
+            const size = Math.max(300, Math.min(400, window.innerWidth - 40));
+            canvas.width = size;
+            canvas.height = size;
+            
+            const ctx = canvas.getContext('2d');
+            container.appendChild(canvas);
+
+            // Tạo QR code tạm thời
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = size;
+            tempCanvas.height = size;
+            const qr = new QRious({
+                element: tempCanvas,
+                value: link,
+                size: size,
+                level: 'H',
+                foreground: '#000000',
+                background: '#FFFFFF',
+                padding: 20
+            });
+
+            const imagePreview = document.getElementById('imagePreview');
+            if (imagePreview && imagePreview.src) {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = function() {
+                    // Vẽ hình ảnh làm nền
+                    ctx.drawImage(img, 0, 0, size, size);
+                    
+                    // Lấy dữ liệu QR
+                    const qrCtx = tempCanvas.getContext('2d');
+                    const qrImageData = qrCtx.getImageData(0, 0, size, size);
+                    const qrData = qrImageData.data;
+                    
+                    // Tạo mask từ QR code
+                    for (let i = 0; i < qrData.length; i += 4) {
+                        // Nếu là pixel đen của QR (foreground)
+                        if (qrData[i] < 128 && qrData[i+1] < 128 && qrData[i+2] < 128) {
+                            // Giữ nguyên màu đen cho các điểm QR
+                            qrData[i] = 0;     // R
+                            qrData[i+1] = 0;   // G
+                            qrData[i+2] = 0;    // B
+                        } else {
+                            // Pixel trắng của QR - làm trong suốt
+                            qrData[i+3] = 0;    // Alpha
+                        }
+                    }
+                    qrCtx.putImageData(qrImageData, 0, 0);
+                    
+                    // Vẽ QR lên trên hình ảnh với blend mode multiply
+                    ctx.globalCompositeOperation = 'multiply';
+                    ctx.drawImage(tempCanvas, 0, 0);
+                    ctx.globalCompositeOperation = 'source-over';
+                    
+                    // Thêm viền trắng để dễ quét
+                    ctx.strokeStyle = 'white';
+                    ctx.lineWidth = 8;
+                    ctx.strokeRect(10, 10, size-20, size-20);
+                };
+                img.src = imagePreview.src;
+            } else {
+                // Fallback nếu không có ảnh
+                ctx.drawImage(tempCanvas, 0, 0);
+            }
+        }
+
+        // Hàm tải QR code
+        function downloadQR() {
+            const canvas = document.getElementById('qrCanvas');
+            if (!canvas) {
+                alert('Chưa có mã QR để tải!');
+                return;
+            }
+
+            try {
+                // Tạo link tải
+                const link = document.createElement('a');
+                link.download = 'qrcode.png';
+                link.href = canvas.toDataURL('image/png', 1.0); // Chất lượng tối đa
+                document.body.appendChild(link); // Thêm vào DOM để đảm bảo hoạt động trên một số trình duyệt
+                link.click();
+                document.body.removeChild(link); // Xóa link khỏi DOM
+            } catch (error) {
+                console.error('Lỗi khi tải QR code:', error);
+                alert('Có lỗi xảy ra khi tải mã QR!');
+            }
+        }
+
+        // Tự động tạo QR khi nhập link
+        document.getElementById('linkInput').addEventListener('input', function() {
+            if (this.value.trim()) {
+                setTimeout(generateQR, 500);
+            }
+        });
+
+        // Tạo QR mặc định khi trang load
+        window.addEventListener('load', function() {
+            document.getElementById('linkInput').value = '';
+            generateQR();
+        });
+        
+        // Xử lý responsive khi thay đổi kích thước màn hình
+        window.addEventListener('resize', function() {
+            const link = document.getElementById('linkInput').value.trim();
+            if (link) {
+                generateQR();
+            }
+        });
     </script>
 </body>
 </html>
