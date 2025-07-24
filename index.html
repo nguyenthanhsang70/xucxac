@@ -451,8 +451,8 @@
             const canvas = document.createElement('canvas');
             canvas.id = 'qrCanvas';
             
-            // Điều chỉnh kích thước dựa trên màn hình, tăng nhẹ để rõ nét hơn
-            const size = Math.min(320, window.innerWidth - 40);
+            // Tăng kích thước để đảm bảo module QR lớn hơn
+            const size = Math.min(350, window.innerWidth - 30);
             canvas.width = size;
             canvas.height = size;
             
@@ -478,12 +478,14 @@
                 const img = new Image();
                 img.crossOrigin = 'anonymous';
                 img.onload = function() {
-                    // Vẽ hình ảnh làm nền, scale để fit canvas
-                    ctx.drawImage(img, 0, 0, size, size);
-                    
-                    // Làm sáng nhẹ hình ảnh nền để tăng độ tương phản
-                    ctx.filter = 'brightness(1.2)';
-                    ctx.drawImage(img, 0, 0, size, size);
+                    // Tạo viền trắng bảo vệ (quiet zone)
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, size, size);
+
+                    // Vẽ hình ảnh làm nền, thu nhỏ để chừa viền
+                    const qrSize = size - 40; // Viền bảo vệ 20px mỗi bên
+                    ctx.filter = 'brightness(1.4) contrast(1.2) blur(0.5px)';
+                    ctx.drawImage(img, 20, 20, qrSize, qrSize);
                     ctx.filter = 'none';
 
                     // Lấy QR pattern
@@ -497,15 +499,15 @@
                     for (let i = 0; i < qrData.length; i += 4) {
                         // Nếu pixel QR là đen (foreground pattern)
                         if (qrData[i] < 128 && qrData[i + 1] < 128 && qrData[i + 2] < 128) {
-                            // Làm tối mạnh hơn để đảm bảo tương phản
-                            bgData[i] = Math.max(0, bgData[i] * 0.1);
-                            bgData[i + 1] = Math.max(0, bgData[i + 1] * 0.1);
-                            bgData[i + 2] = Math.max(0, bgData[i + 2] * 0.1);
+                            // Sử dụng màu đen thuần để đảm bảo tương phản tối đa
+                            bgData[i] = 0;
+                            bgData[i + 1] = 0;
+                            bgData[i + 2] = 0;
                         } else {
-                            // Pixel trắng của QR - làm sáng nhẹ để giữ chi tiết ảnh
-                            bgData[i] = Math.min(255, bgData[i] * 1.3);
-                            bgData[i + 1] = Math.min(255, bgData[i + 1] * 1.3);
-                            bgData[i + 2] = Math.min(255, bgData[i + 2] * 1.3);
+                            // Pixel trắng của QR - giữ nền sáng
+                            bgData[i] = Math.min(255, bgData[i] * 1.4);
+                            bgData[i + 1] = Math.min(255, bgData[i + 1] * 1.4);
+                            bgData[i + 2] = Math.min(255, bgData[i + 2] * 1.4);
                         }
                         bgData[i + 3] = 255; // Alpha channel
                     }
@@ -513,41 +515,39 @@
                     // Vẽ kết quả cuối cùng
                     ctx.putImageData(backgroundImageData, 0, 0);
 
-                    // Thêm QR pattern với độ trong suốt thấp để tăng độ nhận diện
-                    ctx.globalCompositeOperation = 'multiply';
-                    ctx.globalAlpha = 0.4;
-                    ctx.drawImage(tempCanvas, 0, 0);
-                    
-                    // Reset về mặc định
+                    // Vẽ lại QR pattern với độ tương phản cao
                     ctx.globalCompositeOperation = 'source-over';
+                    ctx.globalAlpha = 0.5;
+                    ctx.drawImage(tempCanvas, 20, 20, qrSize, qrSize);
                     ctx.globalAlpha = 1.0;
 
-                    // Thêm viền bảo vệ rộng hơn
-                    ctx.fillStyle = '#FFFFFF';
-                    ctx.fillRect(0, 0, size, size);
-                    ctx.drawImage(tempCanvas, 10, 10, size - 20, size - 20);
-
-                    // Đảm bảo 3 góc vuông của QR code rõ ràng
-                    const cornerSize = size * 0.15;
+                    // Vẽ lại các góc vuông đặc trưng của QR code
+                    const cornerSize = qrSize * 0.15;
                     ctx.fillStyle = '#000000';
                     ctx.strokeStyle = '#FFFFFF';
                     ctx.lineWidth = 4;
 
-                    // Vẽ lại 3 góc vuông đặc trưng của QR code
                     // Góc trên trái
-                    ctx.fillRect(10, 10, cornerSize, cornerSize);
-                    ctx.strokeRect(14, 14, cornerSize - 8, cornerSize - 8);
-                    ctx.fillRect(14, 14, cornerSize - 8, cornerSize - 8);
+                    ctx.fillRect(20, 20, cornerSize, cornerSize);
+                    ctx.strokeRect(24, 24, cornerSize - 8, cornerSize - 8);
+                    ctx.fillRect(24, 24, cornerSize - 8, cornerSize - 8);
 
                     // Góc trên phải
-                    ctx.fillRect(size - cornerSize - 10, 10, cornerSize, cornerSize);
-                    ctx.strokeRect(size - cornerSize - 6, 14, cornerSize - 8, cornerSize - 8);
-                    ctx.fillRect(size - cornerSize - 6, 14, cornerSize - 8, cornerSize - 8);
+                    ctx.fillRect(20 + qrSize - cornerSize, 20, cornerSize, cornerSize);
+                    ctx.strokeRect(24 + qrSize - cornerSize, 24, cornerSize - 8, cornerSize - 8);
+                    ctx.fillRect(24 + qrSize - cornerSize, 24, cornerSize - 8, cornerSize - 8);
 
                     // Góc dưới trái
-                    ctx.fillRect(10, size - cornerSize - 10, cornerSize, cornerSize);
-                    ctx.strokeRect(14, size - cornerSize - 6, cornerSize - 8, cornerSize - 8);
-                    ctx.fillRect(14, size - cornerSize - 6, cornerSize - 8, cornerSize - 8);
+                    ctx.fillRect(20, 20 + qrSize - cornerSize, cornerSize, cornerSize);
+                    ctx.strokeRect(24, 24 + qrSize - cornerSize, cornerSize - 8, cornerSize - 8);
+                    ctx.fillRect(24, 24 + qrSize - cornerSize, cornerSize - 8, cornerSize - 8);
+
+                    // Thêm mẫu căn chỉnh (nếu có) để hỗ trợ QR lớn
+                    const alignSize = cornerSize * 0.5;
+                    const alignOffset = qrSize * 0.75;
+                    ctx.fillRect(20 + alignOffset - alignSize / 2, 20 + alignOffset - alignSize / 2, alignSize, alignSize);
+                    ctx.strokeRect(20 + alignOffset - alignSize / 2 + 2, 20 + alignOffset - alignSize / 2 + 2, alignSize - 4, alignSize - 4);
+                    ctx.fillRect(20 + alignOffset - alignSize / 2 + 2, 20 + alignOffset - alignSize / 2 + 2, alignSize - 4, alignSize - 4);
                 };
                 img.src = imagePreview.src;
             } else {
