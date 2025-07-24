@@ -148,7 +148,7 @@
         }
         .qr-container {
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             background: white;
             border-radius: 15px;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
@@ -156,7 +156,7 @@
         }
         #qrcode {
             display: inline-block;
-            padding: 15px;
+            padding: 20px;
             background: white;
             border-radius: 10px;
             max-width: 100%;
@@ -244,14 +244,14 @@
                 padding: 12px;
             }
             .qr-container {
-                padding: 10px;
+                padding: 15px;
             }
             #qrcode {
-                padding: 10px;
+                padding: 15px;
             }
             #qrCanvas {
-                width: 280px !important;
-                height: 280px !important;
+                width: 280px;
+                height: 280px;
             }
         }
         
@@ -260,8 +260,8 @@
                 padding: 15px;
             }
             #qrCanvas {
-                width: 260px !important;
-                height: 260px !important;
+                width: 240px;
+                height: 240px;
             }
         }
     </style>
@@ -430,8 +430,8 @@
             const canvas = document.createElement('canvas');
             canvas.id = 'qrCanvas';
             
-            // Tăng kích thước tối thiểu, đặc biệt cho mobile
-            const size = Math.max(300, Math.min(400, window.innerWidth - 40));
+            // Điều chỉnh kích thước dựa trên màn hình, đảm bảo đủ lớn để quét
+            const size = Math.min(350, Math.max(280, window.innerWidth - 80));
             canvas.width = size;
             canvas.height = size;
             
@@ -440,10 +440,10 @@
                 element: canvas,
                 value: link,
                 size: size,
-                level: 'H', // High error correction
+                level: 'H',
                 foreground: '#000000',
                 background: '#FFFFFF',
-                padding: 20 // Thêm padding
+                padding: 20 // Thêm viền yên tĩnh
             });
         }
 
@@ -452,14 +452,15 @@
             const canvas = document.createElement('canvas');
             canvas.id = 'qrCanvas';
             
-            const size = Math.max(300, Math.min(400, window.innerWidth - 40));
+            // Điều chỉnh kích thước dựa trên màn hình
+            const size = Math.min(350, Math.max(280, window.innerWidth - 80));
             canvas.width = size;
             canvas.height = size;
             
             const ctx = canvas.getContext('2d');
             container.appendChild(canvas);
 
-            // Tạo QR code tạm thời
+            // Tạo QR code tạm thời để lấy pattern
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = size;
             tempCanvas.height = size;
@@ -470,50 +471,62 @@
                 level: 'H',
                 foreground: '#000000',
                 background: '#FFFFFF',
-                padding: 20
+                padding: 20 // Thêm viền yên tĩnh
             });
 
+            // Lấy hình ảnh đã upload
             const imagePreview = document.getElementById('imagePreview');
             if (imagePreview && imagePreview.src) {
                 const img = new Image();
                 img.crossOrigin = 'anonymous';
                 img.onload = function() {
-                    // Vẽ hình ảnh làm nền
+                    // Vẽ hình ảnh làm nền, scale để fit canvas
                     ctx.drawImage(img, 0, 0, size, size);
-                    
-                    // Lấy dữ liệu QR
-                    const qrCtx = tempCanvas.getContext('2d');
-                    const qrImageData = qrCtx.getImageData(0, 0, size, size);
+
+                    // Lấy QR pattern
+                    const qrImageData = tempCanvas.getContext('2d').getImageData(0, 0, size, size);
+                    const backgroundImageData = ctx.getImageData(0, 0, size, size);
+
+                    // Blend QR pattern với hình ảnh, tăng độ tương phản
                     const qrData = qrImageData.data;
-                    
-                    // Tạo mask từ QR code
+                    const bgData = backgroundImageData.data;
+
                     for (let i = 0; i < qrData.length; i += 4) {
-                        // Nếu là pixel đen của QR (foreground)
-                        if (qrData[i] < 128 && qrData[i+1] < 128 && qrData[i+2] < 128) {
-                            // Giữ nguyên màu đen cho các điểm QR
-                            qrData[i] = 0;     // R
-                            qrData[i+1] = 0;   // G
-                            qrData[i+2] = 0;    // B
+                        // Nếu pixel QR là đen (foreground pattern)
+                        if (qrData[i] < 128 && qrData[i + 1] < 128 && qrData[i + 2] < 128) {
+                            // Làm tối hơn để tăng độ tương phản
+                            bgData[i] = Math.max(0, bgData[i] * 0.2);
+                            bgData[i + 1] = Math.max(0, bgData[i + 1] * 0.2);
+                            bgData[i + 2] = Math.max(0, bgData[i + 2] * 0.2);
                         } else {
-                            // Pixel trắng của QR - làm trong suốt
-                            qrData[i+3] = 0;    // Alpha
+                            // Pixel trắng của QR - làm sáng hơn
+                            bgData[i] = Math.min(255, bgData[i] * 1.4);
+                            bgData[i + 1] = Math.min(255, bgData[i + 1] * 1.4);
+                            bgData[i + 2] = Math.min(255, bgData[i + 2] * 1.4);
                         }
+                        bgData[i + 3] = 255; // Alpha channel
                     }
-                    qrCtx.putImageData(qrImageData, 0, 0);
-                    
-                    // Vẽ QR lên trên hình ảnh với blend mode multiply
+
+                    // Vẽ kết quả cuối cùng
+                    ctx.putImageData(backgroundImageData, 0, 0);
+
+                    // Tăng độ tương phản bằng cách chồng thêm QR mờ
                     ctx.globalCompositeOperation = 'multiply';
+                    ctx.globalAlpha = 0.8;
                     ctx.drawImage(tempCanvas, 0, 0);
+
+                    // Reset về mặc định
                     ctx.globalCompositeOperation = 'source-over';
-                    
-                    // Thêm viền trắng để dễ quét
-                    ctx.strokeStyle = 'white';
+                    ctx.globalAlpha = 1.0;
+
+                    // Thêm viền ngoài để dễ quét hơn
+                    ctx.strokeStyle = '#FFFFFF';
                     ctx.lineWidth = 8;
-                    ctx.strokeRect(10, 10, size-20, size-20);
+                    ctx.strokeRect(4, 4, size - 8, size - 8);
                 };
                 img.src = imagePreview.src;
             } else {
-                // Fallback nếu không có ảnh
+                // Nếu không có ảnh, vẽ QR thông thường
                 ctx.drawImage(tempCanvas, 0, 0);
             }
         }
@@ -531,9 +544,9 @@
                 const link = document.createElement('a');
                 link.download = 'qrcode.png';
                 link.href = canvas.toDataURL('image/png', 1.0); // Chất lượng tối đa
-                document.body.appendChild(link); // Thêm vào DOM để đảm bảo hoạt động trên một số trình duyệt
+                document.body.appendChild(link);
                 link.click();
-                document.body.removeChild(link); // Xóa link khỏi DOM
+                document.body.removeChild(link);
             } catch (error) {
                 console.error('Lỗi khi tải QR code:', error);
                 alert('Có lỗi xảy ra khi tải mã QR!');
