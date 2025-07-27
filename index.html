@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kéo Búa Bao - Rock Paper Scissors</title>
+    <title>Đoán Số</title>
     <style>
         * {
             margin: 0;
@@ -18,453 +18,625 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            color: #333;
         }
 
         .game-container {
             background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 600px;
-            width: 100%;
-            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 90%;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .game-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 30px;
             font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .scoreboard {
+        .info-icon {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
             display: flex;
-            justify-content: space-around;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 30px;
             background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 10px;
         }
 
-        .score {
+        .info-item {
             text-align: center;
         }
 
-        .score h3 {
+        .info-label {
+            font-size: 0.9em;
             color: #666;
-            margin-bottom: 10px;
-            font-size: 1.2em;
+            margin-bottom: 5px;
         }
 
-        .score-value {
-            font-size: 2em;
+        .info-value {
+            font-size: 1.2em;
             font-weight: bold;
             color: #333;
         }
 
-        .choices {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 40px 0;
-            flex-wrap: wrap;
+        .input-section {
+            margin-bottom: 30px;
         }
 
-        .choice-btn {
-            background: linear-gradient(145deg, #fff 0%, #f8f9fa 50%, #e9ecef 100%);
-            border: 3px solid transparent;
+        #guessInput {
+            font-size: 1.5em;
+            padding: 15px 20px;
+            border: 3px solid #ddd;
+            border-radius: 50px;
+            width: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        #guessInput:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .buttons {
+            margin-bottom: 30px;
+        }
+
+        .nav-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1em;
             border-radius: 25px;
-            width: 120px;
-            height: 120px;
-            font-size: 4em;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.6);
-            position: relative;
-            overflow: hidden;
-            display: flex;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
         }
 
-        .choice-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.2) 0%, 
-                rgba(255, 255, 255, 0.1) 50%, 
-                transparent 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+            background: linear-gradient(45deg, #495057, #343a40);
         }
 
-        .choice-btn:hover::before {
-            opacity: 1;
-        }
-
-        .choice-btn:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            border-color: rgba(102, 126, 234, 0.3);
-        }
-
-        .choice-btn:active {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 
-                0 8px 20px rgba(0, 0, 0, 0.2),
-                inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .choice-btn.rock {
-            background: linear-gradient(145deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-        }
-
-        .choice-btn.rock:hover {
-            border-color: rgba(255, 154, 158, 0.5);
-            box-shadow: 
-                0 20px 40px rgba(255, 154, 158, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-        }
-
-        .choice-btn.paper {
-            background: linear-gradient(145deg, #a8edea 0%, #fed6e3 50%, #fed6e3 100%);
-        }
-
-        .choice-btn.paper:hover {
-            border-color: rgba(168, 237, 234, 0.5);
-            box-shadow: 
-                0 20px 40px rgba(168, 237, 234, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-        }
-
-        .choice-btn.scissors {
-            background: linear-gradient(145deg, #ffecd2 0%, #fcb69f 50%, #fcb69f 100%);
-        }
-
-        .choice-btn.scissors:hover {
-            border-color: rgba(255, 236, 210, 0.5);
-            box-shadow: 
-                0 20px 40px rgba(252, 182, 159, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-        }
-
-        .choice-emoji {
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-            transition: transform 0.3s ease;
-        }
-
-        .choice-btn:hover .choice-emoji {
-            transform: scale(1.2);
-        }
-
-        .game-area {
-            margin: 40px 0;
-            min-height: 200px;
-        }
-
-        .choices-display {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 30px 0;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-        }
-
-        .choices-display.show {
-            opacity: 1;
+        .back-btn:active {
             transform: translateY(0);
         }
 
-        .player-choice, .computer-choice {
-            text-align: center;
-            flex: 1;
-        }
-
-        .choice-display {
-            font-size: 4em;
-            margin-bottom: 10px;
-            animation: bounceIn 0.6s ease;
-        }
-
-        .vs {
-            font-size: 2em;
-            color: #666;
-            font-weight: bold;
-            margin: 0 20px;
-        }
-
-        .result {
-            font-size: 1.8em;
-            font-weight: bold;
-            margin: 30px 0;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s ease;
-        }
-
-        .result.show {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .result.win {
-            color: #28a745;
-            text-shadow: 2px 2px 4px rgba(40, 167, 69, 0.3);
-        }
-
-        .result.lose {
-            color: #dc3545;
-            text-shadow: 2px 2px 4px rgba(220, 53, 69, 0.3);
-        }
-
-        .result.tie {
-            color: #ffc107;
-            text-shadow: 2px 2px 4px rgba(255, 193, 7, 0.3);
-        }
-
-        .reset-btn {
-            background: linear-gradient(145deg, #ff6b6b, #ff5252);
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
             padding: 15px 30px;
             font-size: 1.1em;
-            border-radius: 25px;
+            border-radius: 50px;
             cursor: pointer;
+            margin: 0 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #newGameBtn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        #newGameBtn:hover {
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        .feedback {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            min-height: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .feedback.too-high {
+            color: #dc3545;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .feedback.too-low {
+            color: #fd7e14;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .feedback.correct {
+            color: #28a745;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        .previous-guesses {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
             margin-top: 20px;
         }
 
-        .reset-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        .previous-guesses h3 {
+            margin-bottom: 10px;
+            color: #495057;
         }
 
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.3);
+        .guess-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .guess-item {
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: #495057;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .instruction-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instruction-list li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .instruction-list li strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        @keyframes modalSlideIn {
+            from {
                 opacity: 0;
+                transform: translateY(-50px);
             }
-            50% {
-                transform: scale(1.05);
-            }
-            70% {
-                transform: scale(0.9);
-            }
-            100% {
-                transform: scale(1);
+            to {
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
 
-        .pulse {
-            animation: pulse 0.6s ease-in-out;
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        @media (max-width: 480px) {
-            .choice-btn {
-                width: 90px;
-                height: 90px;
-                font-size: 3em;
+        .game-over {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .game-container {
+                padding: 20px;
             }
             
             h1 {
                 font-size: 2em;
             }
-            
-            .choice-display {
-                font-size: 3em;
+
+            .header-container {
+                gap: 10px;
             }
 
-            .choices {
-                gap: 15px;
+            .info-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 1em;
+            }
+            
+            .game-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            #guessInput {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .nav-buttons {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                padding: 20px;
+            }
+
+            .modal h2 {
+                font-size: 1.5em;
             }
         }
     </style>
 </head>
 <body>
+    <div class="nav-buttons">
+        <a href="#" class="back-btn" onclick="goBack()">
+            ← Quay lại
+        </a>
+    </div>
+
     <div class="game-container">
-        <h1>🎮 Kéo Búa Bao 🎮</h1>
+        <div class="header-container">
+            <h1>🎯 Đoán Số</h1>
+            <button class="info-icon" onclick="showInstructions()" title="Hướng dẫn">i</button>
+        </div>
+        <p class="subtitle">Tôi đang nghĩ về một số từ 1 đến 100</p>
         
-        <div class="scoreboard">
-            <div class="score">
-                <h3>Bạn</h3>
-                <div class="score-value" id="playerScore">0</div>
+        <div class="game-info">
+            <div class="info-item">
+                <div class="info-label">Lần thử</div>
+                <div class="info-value" id="attempts">0</div>
             </div>
-            <div class="score">
-                <h3>Máy</h3>
-                <div class="score-value" id="computerScore">0</div>
+            <div class="info-item">
+                <div class="info-label">Phạm vi</div>
+                <div class="info-value">1 - 100</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Điểm cao nhất</div>
+                <div class="info-value" id="bestScore">--</div>
             </div>
         </div>
 
-        <div class="choices">
-            <button class="choice-btn rock" onclick="playGame('rock')">
-                <span class="choice-emoji">✊</span>
-            </button>
-            <button class="choice-btn paper" onclick="playGame('paper')">
-                <span class="choice-emoji">✋</span>
-            </button>
-            <button class="choice-btn scissors" onclick="playGame('scissors')">
-                <span class="choice-emoji">✌️</span>
-            </button>
+        <div class="input-section">
+            <input type="number" id="guessInput" placeholder="?" min="1" max="100">
         </div>
 
-        <div class="game-area">
-            <div class="choices-display" id="choicesDisplay">
-                <div class="player-choice">
-                    <div class="choice-display" id="playerChoice">❓</div>
-                    <div>Bạn chọn</div>
-                </div>
-                <div class="vs">VS</div>
-                <div class="computer-choice">
-                    <div class="choice-display" id="computerChoice">❓</div>
-                    <div>Máy chọn</div>
-                </div>
-            </div>
-            
-            <div class="result" id="result"></div>
+        <div class="buttons">
+            <button id="submitBtn" onclick="checkGuess()">Gửi đáp án</button>
+            <button id="newGameBtn" onclick="newGame()">Chơi lại</button>
         </div>
 
-        <button class="reset-btn" onclick="resetGame()">🔄 Chơi lại</button>
+        <div class="feedback" id="feedback">Hãy đoán số đầu tiên!</div>
+
+        <div class="previous-guesses" id="previousGuesses" style="display: none;">
+            <h3>Các lần đoán trước:</h3>
+            <div class="guess-list" id="guessList"></div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructionsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeInstructions()">&times;</span>
+            <h2>🎮 Hướng dẫn chơi</h2>
+            <ul class="instruction-list">
+                <li>
+                    <strong>🎯 Mục tiêu:</strong>
+                    Đoán đúng số bí mật từ 1 đến 100 với ít lần thử nhất có thể.
+                </li>
+                <li>
+                    <strong>📝 Cách chơi:</strong>
+                    Nhập một số vào ô và nhấn "Gửi đáp án" hoặc phím Enter.
+                </li>
+                <li>
+                    <strong>💡 Gợi ý:</strong>
+                    Game sẽ cho biết số bạn đoán là "Quá cao" hay "Quá thấp".
+                </li>
+                <li>
+                    <strong>🏆 Chiến thắng:</strong>
+                    Khi đoán đúng, điểm số sẽ được tính theo số lần thử. Ít lần thử = điểm cao hơn!
+                </li>
+                <li>
+                    <strong>📊 Theo dõi:</strong>
+                    Xem các lần đoán trước và điểm cao nhất của bạn.
+                </li>
+                <li>
+                    <strong>🔄 Chơi lại:</strong>
+                    Nhấn "Chơi lại" để bắt đầu một trò chơi mới với số bí mật khác.
+                </li>
+            </ul>
+        </div>
     </div>
 
     <script>
-        let playerScore = 0;
-        let computerScore = 0;
-        
-        const choices = {
-            rock: { emoji: '✊', name: 'Búa' },
-            paper: { emoji: '✋', name: 'Bao' },
-            scissors: { emoji: '✌️', name: 'Kéo' }
-        };
+        let targetNumber;
+        let attempts;
+        let gameOver;
+        let guesses;
+        let bestScore = null;
 
-        const rules = {
-            rock: 'scissors',
-            paper: 'rock',
-            scissors: 'paper'
-        };
-
-        function getComputerChoice() {
-            const choiceKeys = Object.keys(choices);
-            return choiceKeys[Math.floor(Math.random() * choiceKeys.length)];
+        // Load best score from memory
+        if (window.gameData && window.gameData.bestScore) {
+            bestScore = window.gameData.bestScore;
+            document.getElementById('bestScore').textContent = bestScore;
         }
 
-        function determineWinner(playerChoice, computerChoice) {
-            if (playerChoice === computerChoice) {
-                return 'tie';
-            }
-            if (rules[playerChoice] === computerChoice) {
-                return 'win';
-            }
-            return 'lose';
+        function initGame() {
+            targetNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            gameOver = false;
+            guesses = [];
+            
+            document.getElementById('guessInput').value = '';
+            document.getElementById('attempts').textContent = '0';
+            document.getElementById('feedback').textContent = 'Hãy đoán số đầu tiên!';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('previousGuesses').style.display = 'none';
+            document.getElementById('guessList').innerHTML = '';
+            document.getElementById('guessInput').disabled = false;
+            document.getElementById('submitBtn').disabled = false;
         }
 
-        function updateScore(result) {
-            if (result === 'win') {
-                playerScore++;
-                document.getElementById('playerScore').classList.add('pulse');
-            } else if (result === 'lose') {
-                computerScore++;
-                document.getElementById('computerScore').classList.add('pulse');
-            }
+        function checkGuess() {
+            if (gameOver) return;
             
-            document.getElementById('playerScore').textContent = playerScore;
-            document.getElementById('computerScore').textContent = computerScore;
+            const guessInput = document.getElementById('guessInput');
+            const guess = parseInt(guessInput.value);
+            const feedback = document.getElementById('feedback');
             
-            setTimeout(() => {
-                document.getElementById('playerScore').classList.remove('pulse');
-                document.getElementById('computerScore').classList.remove('pulse');
-            }, 600);
-        }
-
-        function displayResult(result, playerChoice, computerChoice) {
-            const resultElement = document.getElementById('result');
-            let message = '';
-            
-            switch(result) {
-                case 'win':
-                    message = `🎉 Bạn thắng! ${choices[playerChoice].name} thắng ${choices[computerChoice].name}`;
-                    resultElement.className = 'result show win';
-                    break;
-                case 'lose':
-                    message = `😢 Bạn thua! ${choices[computerChoice].name} thắng ${choices[playerChoice].name}`;
-                    resultElement.className = 'result show lose';
-                    break;
-                case 'tie':
-                    message = '🤝 Hòa! Cả hai cùng chọn ' + choices[playerChoice].name;
-                    resultElement.className = 'result show tie';
-                    break;
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                feedback.textContent = 'Vui lòng nhập một số từ 1 đến 100!';
+                feedback.className = 'feedback';
+                return;
             }
             
-            resultElement.textContent = message;
+            if (guesses.includes(guess)) {
+                feedback.textContent = 'Bạn đã đoán số này rồi!';
+                feedback.className = 'feedback';
+                return;
+            }
+            
+            attempts++;
+            guesses.push(guess);
+            
+            document.getElementById('attempts').textContent = attempts;
+            updatePreviousGuesses();
+            
+            if (guess === targetNumber) {
+                feedback.textContent = `🎉 Chúc mừng! Bạn đã đoán đúng trong ${attempts} lần thử!`;
+                feedback.className = 'feedback correct';
+                gameOver = true;
+                document.getElementById('guessInput').disabled = true;
+                document.getElementById('submitBtn').disabled = true;
+                
+                // Update best score
+                if (bestScore === null || attempts < bestScore) {
+                    bestScore = attempts;
+                    document.getElementById('bestScore').textContent = bestScore;
+                    // Store best score in memory
+                    if (!window.gameData) window.gameData = {};
+                    window.gameData.bestScore = bestScore;
+                }
+                
+                showGameOver();
+            } else if (guess < targetNumber) {
+                feedback.textContent = '📈 Quá thấp! Hãy thử số cao hơn.';
+                feedback.className = 'feedback too-low';
+            } else {
+                feedback.textContent = '📉 Quá cao! Hãy thử số thấp hơn.';
+                feedback.className = 'feedback too-high';
+            }
+            
+            guessInput.value = '';
+            guessInput.focus();
         }
 
-        function playGame(playerChoice) {
-            const computerChoice = getComputerChoice();
-            const result = determineWinner(playerChoice, computerChoice);
+        function updatePreviousGuesses() {
+            const previousGuesses = document.getElementById('previousGuesses');
+            const guessList = document.getElementById('guessList');
             
-            // Update display
-            document.getElementById('playerChoice').textContent = choices[playerChoice].emoji;
-            document.getElementById('computerChoice').textContent = choices[computerChoice].emoji;
-            
-            // Show choices with animation
-            const choicesDisplay = document.getElementById('choicesDisplay');
-            choicesDisplay.classList.add('show');
-            
-            // Update score and show result
-            setTimeout(() => {
-                updateScore(result);
-                displayResult(result, playerChoice, computerChoice);
-            }, 300);
+            if (guesses.length > 0) {
+                previousGuesses.style.display = 'block';
+                guessList.innerHTML = guesses.map(guess => 
+                    `<span class="guess-item">${guess}</span>`
+                ).join('');
+            }
         }
 
-        function resetGame() {
-            playerScore = 0;
-            computerScore = 0;
-            document.getElementById('playerScore').textContent = '0';
-            document.getElementById('computerScore').textContent = '0';
-            document.getElementById('playerChoice').textContent = '❓';
-            document.getElementById('computerChoice').textContent = '❓';
-            document.getElementById('result').textContent = '';
-            document.getElementById('result').className = 'result';
-            document.getElementById('choicesDisplay').classList.remove('show');
+        function showGameOver() {
+            const container = document.querySelector('.game-container');
+            const gameOverDiv = document.createElement('div');
+            gameOverDiv.className = 'game-over';
+            gameOverDiv.innerHTML = `
+                <h3>🏆 Hoàn thành trò chơi!</h3>
+                <p>Số đó là ${targetNumber}</p>
+                <p>Bạn đã giải được trong ${attempts} lần thử!</p>
+            `;
+            container.appendChild(gameOverDiv);
         }
 
-        // Add some initial animations
-        window.addEventListener('load', () => {
-            const buttons = document.querySelectorAll('.choice-btn');
-            buttons.forEach((btn, index) => {
-                setTimeout(() => {
-                    btn.style.animation = 'bounceIn 0.6s ease';
-                }, index * 100);
-            });
+        function newGame() {
+            // Remove game over message if it exists
+            const gameOverDiv = document.querySelector('.game-over');
+            if (gameOverDiv) {
+                gameOverDiv.remove();
+            }
+            initGame();
+        }
+
+        function showInstructions() {
+            document.getElementById('instructionsModal').style.display = 'block';
+        }
+
+        function closeInstructions() {
+            document.getElementById('instructionsModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('instructionsModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Allow Enter key to submit guess
+        document.getElementById('guessInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkGuess();
+            }
         });
+
+        // Back button functionality
+        function goBack() {
+            // Try to go back in browser history first
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // If no history, try to go to a common index page
+                const possibleIndexPages = [
+                    'index.html',
+                    '../index.html',
+                    '../../index.html',
+                    'home.html',
+                    '../home.html',
+                    'main.html',
+                    '../main.html'
+                ];
+                
+                // Try each possible index page
+                window.location.href = possibleIndexPages[0];
+            }
+        }
+
+        // Initialize the game when page loads
+        initGame();
     </script>
 </body>
 </html>
