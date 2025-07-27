@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đoán Số</title>
+    <title>Logic Màu Sắc - Memory & Logic Colors</title>
     <style>
         * {
             margin: 0;
@@ -12,92 +12,46 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
+            padding: 20px;
+            color: white;
         }
 
         .game-container {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 480px;
-            width: 90%;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .game-container:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .header-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: #1e3a8a;
-        }
-
-        .info-icon, .back-icon {
-            background: #4f46e5;
-            color: white;
-            border: none;
-            height: 32px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s ease, transform 0.3s ease;
-            padding: 0 12px;
-            gap: 8px;
-        }
-
-        .info-icon {
-            width: 32px;
-        }
-
-        .back-icon {
-            width: auto;
-        }
-
-        .back-text {
-            font-size: 0.875rem;
-            display: none;
-        }
-
-        .info-icon:hover, .back-icon:hover {
-            background: #3b82f6;
-            transform: scale(1.05);
-        }
-
-        .subtitle {
-            color: #6b7280;
-            font-size: 1rem;
-            margin-bottom: 24px;
+            max-width: 800px;
+            width: 100%;
             text-align: center;
         }
 
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
         .game-info {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            background: #f9fafb;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
         }
 
         .info-item {
@@ -105,458 +59,497 @@
         }
 
         .info-label {
-            font-size: 0.875rem;
-            color: #6b7280;
-            margin-bottom: 4px;
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
 
         .info-value {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #1f2937;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 5px;
         }
 
-        .input-section {
-            margin-bottom: 24px;
-            display: flex;
-            justify-content: center;
+        .game-board {
+            display: grid;
+            gap: 15px;
+            margin: 30px auto;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
 
-        #guessInput {
-            font-size: 1.25rem;
-            padding: 12px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            width: 160px;
-            text-align: center;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        #guessInput:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-            outline: none;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-
-        button {
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 500;
-            border: none;
-            border-radius: 12px;
+        .color-tile {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            border: 3px solid rgba(255,255,255,0.3);
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-
-        #submitBtn {
-            background: #4f46e5;
-            color: white;
-        }
-
-        #submitBtn:hover {
-            background: #4338ca;
-            transform: translateY(-2px);
-        }
-
-        #newGameBtn {
-            background: #10b981;
-            color: white;
-        }
-
-        #newGameBtn:hover {
-            background: #059669;
-            transform: translateY(-2px);
-        }
-
-        .feedback {
-            font-size: 1.125rem;
-            font-weight: 500;
-            text-align: center;
-            min-height: 32px;
-            margin-bottom: 24px;
-        }
-
-        .feedback.too-high {
-            color: #ef4444;
-            animation: shake 0.4s ease-in-out;
-        }
-
-        .feedback.too-low {
-            color: #f59e0b;
-            animation: shake 0.4s ease-in-out;
-        }
-
-        .feedback.correct {
-            color: #10b981;
-            animation: bounce 0.5s ease-in-out;
-        }
-
-        .previous-guesses {
-            background: #f9fafb;
-            padding: 16px;
-            border-radius: 12px;
-            display: none;
-        }
-
-        .previous-guesses h3 {
-            font-size: 1rem;
-            color: #374151;
-            margin-bottom: 12px;
-        }
-
-        .guess-list {
+            transition: all 0.3s ease;
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+            align-items: center;
             justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .guess-item {
-            background: #e5e7eb;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            color: #374151;
+        .color-tile:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
-        .modal {
-            display: none;
+        .color-tile.active {
+            transform: scale(1.2);
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .color-tile.correct {
+            animation: correctPulse 0.6s ease;
+        }
+
+        .color-tile.wrong {
+            animation: wrongShake 0.6s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(78,205,196,0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #96ceb4, #85c1a3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(150,206,180,0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .message.success {
+            background: rgba(76, 175, 80, 0.3);
+            color: #c8e6c9;
+        }
+
+        .message.error {
+            background: rgba(244, 67, 54, 0.3);
+            color: #ffcdd2;
+        }
+
+        .difficulty-selector {
+            margin: 20px 0;
+        }
+
+        .difficulty-btn {
+            margin: 0 5px;
+            padding: 8px 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-btn.active {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+
+        .game-over {
+            background: rgba(0,0,0,0.8);
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
             z-index: 1000;
         }
 
-        .modal-content {
-            background: white;
-            margin: 10% auto;
-            padding: 24px;
-            border-radius: 16px;
-            max-width: 480px;
-            width: 90%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            font-size: 1.5rem;
-            color: #374151;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .close:hover {
-            color: #1f2937;
-        }
-
-        .modal h2 {
-            font-size: 1.5rem;
-            color: #1f2937;
-            margin-bottom: 20px;
+        .game-over-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 20px;
             text-align: center;
-        }
-
-        .instruction-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .instruction-list li {
-            padding: 12px;
-            background: #f9fafb;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 0.875rem;
-            color: #374151;
-        }
-
-        .instruction-list li strong {
-            color: #1f2937;
-            font-weight: 600;
-        }
-
-        .game-over {
-            background: #ecfdf5;
-            color: #065f46;
-            padding: 16px;
-            border-radius: 12px;
-            margin-top: 24px;
-            text-align: center;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-4px); }
-            75% { transform: translateX(4px); }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @media (min-width: 480px) {
-            .back-text {
-                display: inline;
-            }
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         @media (max-width: 600px) {
-            .game-container {
-                padding: 16px;
+            .color-tile {
+                width: 60px;
+                height: 60px;
+                font-size: 1rem;
             }
-
+            
+            .game-board {
+                gap: 10px;
+                padding: 20px;
+            }
+            
             h1 {
-                font-size: 1.75rem;
-            }
-
-            .game-info {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            #guessInput {
-                width: 100%;
-                max-width: 200px;
-            }
-
-            .buttons {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            button {
-                width: 100%;
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <div class="header-container">
-            <button class="back-icon" onclick="goBack()" title="Quay lại">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-                <span class="back-text">Quay lại</span>
-            </button>
-            <h1>Đoán Số</h1>
-            <button class="info-icon" onclick="showInstructions()" title="Hướng dẫn">i</button>
-        </div>
-        <p class="subtitle">Tôi đang nghĩ về một số từ 1 đến 100</p>
+        <h1>Logic Màu Sắc</h1>
+        <p class="subtitle">Memory & Logic Colors Game</p>
         
         <div class="game-info">
             <div class="info-item">
-                <div class="info-label">Lần thử</div>
-                <div class="info-value" id="attempts">0</div>
+                <div class="info-label">Level</div>
+                <div class="info-value" id="level">1</div>
             </div>
             <div class="info-item">
-                <div class="info-label">Phạm vi</div>
-                <div class="info-value">1 - 100</div>
+                <div class="info-label">Score</div>
+                <div class="info-value" id="score">0</div>
             </div>
             <div class="info-item">
-                <div class="info-label">Điểm cao nhất</div>
-                <div class="info-value" id="bestScore">--</div>
+                <div class="info-label">Lives</div>
+                <div class="info-value" id="lives">3</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Best</div>
+                <div class="info-value" id="best">0</div>
             </div>
         </div>
 
-        <div class="input-section">
-            <input type="number" id="guessInput" placeholder="?" min="1" max="100">
+        <div class="difficulty-selector">
+            <button class="difficulty-btn active" data-difficulty="easy">Dễ (3x3)</button>
+            <button class="difficulty-btn" data-difficulty="medium">Trung bình (4x4)</button>
+            <button class="difficulty-btn" data-difficulty="hard">Khó (5x5)</button>
         </div>
 
-        <div class="buttons">
-            <button id="submitBtn" onclick="checkGuess()">Gửi đáp án</button>
-            <button id="newGameBtn" onclick="newGame()">Chơi lại</button>
-        </div>
+        <div class="game-board" id="gameBoard"></div>
 
-        <div class="feedback" id="feedback">Hãy đoán số đầu tiên!</div>
+        <div class="message" id="message">Nhấn "Bắt đầu" để chơi!</div>
 
-        <div class="previous-guesses" id="previousGuesses">
-            <h3>Các lần đoán trước:</h3>
-            <div class="guess-list" id="guessList"></div>
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn">Bắt đầu</button>
+            <button class="btn btn-secondary" id="showPatternBtn" disabled>Xem lại mẫu</button>
+            <button class="btn btn-success" id="resetBtn">Chơi lại</button>
         </div>
     </div>
 
-    <div id="instructionsModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeInstructions()">&times;</span>
-            <h2>🎮 Hướng dẫn chơi</h2>
-            <ul class="instruction-list">
-                <li>
-                    <strong>🎯 Mục tiêu:</strong> Đoán đúng số bí mật từ 1 đến 100 với ít lần thử nhất có thể.
-                </li>
-                <li>
-                    <strong>📝 Cách chơi:</strong> Nhập một số vào ô và nhấn "Gửi đáp án" hoặc phím Enter.
-                </li>
-                <li>
-                    <strong>💡 Gợi ý:</strong> Game sẽ cho biết số bạn đoán là "Quá cao" hay "Quá thấp".
-                </li>
-                <li>
-                    <strong>🏆 Chiến thắng:</strong> Khi đoán đúng, điểm số sẽ được tính theo số lần thử. Ít lần thử = điểm cao hơn!
-                </li>
-                <li>
-                    <strong>📊 Theo dõi:</strong> Xem các lần đoán trước và điểm cao nhất của bạn.
-                </li>
-                <li>
-                    <strong>🔄 Chơi lại:</strong> Nhấn "Chơi lại" để bắt đầu một trò chơi mới với số bí mật khác.
-                </li>
-            </ul>
+    <div class="game-over" id="gameOver">
+        <div class="game-over-content">
+            <h2>Game Over!</h2>
+            <p id="finalScore"></p>
+            <button class="btn btn-primary" onclick="resetGame()">Chơi lại</button>
         </div>
     </div>
 
     <script>
-        let targetNumber;
-        let attempts;
-        let gameOver;
-        let guesses;
-        let bestScore = null;
-
-        // Load best score from memory
-        if (window.gameData && window.gameData.bestScore) {
-            bestScore = window.gameData.bestScore;
-            document.getElementById('bestScore').textContent = bestScore;
-        }
-
-        function initGame() {
-            targetNumber = Math.floor(Math.random() * 100) + 1;
-            attempts = 0;
-            gameOver = false;
-            guesses = [];
-            
-            document.getElementById('guessInput').value = '';
-            document.getElementById('attempts').textContent = '0';
-            document.getElementById('feedback').textContent = 'Hãy đoán số đầu tiên!';
-            document.getElementById('feedback').className = 'feedback';
-            document.getElementById('previousGuesses').style.display = 'none';
-            document.getElementById('guessList').innerHTML = '';
-            document.getElementById('guessInput').disabled = false;
-            document.getElementById('submitBtn').disabled = false;
-        }
-
-        function checkGuess() {
-            if (gameOver) return;
-            
-            const guessInput = document.getElementById('guessInput');
-            const guess = parseInt(guessInput.value);
-            const feedback = document.getElementById('feedback');
-            
-            if (isNaN(guess) || guess < 1 || guess > 100) {
-                feedback.textContent = 'Vui lòng nhập một số từ 1 đến 100!';
-                feedback.className = 'feedback';
-                return;
-            }
-            
-            if (guesses.includes(guess)) {
-                feedback.textContent = 'Bạn đã đoán số này rồi!';
-                feedback.className = 'feedback';
-                return;
-            }
-            
-            attempts++;
-            guesses.push(guess);
-            
-            document.getElementById('attempts').textContent = attempts;
-            updatePreviousGuesses();
-            
-            if (guess === targetNumber) {
-                feedback.textContent = `🎉 Chúc mừng! Bạn đã đoán đúng trong ${attempts} lần thử!`;
-                feedback.className = 'feedback correct';
-                gameOver = true;
-                document.getElementById('guessInput').disabled = true;
-                document.getElementById('submitBtn').disabled = true;
+        class ColorLogicGame {
+            constructor() {
+                this.level = 1;
+                this.score = 0;
+                this.lives = 3;
+                this.best = localStorage.getItem('colorLogicBest') || 0;
+                this.currentPattern = [];
+                this.playerPattern = [];
+                this.showingPattern = false;
+                this.gameActive = false;
+                this.difficulty = 'easy';
+                this.gridSize = 3;
                 
-                if (bestScore === null || attempts < bestScore) {
-                    bestScore = attempts;
-                    document.getElementById('bestScore').textContent = bestScore;
-                    if (!window.gameData) window.gameData = {};
-                    window.gameData.bestScore = bestScore;
+                this.colors = [
+                    '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4',
+                    '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd',
+                    '#00d2d3', '#ff9f43', '#10ac84', '#ee5a6f'
+                ];
+
+                this.initializeElements();
+                this.updateDisplay();
+                this.createBoard();
+                this.bindEvents();
+            }
+
+            initializeElements() {
+                this.levelEl = document.getElementById('level');
+                this.scoreEl = document.getElementById('score');
+                this.livesEl = document.getElementById('lives');
+                this.bestEl = document.getElementById('best');
+                this.messageEl = document.getElementById('message');
+                this.boardEl = document.getElementById('gameBoard');
+                this.startBtn = document.getElementById('startBtn');
+                this.showPatternBtn = document.getElementById('showPatternBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.gameOverEl = document.getElementById('gameOver');
+                this.finalScoreEl = document.getElementById('finalScore');
+            }
+
+            bindEvents() {
+                this.startBtn.addEventListener('click', () => this.startGame());
+                this.showPatternBtn.addEventListener('click', () => this.showPattern());
+                this.resetBtn.addEventListener('click', () => this.resetGame());
+
+                document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.changeDifficulty(e.target.dataset.difficulty));
+                });
+            }
+
+            changeDifficulty(difficulty) {
+                if (this.gameActive) return;
+                
+                document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`[data-difficulty="${difficulty}"]`).classList.add('active');
+                
+                this.difficulty = difficulty;
+                this.gridSize = difficulty === 'easy' ? 3 : difficulty === 'medium' ? 4 : 5;
+                this.createBoard();
+            }
+
+            createBoard() {
+                this.boardEl.innerHTML = '';
+                this.boardEl.style.gridTemplateColumns = `repeat(${this.gridSize}, 1fr)`;
+                
+                for (let i = 0; i < this.gridSize * this.gridSize; i++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'color-tile';
+                    tile.dataset.index = i;
+                    tile.style.backgroundColor = '#333';
+                    tile.addEventListener('click', () => this.handleTileClick(i));
+                    this.boardEl.appendChild(tile);
+                }
+            }
+
+            generatePattern() {
+                const patternLength = Math.min(3 + this.level, this.gridSize * this.gridSize);
+                this.currentPattern = [];
+                
+                for (let i = 0; i < patternLength; i++) {
+                    const randomIndex = Math.floor(Math.random() * (this.gridSize * this.gridSize));
+                    const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
+                    this.currentPattern.push({ index: randomIndex, color: randomColor });
+                }
+            }
+
+            async showPattern() {
+                this.showingPattern = true;
+                this.showPatternBtn.disabled = true;
+                this.messageEl.textContent = 'Ghi nhớ mẫu màu...';
+                this.messageEl.className = 'message';
+
+                // Clear board
+                const tiles = document.querySelectorAll('.color-tile');
+                tiles.forEach(tile => {
+                    tile.style.backgroundColor = '#333';
+                    tile.textContent = '';
+                });
+
+                // Show pattern
+                for (let i = 0; i < this.currentPattern.length; i++) {
+                    const { index, color } = this.currentPattern[i];
+                    const tile = tiles[index];
+                    
+                    tile.style.backgroundColor = color;
+                    tile.textContent = i + 1;
+                    tile.classList.add('active');
+                    
+                    await this.sleep(800);
+                    tile.classList.remove('active');
+                    await this.sleep(200);
+                }
+
+                // Hide pattern
+                await this.sleep(1000);
+                tiles.forEach(tile => {
+                    tile.style.backgroundColor = '#333';
+                    tile.textContent = '';
+                });
+
+                this.showingPattern = false;
+                this.messageEl.textContent = 'Nhấn theo đúng thứ tự màu sắc!';
+                this.playerPattern = [];
+            }
+
+            handleTileClick(index) {
+                if (this.showingPattern || !this.gameActive) return;
+
+                const expectedPattern = this.currentPattern[this.playerPattern.length];
+                const tile = document.querySelectorAll('.color-tile')[index];
+
+                if (expectedPattern && expectedPattern.index === index) {
+                    // Correct tile
+                    tile.style.backgroundColor = expectedPattern.color;
+                    tile.textContent = this.playerPattern.length + 1;
+                    tile.classList.add('correct');
+                    
+                    this.playerPattern.push({ index, color: expectedPattern.color });
+                    
+                    setTimeout(() => tile.classList.remove('correct'), 600);
+
+                    if (this.playerPattern.length === this.currentPattern.length) {
+                        this.levelComplete();
+                    }
+                } else {
+                    // Wrong tile
+                    tile.classList.add('wrong');
+                    setTimeout(() => tile.classList.remove('wrong'), 600);
+                    
+                    this.loseLife();
+                }
+            }
+
+            levelComplete() {
+                this.score += this.level * 100;
+                this.level++;
+                this.messageEl.textContent = `Xuất sắc! Chuyển sang level ${this.level}`;
+                this.messageEl.className = 'message success';
+                
+                this.updateDisplay();
+                
+                setTimeout(() => {
+                    this.startRound();
+                }, 2000);
+            }
+
+            loseLife() {
+                this.lives--;
+                this.updateDisplay();
+                
+                if (this.lives <= 0) {
+                    this.gameOver();
+                } else {
+                    this.messageEl.textContent = `Sai rồi! Còn ${this.lives} mạng`;
+                    this.messageEl.className = 'message error';
+                    this.showPatternBtn.disabled = false;
+                }
+            }
+
+            gameOver() {
+                this.gameActive = false;
+                this.startBtn.disabled = false;
+                
+                if (this.score > this.best) {
+                    this.best = this.score;
+                    localStorage.setItem('colorLogicBest', this.best);
+                    this.updateDisplay();
                 }
                 
-                showGameOver();
-            } else if (guess < targetNumber) {
-                feedback.textContent = '📈 Quá thấp! Hãy thử số cao hơn.';
-                feedback.className = 'feedback too-low';
-            } else {
-                feedback.textContent = '📉 Quá cao! Hãy thử số thấp hơn.';
-                feedback.className = 'feedback too-high';
+                this.finalScoreEl.textContent = `Điểm số: ${this.score} | Level đạt được: ${this.level}`;
+                this.gameOverEl.style.display = 'flex';
             }
-            
-            guessInput.value = '';
-            guessInput.focus();
-        }
 
-        function updatePreviousGuesses() {
-            const previousGuesses = document.getElementById('previousGuesses');
-            const guessList = document.getElementById('guessList');
-            
-            if (guesses.length > 0) {
-                previousGuesses.style.display = 'block';
-                guessList.innerHTML = guesses.map(guess => 
-                    `<span class="guess-item">${guess}</span>`
-                ).join('');
+            startGame() {
+                this.gameActive = true;
+                this.startBtn.disabled = true;
+                this.startRound();
             }
-        }
 
-        function showGameOver() {
-            const container = document.querySelector('.game-container');
-            const gameOverDiv = document.createElement('div');
-            gameOverDiv.className = 'game-over';
-            gameOverDiv.innerHTML = `
-                <h3>🏆 Hoàn thành trò chơi!</h3>
-                <p>Số đó là ${targetNumber}</p>
-                <p>Bạn đã giải được trong ${attempts} lần thử!</p>
-            `;
-            container.appendChild(gameOverDiv);
-        }
-
-        function newGame() {
-            const gameOverDiv = document.querySelector('.game-over');
-            if (gameOverDiv) {
-                gameOverDiv.remove();
+            startRound() {
+                this.generatePattern();
+                this.showPattern();
             }
-            initGame();
-        }
 
-        function showInstructions() {
-            document.getElementById('instructionsModal').style.display = 'block';
-        }
+            resetGame() {
+                this.level = 1;
+                this.score = 0;
+                this.lives = 3;
+                this.gameActive = false;
+                this.showingPattern = false;
+                this.currentPattern = [];
+                this.playerPattern = [];
+                
+                this.startBtn.disabled = false;
+                this.showPatternBtn.disabled = true;
+                this.gameOverEl.style.display = 'none';
+                
+                this.createBoard();
+                this.updateDisplay();
+                this.messageEl.textContent = 'Nhấn "Bắt đầu" để chơi!';
+                this.messageEl.className = 'message';
+            }
 
-        function closeInstructions() {
-            document.getElementById('instructionsModal').style.display = 'none';
-        }
+            updateDisplay() {
+                this.levelEl.textContent = this.level;
+                this.scoreEl.textContent = this.score;
+                this.livesEl.textContent = this.lives;
+                this.bestEl.textContent = this.best;
+            }
 
-        function goBack() {
-            window.location.href = 'game.html';
-        }
-
-        window.onclick = function(event) {
-            const modal = document.getElementById('instructionsModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
             }
         }
 
-        document.getElementById('guessInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkGuess();
-            }
+        // Initialize game when page loads
+        let game;
+        window.addEventListener('DOMContentLoaded', () => {
+            game = new ColorLogicGame();
         });
 
-        initGame();
+        function resetGame() {
+            game.resetGame();
+        }
     </script>
 </body>
 </html>
