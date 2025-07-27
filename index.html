@@ -2,571 +2,468 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trình tạo mã QR</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    <link rel="icon" type="image/png" href="logos3.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kéo Búa Bao - Rock Paper Scissors</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
-        .container {
+
+        .game-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
             max-width: 600px;
             width: 100%;
             backdrop-filter: blur(10px);
         }
+
         h1 {
-            text-align: center;
             color: #333;
-            margin-bottom: 20px;
-            font-size: clamp(1.5rem, 4vw, 2.2rem);
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            padding: 0 10px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .form-group {
-            margin-bottom: 20px;
+
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
+
+        .score {
+            text-align: center;
         }
-        input[type="text"], input[type="url"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.8);
+
+        .score h3 {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 1.2em;
         }
-        input[type="text"]:focus, input[type="url"]:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+
+        .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
         }
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 2px dashed #667eea;
-            border-radius: 10px;
-            background: rgba(102, 126, 234, 0.05);
+
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .choice-btn {
+            background: linear-gradient(145deg, #fff 0%, #f8f9fa 50%, #e9ecef 100%);
+            border: 3px solid transparent;
+            border-radius: 25px;
+            width: 120px;
+            height: 120px;
+            font-size: 4em;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-        input[type="file"]:hover {
-            background: rgba(102, 126, 234, 0.1);
-            border-color: #764ba2;
-        }
-        .toggle-container {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            justify-content: center;
         }
-        .toggle {
-            position: relative;
-            width: 50px;
-            height: 25px;
-        }
-        .toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
+
+        .choice-btn::before {
+            content: '';
             position: absolute;
-            cursor: pointer;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
-            transition: 0.4s;
-            border-radius: 25px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: 0.4s;
-            border-radius: 50%;
+
+        .choice-btn:hover::before {
+            opacity: 1;
         }
-        input:checked + .slider {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+
+        .choice-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border-color: rgba(102, 126, 234, 0.3);
         }
-        input:checked + .slider:before {
-            transform: translateX(24px);
+
+        .choice-btn:active {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.2),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
+
+        .choice-btn.rock {
+            background: linear-gradient(145deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
         }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+
+        .choice-btn.rock:hover {
+            border-color: rgba(255, 154, 158, 0.5);
+            box-shadow: 
+                0 20px 40px rgba(255, 154, 158, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
-        button:active {
+
+        .choice-btn.paper {
+            background: linear-gradient(145deg, #a8edea 0%, #fed6e3 50%, #fed6e3 100%);
+        }
+
+        .choice-btn.paper:hover {
+            border-color: rgba(168, 237, 234, 0.5);
+            box-shadow: 
+                0 20px 40px rgba(168, 237, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .choice-btn.scissors {
+            background: linear-gradient(145deg, #ffecd2 0%, #fcb69f 50%, #fcb69f 100%);
+        }
+
+        .choice-btn.scissors:hover {
+            border-color: rgba(255, 236, 210, 0.5);
+            box-shadow: 
+                0 20px 40px rgba(252, 182, 159, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .choice-emoji {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+            transition: transform 0.3s ease;
+        }
+
+        .choice-btn:hover .choice-emoji {
+            transform: scale(1.2);
+        }
+
+        .game-area {
+            margin: 40px 0;
+            min-height: 200px;
+        }
+
+        .choices-display {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .choices-display.show {
+            opacity: 1;
             transform: translateY(0);
         }
-        .qr-container {
+
+        .player-choice, .computer-choice {
             text-align: center;
-            padding: 15px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
-            margin-top: 15px;
+            flex: 1;
         }
-        #qrcode {
-            display: inline-block;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            max-width: 100%;
+
+        .choice-display {
+            font-size: 4em;
+            margin-bottom: 10px;
+            animation: bounceIn 0.6s ease;
         }
-        .preview-container {
-            margin-top: 10px;
-            text-align: center;
-        }
-        #imagePreview {
-            max-width: 80px;
-            max-height: 80px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .status-text {
-            margin-top: 10px;
-            padding: 8px;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 14px;
-        }
-        .status-enabled {
-            background: rgba(76, 175, 80, 0.1);
-            color: #4CAF50;
-        }
-        .status-disabled {
-            background: rgba(158, 158, 158, 0.1);
+
+        .vs {
+            font-size: 2em;
             color: #666;
+            font-weight: bold;
+            margin: 0 20px;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .qr-container {
-            animation: fadeIn 0.3s ease-out;
-        }
-        .download-button {
-            background: linear-gradient(45deg, #4CAF50, #66BB6A);
-        }
-        .download-button:hover {
-            background: linear-gradient(45deg, #45a049, #5cb85c);
-        }
-        .back-button {
-            background: linear-gradient(45deg, #2196F3, #42A5F5);
-            display: inline-block;
-            text-decoration: none;
-            text-align: center;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 10px;
-            color: white;
+
+        .result {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 30px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.8);
             transition: all 0.3s ease;
         }
-        .back-button:hover {
-            background: linear-gradient(45deg, #1E88E5, #3d8bfd);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+
+        .result.show {
+            opacity: 1;
+            transform: scale(1);
         }
-        
-        /* Responsive adjustments */
+
+        .result.win {
+            color: #28a745;
+            text-shadow: 2px 2px 4px rgba(40, 167, 69, 0.3);
+        }
+
+        .result.lose {
+            color: #dc3545;
+            text-shadow: 2px 2px 4px rgba(220, 53, 69, 0.3);
+        }
+
+        .result.tie {
+            color: #ffc107;
+            text-shadow: 2px 2px 4px rgba(255, 193, 7, 0.3);
+        }
+
+        .reset-btn {
+            background: linear-gradient(145deg, #ff6b6b, #ff5252);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 0.6s ease-in-out;
+        }
+
         @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-                border-radius: 15px;
+            .choice-btn {
+                width: 90px;
+                height: 90px;
+                font-size: 3em;
             }
+            
             h1 {
-                margin-bottom: 15px;
+                font-size: 2em;
             }
-            input[type="text"], input[type="url"] {
-                padding: 10px;
-                font-size: 14px;
+            
+            .choice-display {
+                font-size: 3em;
             }
-            button {
-                padding: 12px;
-                font-size: 15px;
-            }
-            .back-button {
-                padding: 12px;
-                font-size: 15px;
-            }
-            .qr-container {
-                padding: 10px;
-            }
-            #qrcode {
-                padding: 10px;
+
+            .choices {
+                gap: 15px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎨 Trình tạo mã QR</h1>
-        <div class="form-group">
-            <label for="linkInput">🔗 Nhập đường link:</label>
-            <input type="url" id="linkInput" placeholder="https://example.com" required>
+    <div class="game-container">
+        <h1>🎮 Kéo Búa Bao 🎮</h1>
+        
+        <div class="scoreboard">
+            <div class="score">
+                <h3>Bạn</h3>
+                <div class="score-value" id="playerScore">0</div>
+            </div>
+            <div class="score">
+                <h3>Máy</h3>
+                <div class="score-value" id="computerScore">0</div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="imageInput">🖼️ Tải ảnh lên để lấy màu:</label>
-            <input type="file" id="imageInput" accept="image/*">
+
+        <div class="choices">
+            <button class="choice-btn rock" onclick="playGame('rock')">
+                <span class="choice-emoji">✊</span>
+            </button>
+            <button class="choice-btn paper" onclick="playGame('paper')">
+                <span class="choice-emoji">✋</span>
+            </button>
+            <button class="choice-btn scissors" onclick="playGame('scissors')">
+                <span class="choice-emoji">✌️</span>
+            </button>
         </div>
-        <div class="preview-container">
-            <img id="imagePreview" style="display: none;" alt="Preview">
+
+        <div class="game-area">
+            <div class="choices-display" id="choicesDisplay">
+                <div class="player-choice">
+                    <div class="choice-display" id="playerChoice">❓</div>
+                    <div>Bạn chọn</div>
+                </div>
+                <div class="vs">VS</div>
+                <div class="computer-choice">
+                    <div class="choice-display" id="computerChoice">❓</div>
+                    <div>Máy chọn</div>
+                </div>
+            </div>
+            
+            <div class="result" id="result"></div>
         </div>
-        <div class="toggle-container">
-            <label class="toggle">
-                <input type="checkbox" id="colorToggle">
-                <span class="slider"></span>
-            </label>
-            <label for="colorToggle" style="margin-bottom: 0;">Kết hợp hình ảnh với QR</label>
-        </div>
-        <div id="statusText" class="status-text status-disabled">
-            Kết hợp: TẮT (mã QR đen trắng)
-        </div>
-        <button onclick="generateQR()">✨ Tạo mã QR</button>
-        <button class="download-button" onclick="downloadQR()" style="display: none;" id="downloadButton">⬇ Tải mã QR</button>
-        <a href="index.html" class="back-button">↩ Quay lại</a>
-        <div class="qr-container">
-            <div id="qrcode"></div>
-        </div>
+
+        <button class="reset-btn" onclick="resetGame()">🔄 Chơi lại</button>
     </div>
 
     <script>
-        let extractedColors = null;
-        let imageLoaded = false;
-        let currentQR = null;
+        let playerScore = 0;
+        let computerScore = 0;
+        
+        const choices = {
+            rock: { emoji: '✊', name: 'Búa' },
+            paper: { emoji: '✋', name: 'Bao' },
+            scissors: { emoji: '✌️', name: 'Kéo' }
+        };
 
-        // Xử lý tải ảnh và hiển thị preview
-        document.getElementById('imageInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('imagePreview');
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    // Trích xuất màu từ ảnh
-                    extractColorsFromImage(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+        const rules = {
+            rock: 'scissors',
+            paper: 'rock',
+            scissors: 'paper'
+        };
 
-        // Xử lý toggle màu sắc
-        document.getElementById('colorToggle').addEventListener('change', function() {
-            const statusText = document.getElementById('statusText');
-            if (this.checked) {
-                if (imageLoaded && extractedColors) {
-                    statusText.textContent = `Kết hợp: BẬT (QR + hình ảnh)`;
-                    statusText.className = 'status-text status-enabled';
-                } else {
-                    statusText.textContent = 'Vui lòng tải ảnh trước!';
-                    statusText.className = 'status-text status-disabled';
-                    this.checked = false;
-                }
-            } else {
-                statusText.textContent = 'Kết hợp: TẮT (mã QR đen trắng)';
-                statusText.className = 'status-text status-disabled';
-            }
-            
-            // Tạo lại QR nếu đã có dữ liệu
-            const linkInput = document.getElementById('linkInput');
-            if (linkInput.value.trim()) {
-                generateQR();
-            }
-        });
-
-        // Trích xuất màu chủ đạo từ ảnh
-        function extractColorsFromImage(imageSrc) {
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                // Resize ảnh để xử lý nhanh hơn
-                canvas.width = 100;
-                canvas.height = 100;
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const data = imageData.data;
-                
-                // Tính màu trung bình
-                let r = 0, g = 0, b = 0;
-                const totalPixels = data.length / 4;
-                for (let i = 0; i < data.length; i += 4) {
-                    r += data[i];
-                    g += data[i + 1];
-                    b += data[i + 2];
-                }
-                r = Math.round(r / totalPixels);
-                g = Math.round(g / totalPixels);
-                b = Math.round(b / totalPixels);
-
-                // Tạo màu sáng hơn cho nền
-                const lightR = Math.min(255, r + 100);
-                const lightG = Math.min(255, g + 100);
-                const lightB = Math.min(255, b + 100);
-
-                extractedColors = {
-                    primary: `rgb(${r}, ${g}, ${b})`,
-                    light: `rgb(${lightR}, ${lightG}, ${lightB})`,
-                    hex: `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
-                };
-                imageLoaded = true;
-
-                // Cập nhật trạng thái nếu toggle đang bật
-                const colorToggle = document.getElementById('colorToggle');
-                const statusText = document.getElementById('statusText');
-                if (colorToggle.checked) {
-                    statusText.textContent = `Kết hợp: BẬT (QR + hình ảnh)`;
-                    statusText.className = 'status-text status-enabled';
-                }
-                
-                // Tạo lại QR nếu đã có dữ liệu
-                const linkInput = document.getElementById('linkInput');
-                if (linkInput.value.trim()) {
-                    generateQR();
-                }
-            };
-            img.src = imageSrc;
+        function getComputerChoice() {
+            const choiceKeys = Object.keys(choices);
+            return choiceKeys[Math.floor(Math.random() * choiceKeys.length)];
         }
 
-        // Tạo mã QR
-        function generateQR() {
-            const link = document.getElementById('linkInput').value.trim();
-            const colorToggle = document.getElementById('colorToggle').checked;
-            const qrContainer = document.getElementById('qrcode');
-            const downloadButton = document.getElementById('downloadButton');
-
-            if (!link) {
-                alert('Vui lòng nhập đường link!');
-                downloadButton.style.display = 'none';
-                qrContainer.innerHTML = '<p style="color:#666;">Mã QR sẽ xuất hiện ở đây</p>';
-                return;
+        function determineWinner(playerChoice, computerChoice) {
+            if (playerChoice === computerChoice) {
+                return 'tie';
             }
+            if (rules[playerChoice] === computerChoice) {
+                return 'win';
+            }
+            return 'lose';
+        }
 
-            // Xóa QR code cũ
-            qrContainer.innerHTML = '';
+        function updateScore(result) {
+            if (result === 'win') {
+                playerScore++;
+                document.getElementById('playerScore').classList.add('pulse');
+            } else if (result === 'lose') {
+                computerScore++;
+                document.getElementById('computerScore').classList.add('pulse');
+            }
+            
+            document.getElementById('playerScore').textContent = playerScore;
+            document.getElementById('computerScore').textContent = computerScore;
+            
+            setTimeout(() => {
+                document.getElementById('playerScore').classList.remove('pulse');
+                document.getElementById('computerScore').classList.remove('pulse');
+            }, 600);
+        }
 
-            try {
-                if (colorToggle && imageLoaded) {
-                    // Tạo QR với hình ảnh
-                    createQRWithImage(link, qrContainer);
-                } else {
-                    // Tạo QR thông thường
-                    createNormalQR(link, qrContainer);
-                }
+        function displayResult(result, playerChoice, computerChoice) {
+            const resultElement = document.getElementById('result');
+            let message = '';
+            
+            switch(result) {
+                case 'win':
+                    message = `🎉 Bạn thắng! ${choices[playerChoice].name} thắng ${choices[computerChoice].name}`;
+                    resultElement.className = 'result show win';
+                    break;
+                case 'lose':
+                    message = `😢 Bạn thua! ${choices[computerChoice].name} thắng ${choices[playerChoice].name}`;
+                    resultElement.className = 'result show lose';
+                    break;
+                case 'tie':
+                    message = '🤝 Hòa! Cả hai cùng chọn ' + choices[playerChoice].name;
+                    resultElement.className = 'result show tie';
+                    break;
+            }
+            
+            resultElement.textContent = message;
+        }
 
-                // Hiển thị nút tải xuống
-                downloadButton.style.display = 'block';
+        function playGame(playerChoice) {
+            const computerChoice = getComputerChoice();
+            const result = determineWinner(playerChoice, computerChoice);
+            
+            // Update display
+            document.getElementById('playerChoice').textContent = choices[playerChoice].emoji;
+            document.getElementById('computerChoice').textContent = choices[computerChoice].emoji;
+            
+            // Show choices with animation
+            const choicesDisplay = document.getElementById('choicesDisplay');
+            choicesDisplay.classList.add('show');
+            
+            // Update score and show result
+            setTimeout(() => {
+                updateScore(result);
+                displayResult(result, playerChoice, computerChoice);
+            }, 300);
+        }
 
-                // Thêm hiệu ứng
-                qrContainer.style.opacity = '0';
+        function resetGame() {
+            playerScore = 0;
+            computerScore = 0;
+            document.getElementById('playerScore').textContent = '0';
+            document.getElementById('computerScore').textContent = '0';
+            document.getElementById('playerChoice').textContent = '❓';
+            document.getElementById('computerChoice').textContent = '❓';
+            document.getElementById('result').textContent = '';
+            document.getElementById('result').className = 'result';
+            document.getElementById('choicesDisplay').classList.remove('show');
+        }
+
+        // Add some initial animations
+        window.addEventListener('load', () => {
+            const buttons = document.querySelectorAll('.choice-btn');
+            buttons.forEach((btn, index) => {
                 setTimeout(() => {
-                    qrContainer.style.transition = 'opacity 0.3s ease-in';
-                    qrContainer.style.opacity = '1';
-                }, 50);
-            } catch (error) {
-                console.error('Lỗi tạo QR code:', error);
-                alert('Có lỗi xảy ra khi tạo mã QR!');
-                downloadButton.style.display = 'none';
-                qrContainer.innerHTML = '<p style="color:#f44336;">Lỗi khi tạo mã QR</p>';
-            }
-        }
-
-        // Tạo QR code thông thường
-        function createNormalQR(link, container) {
-            const canvas = document.createElement('canvas');
-            canvas.id = 'qrCanvas';
-            container.appendChild(canvas);
-            
-            // Kích thước responsive
-            const size = Math.min(300, window.innerWidth - 100);
-            
-            currentQR = new QRious({
-                element: canvas,
-                value: link,
-                size: size,
-                level: 'H',
-                foreground: '#000000',
-                background: '#FFFFFF'
+                    btn.style.animation = 'bounceIn 0.6s ease';
+                }, index * 100);
             });
-        }
-
-        // Tạo QR code với hình ảnh overlay
-        function createQRWithImage(link, container) {
-            const size = Math.min(300, window.innerWidth - 100);
-            const canvas = document.createElement('canvas');
-            canvas.id = 'qrCanvas';
-            canvas.width = size;
-            canvas.height = size;
-            container.appendChild(canvas);
-
-            // Tạo QR code tạm thời để lấy pattern
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = size;
-            tempCanvas.height = size;
-            currentQR = new QRious({
-                element: tempCanvas,
-                value: link,
-                size: size,
-                level: 'H',
-                foreground: '#000000',
-                background: '#FFFFFF'
-            });
-
-            // Lấy hình ảnh đã upload
-            const imagePreview = document.getElementById('imagePreview');
-            if (imagePreview && imagePreview.src) {
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = function() {
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Vẽ hình ảnh làm nền, scale để fit canvas
-                    ctx.drawImage(img, 0, 0, size, size);
-
-                    // Lấy QR pattern
-                    const qrImageData = tempCanvas.getContext('2d').getImageData(0, 0, size, size);
-                    const backgroundImageData = ctx.getImageData(0, 0, size, size);
-
-                    // Blend QR pattern với hình ảnh
-                    const qrData = qrImageData.data;
-                    const bgData = backgroundImageData.data;
-
-                    for (let i = 0; i < qrData.length; i += 4) {
-                        // Nếu pixel QR là đen (foreground pattern)
-                        if (qrData[i] < 128 && qrData[i + 1] < 128 && qrData[i + 2] < 128) {
-                            // Làm tối hình nền ở vị trí này
-                            bgData[i] = Math.max(0, bgData[i] * 0.3);
-                            bgData[i + 1] = Math.max(0, bgData[i + 1] * 0.3);
-                            bgData[i + 2] = Math.max(0, bgData[i + 2] * 0.3);
-                        } else {
-                            // Pixel trắng của QR - làm sáng hình nền
-                            bgData[i] = Math.min(255, bgData[i] * 1.2);
-                            bgData[i + 1] = Math.min(255, bgData[i + 1] * 1.2);
-                            bgData[i + 2] = Math.min(255, bgData[i + 2] * 1.2);
-                        }
-                        bgData[i + 3] = 255; // Alpha channel
-                    }
-
-                    // Vẽ kết quả cuối cùng
-                    ctx.putImageData(backgroundImageData, 0, 0);
-
-                    // Tăng độ tương phản bằng cách chồng thêm QR mờ
-                    ctx.globalCompositeOperation = 'multiply';
-                    ctx.globalAlpha = 0.7;
-                    ctx.drawImage(tempCanvas, 0, 0);
-
-                    // Reset về mặc định
-                    ctx.globalCompositeOperation = 'source-over';
-                    ctx.globalAlpha = 1.0;
-
-                    // Thêm viền ngoài để dễ quét hơn
-                    ctx.strokeStyle = '#333333';
-                    ctx.lineWidth = 3;
-                    ctx.strokeRect(2, 2, size - 4, size - 4);
-                };
-                img.src = imagePreview.src;
-            } else {
-                // Nếu không có ảnh, vẽ QR thông thường
-                container.appendChild(tempCanvas);
-            }
-        }
-
-        // Hàm tải QR code
-        function downloadQR() {
-            const canvas = document.getElementById('qrCanvas');
-            if (!canvas) {
-                alert('Chưa có mã QR để tải!');
-                return;
-            }
-
-            try {
-                // Tạo link tải
-                const link = document.createElement('a');
-                link.download = 'qrcode_' + new Date().getTime() + '.png';
-                link.href = canvas.toDataURL('image/png');
-                document.body.appendChild(link);
-                link.click();
-                setTimeout(() => {
-                    document.body.removeChild(link);
-                }, 100);
-            } catch (error) {
-                console.error('Lỗi khi tải QR code:', error);
-                alert('Có lỗi xảy ra khi tải mã QR!');
-            }
-        }
-
-        // Tự động tạo QR khi nhập link (với debounce)
-        let inputTimer;
-        document.getElementById('linkInput').addEventListener('input', function() {
-            clearTimeout(inputTimer);
-            inputTimer = setTimeout(() => {
-                if (this.value.trim()) {
-                    generateQR();
-                }
-            }, 500);
-        });
-
-        // Tạo QR mặc định khi trang load
-        window.addEventListener('load', function() {
-            document.getElementById('linkInput').value = '';
-            generateQR();
-        });
-
-        // Xử lý responsive khi thay đổi kích thước màn hình
-        window.addEventListener('resize', function() {
-            const linkInput = document.getElementById('linkInput');
-            if (linkInput.value.trim()) {
-                generateQR();
-            }
         });
     </script>
 </body>
