@@ -53,7 +53,6 @@
             background: #4f46e5;
             color: white;
             border: none;
-            width: 32px;
             height: 32px;
             border-radius: 8px;
             cursor: pointer;
@@ -62,6 +61,21 @@
             align-items: center;
             justify-content: center;
             transition: background 0.3s ease, transform 0.3s ease;
+            padding: 0 12px;
+            gap: 8px;
+        }
+
+        .info-icon {
+            width: 32px;
+        }
+
+        .back-icon {
+            width: auto;
+        }
+
+        .back-text {
+            font-size: 0.875rem;
+            display: none;
         }
 
         .info-icon:hover, .back-icon:hover {
@@ -294,6 +308,12 @@
             50% { transform: translateY(-8px); }
         }
 
+        @media (min-width: 480px) {
+            .back-text {
+                display: inline;
+            }
+        }
+
         @media (max-width: 600px) {
             .game-container {
                 padding: 16px;
@@ -327,8 +347,14 @@
 <body>
     <div class="game-container">
         <div class="header-container">
-            <button class="back-icon" onclick="goBack()" title="Quay lại">←</button>
-            <h1>🎯 Đoán Số</h1>
+            <button class="back-icon" onclick="goBack()" title="Quay lại">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span class="back-text">Quay lại</span>
+            </button>
+            <h1>Đoán Số</h1>
             <button class="info-icon" onclick="showInstructions()" title="Hướng dẫn">i</button>
         </div>
         <p class="subtitle">Tôi đang nghĩ về một số từ 1 đến 100</p>
