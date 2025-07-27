@@ -12,83 +12,78 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #333;
+            overflow-x: hidden;
         }
 
         .game-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 500px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 480px;
             width: 90%;
-            transition: transform 0.3s ease;
-            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .game-container:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
 
         .header-container {
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1e3a8a;
         }
 
-        .info-icon {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+        .info-icon, .back-icon {
+            background: #4f46e5;
             color: white;
             border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.2em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+            font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background 0.3s ease, transform 0.3s ease;
         }
 
-        .info-icon:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        .info-icon:hover, .back-icon:hover {
+            background: #3b82f6;
+            transform: scale(1.05);
         }
 
         .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+            color: #6b7280;
+            font-size: 1rem;
+            margin-bottom: 24px;
+            text-align: center;
         }
 
         .game-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
         }
 
         .info-item {
@@ -96,138 +91,110 @@
         }
 
         .info-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 5px;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 4px;
         }
 
         .info-value {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
         }
 
         .input-section {
-            margin-bottom: 30px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: center;
         }
 
         #guessInput {
-            font-size: 1.5em;
-            padding: 15px 20px;
-            border: 3px solid #ddd;
-            border-radius: 50px;
-            width: 200px;
+            font-size: 1.25rem;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            width: 160px;
             text-align: center;
-            transition: all 0.3s ease;
-            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         #guessInput:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            outline: none;
         }
 
         .buttons {
-            margin-bottom: 30px;
-        }
-
-        .nav-buttons {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-        }
-
-        .back-btn {
-            background: linear-gradient(45deg, #6c757d, #495057);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1em;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
-            background: linear-gradient(45deg, #495057, #343a40);
-        }
-
-        .back-btn:active {
-            transform: translateY(0);
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 24px;
         }
 
         button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 500;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            border-radius: 50px;
+            border-radius: 12px;
             cursor: pointer;
-            margin: 0 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transition: background 0.3s ease, transform 0.3s ease;
         }
 
-        button:hover {
+        #submitBtn {
+            background: #4f46e5;
+            color: white;
+        }
+
+        #submitBtn:hover {
+            background: #4338ca;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
         }
 
         #newGameBtn {
-            background: linear-gradient(45deg, #28a745, #20c997);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+            background: #10b981;
+            color: white;
         }
 
         #newGameBtn:hover {
-            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+            background: #059669;
+            transform: translateY(-2px);
         }
 
         .feedback {
-            font-size: 1.3em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            min-height: 30px;
-            transition: all 0.3s ease;
+            font-size: 1.125rem;
+            font-weight: 500;
+            text-align: center;
+            min-height: 32px;
+            margin-bottom: 24px;
         }
 
         .feedback.too-high {
-            color: #dc3545;
-            animation: shake 0.5s ease-in-out;
+            color: #ef4444;
+            animation: shake 0.4s ease-in-out;
         }
 
         .feedback.too-low {
-            color: #fd7e14;
-            animation: shake 0.5s ease-in-out;
+            color: #f59e0b;
+            animation: shake 0.4s ease-in-out;
         }
 
         .feedback.correct {
-            color: #28a745;
-            animation: bounce 0.6s ease-in-out;
+            color: #10b981;
+            animation: bounce 0.5s ease-in-out;
         }
 
         .previous-guesses {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 12px;
+            display: none;
         }
 
         .previous-guesses h3 {
-            margin-bottom: 10px;
-            color: #495057;
+            font-size: 1rem;
+            color: #374151;
+            margin-bottom: 12px;
         }
 
         .guess-list {
@@ -238,62 +205,54 @@
         }
 
         .guess-item {
-            background: #e9ecef;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            color: #495057;
+            background: #e5e7eb;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: #374151;
         }
 
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
         }
 
         .modal-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 20px;
+            background: white;
+            margin: 10% auto;
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 480px;
             width: 90%;
-            max-width: 500px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             position: relative;
-            animation: modalSlideIn 0.3s ease-out;
         }
 
         .close {
-            color: white;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
             position: absolute;
-            top: 15px;
-            right: 20px;
-            transition: all 0.3s ease;
+            top: 16px;
+            right: 16px;
+            font-size: 1.5rem;
+            color: #374151;
+            cursor: pointer;
+            transition: color 0.3s ease;
         }
 
         .close:hover {
-            transform: scale(1.2);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            color: #1f2937;
         }
 
         .modal h2 {
+            font-size: 1.5rem;
+            color: #1f2937;
             margin-bottom: 20px;
-            font-size: 2em;
             text-align: center;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .instruction-list {
@@ -302,107 +261,73 @@
         }
 
         .instruction-list li {
-            background: rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 0.875rem;
+            color: #374151;
         }
 
         .instruction-list li strong {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 1.1em;
+            color: #1f2937;
+            font-weight: 600;
         }
 
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .game-over {
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 24px;
+            text-align: center;
         }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .game-over {
-            background: linear-gradient(45deg, #28a745, #20c997);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
+            50% { transform: translateY(-8px); }
         }
 
         @media (max-width: 600px) {
             .game-container {
-                padding: 20px;
+                padding: 16px;
             }
-            
+
             h1 {
-                font-size: 2em;
+                font-size: 1.75rem;
             }
 
-            .header-container {
-                gap: 10px;
-            }
-
-            .info-icon {
-                width: 30px;
-                height: 30px;
-                font-size: 1em;
-            }
-            
             .game-info {
-                flex-direction: column;
-                gap: 10px;
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
-            
+
             #guessInput {
                 width: 100%;
-                max-width: 250px;
+                max-width: 200px;
             }
 
-            .nav-buttons {
-                position: relative;
-                top: auto;
-                left: auto;
-                margin-bottom: 20px;
-                text-align: center;
+            .buttons {
+                flex-direction: column;
+                gap: 12px;
             }
 
-            .modal-content {
-                margin: 10% auto;
-                padding: 20px;
-            }
-
-            .modal h2 {
-                font-size: 1.5em;
+            button {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="nav-buttons">
-        <a href="#" class="back-btn" onclick="goBack()">
-            ← Quay lại
-        </a>
-    </div>
-
     <div class="game-container">
         <div class="header-container">
+            <button class="back-icon" onclick="goBack()" title="Quay lại">←</button>
             <h1>🎯 Đoán Số</h1>
             <button class="info-icon" onclick="showInstructions()" title="Hướng dẫn">i</button>
         </div>
@@ -434,41 +359,34 @@
 
         <div class="feedback" id="feedback">Hãy đoán số đầu tiên!</div>
 
-        <div class="previous-guesses" id="previousGuesses" style="display: none;">
+        <div class="previous-guesses" id="previousGuesses">
             <h3>Các lần đoán trước:</h3>
             <div class="guess-list" id="guessList"></div>
         </div>
     </div>
 
-    <!-- Instructions Modal -->
     <div id="instructionsModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeInstructions()">&times;</span>
             <h2>🎮 Hướng dẫn chơi</h2>
             <ul class="instruction-list">
                 <li>
-                    <strong>🎯 Mục tiêu:</strong>
-                    Đoán đúng số bí mật từ 1 đến 100 với ít lần thử nhất có thể.
+                    <strong>🎯 Mục tiêu:</strong> Đoán đúng số bí mật từ 1 đến 100 với ít lần thử nhất có thể.
                 </li>
                 <li>
-                    <strong>📝 Cách chơi:</strong>
-                    Nhập một số vào ô và nhấn "Gửi đáp án" hoặc phím Enter.
+                    <strong>📝 Cách chơi:</strong> Nhập một số vào ô và nhấn "Gửi đáp án" hoặc phím Enter.
                 </li>
                 <li>
-                    <strong>💡 Gợi ý:</strong>
-                    Game sẽ cho biết số bạn đoán là "Quá cao" hay "Quá thấp".
+                    <strong>💡 Gợi ý:</strong> Game sẽ cho biết số bạn đoán là "Quá cao" hay "Quá thấp".
                 </li>
                 <li>
-                    <strong>🏆 Chiến thắng:</strong>
-                    Khi đoán đúng, điểm số sẽ được tính theo số lần thử. Ít lần thử = điểm cao hơn!
+                    <strong>🏆 Chiến thắng:</strong> Khi đoán đúng, điểm số sẽ được tính theo số lần thử. Ít lần thử = điểm cao hơn!
                 </li>
                 <li>
-                    <strong>📊 Theo dõi:</strong>
-                    Xem các lần đoán trước và điểm cao nhất của bạn.
+                    <strong>📊 Theo dõi:</strong> Xem các lần đoán trước và điểm cao nhất của bạn.
                 </li>
                 <li>
-                    <strong>🔄 Chơi lại:</strong>
-                    Nhấn "Chơi lại" để bắt đầu một trò chơi mới với số bí mật khác.
+                    <strong>🔄 Chơi lại:</strong> Nhấn "Chơi lại" để bắt đầu một trò chơi mới với số bí mật khác.
                 </li>
             </ul>
         </div>
@@ -535,11 +453,9 @@
                 document.getElementById('guessInput').disabled = true;
                 document.getElementById('submitBtn').disabled = true;
                 
-                // Update best score
                 if (bestScore === null || attempts < bestScore) {
                     bestScore = attempts;
                     document.getElementById('bestScore').textContent = bestScore;
-                    // Store best score in memory
                     if (!window.gameData) window.gameData = {};
                     window.gameData.bestScore = bestScore;
                 }
@@ -582,7 +498,6 @@
         }
 
         function newGame() {
-            // Remove game over message if it exists
             const gameOverDiv = document.querySelector('.game-over');
             if (gameOverDiv) {
                 gameOverDiv.remove();
@@ -598,7 +513,10 @@
             document.getElementById('instructionsModal').style.display = 'none';
         }
 
-        // Close modal when clicking outside of it
+        function goBack() {
+            window.location.href = 'game.html';
+        }
+
         window.onclick = function(event) {
             const modal = document.getElementById('instructionsModal');
             if (event.target === modal) {
@@ -606,36 +524,12 @@
             }
         }
 
-        // Allow Enter key to submit guess
         document.getElementById('guessInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 checkGuess();
             }
         });
 
-        // Back button functionality
-        function goBack() {
-            // Try to go back in browser history first
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                // If no history, try to go to a common index page
-                const possibleIndexPages = [
-                    'index.html',
-                    '../index.html',
-                    '../../index.html',
-                    'home.html',
-                    '../home.html',
-                    'main.html',
-                    '../main.html'
-                ];
-                
-                // Try each possible index page
-                window.location.href = possibleIndexPages[0];
-            }
-        }
-
-        // Initialize the game when page loads
         initGame();
     </script>
 </body>
