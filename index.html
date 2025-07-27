@@ -163,6 +163,12 @@
             box-shadow: 0 4px 15px rgba(150,206,180,0.4);
         }
 
+        .btn-back {
+            background: linear-gradient(45deg, #6c757d, #5a6268);
+            color: white;
+            box-shadow: 0 4px 15px rgba(108,117,125,0.4);
+        }
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.2);
@@ -176,50 +182,53 @@
 
         .message {
             margin: 20px 0;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-size: 1.2rem;
             font-weight: bold;
-            min-height: 50px;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(45deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: #ffffff;
+            animation: fadeIn 0.5s ease-in-out;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .message:hover {
+            transform: translateY(-5px);
+            opacity: 0.95;
         }
 
         .message.success {
-            background: rgba(76, 175, 80, 0.3);
-            color: #c8e6c9;
+            background: linear-gradient(45deg, rgba(76,175,80,0.4), rgba(56,142,60,0.2));
+            color: #e8f5e9;
+            border: 2px solid rgba(76,175,80,0.6);
+            box-shadow: 0 6px 20px rgba(76,175,80,0.3);
         }
 
         .message.error {
-            background: rgba(244, 67, 54, 0.3);
-            color: #ffcdd2;
+            background: linear-gradient(45deg, rgba(244,67,54,0.4), rgba(211,47,47,0.2));
+            color: #ffebee;
+            border: 2px solid rgba(244,67,54,0.6);
+            box-shadow: 0 6px 20px rgba(244,67,54,0.3);
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .difficulty-selector {
-            margin: 20px 0;
-        }
-
-        .difficulty-btn {
-            margin: 0 5px;
-            padding: 8px 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .difficulty-btn.active {
-            background: rgba(255,255,255,0.3);
-            border-color: white;
+            display: none;
         }
 
         .game-over {
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             position: fixed;
             top: 0;
             left: 0;
@@ -229,14 +238,53 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            animation: fadeInOverlay 0.5s ease-in-out;
         }
 
         .game-over-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 40px;
+            background: linear-gradient(135deg, #8e2de2, #4a00e0);
+            padding: 50px 30px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.4);
+            max-width: 90%;
+            width: 400px;
+            animation: popIn 0.5s ease-in-out;
+        }
+
+        .game-over-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-over-content p {
+            font-size: 1.4rem;
+            color: #e0e0e0;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .game-over-content .btn {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+        }
+
+        @keyframes fadeInOverlay {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         @media (max-width: 600px) {
@@ -253,6 +301,30 @@
             
             h1 {
                 font-size: 2rem;
+            }
+
+            .message {
+                font-size: 1rem;
+                padding: 15px 20px;
+                min-height: 50px;
+            }
+
+            .game-over-content {
+                padding: 30px 20px;
+                width: 90%;
+            }
+
+            .game-over-content h2 {
+                font-size: 2rem;
+            }
+
+            .game-over-content p {
+                font-size: 1.2rem;
+            }
+
+            .game-over-content .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -281,12 +353,6 @@
             </div>
         </div>
 
-        <div class="difficulty-selector">
-            <button class="difficulty-btn active" data-difficulty="easy">Dễ (3x3)</button>
-            <button class="difficulty-btn" data-difficulty="medium">Trung bình (4x4)</button>
-            <button class="difficulty-btn" data-difficulty="hard">Khó (5x5)</button>
-        </div>
-
         <div class="game-board" id="gameBoard"></div>
 
         <div class="message" id="message">Nhấn "Bắt đầu" để chơi!</div>
@@ -295,6 +361,7 @@
             <button class="btn btn-primary" id="startBtn">Bắt đầu</button>
             <button class="btn btn-secondary" id="showPatternBtn" disabled>Xem lại mẫu</button>
             <button class="btn btn-success" id="resetBtn">Chơi lại</button>
+            <button class="btn btn-back" id="backBtn">Quay lại</button>
         </div>
     </div>
 
@@ -303,6 +370,7 @@
             <h2>Game Over!</h2>
             <p id="finalScore"></p>
             <button class="btn btn-primary" onclick="resetGame()">Chơi lại</button>
+            <button class="btn btn-back" onclick="window.location.href='game.html'">Quay lại</button>
         </div>
     </div>
 
@@ -317,8 +385,8 @@
                 this.playerPattern = [];
                 this.showingPattern = false;
                 this.gameActive = false;
-                this.difficulty = 'easy';
-                this.gridSize = 3;
+                this.difficulty = 'standard';
+                this.gridSize = 4;
                 
                 this.colors = [
                     '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4',
@@ -342,6 +410,7 @@
                 this.startBtn = document.getElementById('startBtn');
                 this.showPatternBtn = document.getElementById('showPatternBtn');
                 this.resetBtn = document.getElementById('resetBtn');
+                this.backBtn = document.getElementById('backBtn');
                 this.gameOverEl = document.getElementById('gameOver');
                 this.finalScoreEl = document.getElementById('finalScore');
             }
@@ -350,21 +419,7 @@
                 this.startBtn.addEventListener('click', () => this.startGame());
                 this.showPatternBtn.addEventListener('click', () => this.showPattern());
                 this.resetBtn.addEventListener('click', () => this.resetGame());
-
-                document.querySelectorAll('.difficulty-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => this.changeDifficulty(e.target.dataset.difficulty));
-                });
-            }
-
-            changeDifficulty(difficulty) {
-                if (this.gameActive) return;
-                
-                document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelector(`[data-difficulty="${difficulty}"]`).classList.add('active');
-                
-                this.difficulty = difficulty;
-                this.gridSize = difficulty === 'easy' ? 3 : difficulty === 'medium' ? 4 : 5;
-                this.createBoard();
+                this.backBtn.addEventListener('click', () => window.location.href = 'game.html');
             }
 
             createBoard() {
@@ -382,11 +437,36 @@
             }
 
             generatePattern() {
-                const patternLength = Math.min(3 + this.level, this.gridSize * this.gridSize);
+                // Tăng độ khó dần theo level
+                const baseLength = 3;
+                const maxLength = this.gridSize * this.gridSize; // 16 ô tối đa
+                const patternLength = Math.min(baseLength + Math.floor(this.level / 2), maxLength);
+                
                 this.currentPattern = [];
+                const usedIndices = new Set();
                 
                 for (let i = 0; i < patternLength; i++) {
-                    const randomIndex = Math.floor(Math.random() * (this.gridSize * this.gridSize));
+                    let randomIndex;
+                    let attempts = 0;
+                    
+                    // Ở level cao, tăng khả năng trùng vị trí để khó hơn
+                    const allowDuplicate = this.level > 5 && Math.random() < 0.3;
+                    
+                    if (!allowDuplicate) {
+                        // Tránh trùng vị trí ở level thấp
+                        do {
+                            randomIndex = Math.floor(Math.random() * (this.gridSize * this.gridSize));
+                            attempts++;
+                        } while (usedIndices.has(randomIndex) && attempts < 20);
+                        
+                        if (attempts < 20) {
+                            usedIndices.add(randomIndex);
+                        }
+                    } else {
+                        // Cho phép trùng vị trí ở level cao
+                        randomIndex = Math.floor(Math.random() * (this.gridSize * this.gridSize));
+                    }
+                    
                     const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
                     this.currentPattern.push({ index: randomIndex, color: randomColor });
                 }
@@ -395,7 +475,7 @@
             async showPattern() {
                 this.showingPattern = true;
                 this.showPatternBtn.disabled = true;
-                this.messageEl.textContent = 'Ghi nhớ mẫu màu...';
+                this.messageEl.textContent = `Level ${this.level} - Ghi nhớ mẫu màu...`;
                 this.messageEl.className = 'message';
 
                 // Clear board
@@ -405,29 +485,41 @@
                     tile.textContent = '';
                 });
 
+                // Thời gian hiển thị giảm dần theo level (khó hơn)
+                const baseShowTime = 1000;
+                const baseDelayTime = 300;
+                const showTime = Math.max(400, baseShowTime - (this.level * 50));
+                const delayTime = Math.max(100, baseDelayTime - (this.level * 20));
+
                 // Show pattern
                 for (let i = 0; i < this.currentPattern.length; i++) {
                     const { index, color } = this.currentPattern[i];
                     const tile = tiles[index];
                     
+                    // Nếu có nhiều màu cùng vị trí, hiển thị số lần
+                    const samePositionCount = this.currentPattern.slice(0, i + 1)
+                        .filter(p => p.index === index).length;
+                    
                     tile.style.backgroundColor = color;
-                    tile.textContent = i + 1;
+                    tile.textContent = samePositionCount > 1 ? `${i + 1}(${samePositionCount})` : i + 1;
                     tile.classList.add('active');
                     
-                    await this.sleep(800);
+                    await this.sleep(showTime);
                     tile.classList.remove('active');
-                    await this.sleep(200);
+                    await this.sleep(delayTime);
                 }
 
-                // Hide pattern
-                await this.sleep(1000);
+                // Hide pattern sau thời gian ngắn hơn ở level cao
+                const hideDelay = Math.max(500, 1500 - (this.level * 100));
+                await this.sleep(hideDelay);
+                
                 tiles.forEach(tile => {
                     tile.style.backgroundColor = '#333';
                     tile.textContent = '';
                 });
 
                 this.showingPattern = false;
-                this.messageEl.textContent = 'Nhấn theo đúng thứ tự màu sắc!';
+                this.messageEl.textContent = `Level ${this.level} - Nhấn theo đúng thứ tự màu sắc!`;
                 this.playerPattern = [];
             }
 
@@ -460,16 +552,25 @@
             }
 
             levelComplete() {
-                this.score += this.level * 100;
+                // Điểm số tăng theo level và độ khó của pattern
+                const baseScore = 100;
+                const levelBonus = this.level * 50;
+                const patternBonus = this.currentPattern.length * 25;
+                const totalScore = baseScore + levelBonus + patternBonus;
+                
+                this.score += totalScore;
                 this.level++;
-                this.messageEl.textContent = `Xuất sắc! Chuyển sang level ${this.level}`;
+                
+                this.messageEl.textContent = `Xuất sắc! +${totalScore} điểm - Chuyển sang level ${this.level}`;
                 this.messageEl.className = 'message success';
                 
                 this.updateDisplay();
                 
+                // Thời gian nghỉ giữa các level ngắn hơn ở level cao
+                const restTime = Math.max(1000, 2500 - (this.level * 100));
                 setTimeout(() => {
                     this.startRound();
-                }, 2000);
+                }, restTime);
             }
 
             loseLife() {
@@ -479,7 +580,7 @@
                 if (this.lives <= 0) {
                     this.gameOver();
                 } else {
-                    this.messageEl.textContent = `Sai rồi! Còn ${this.lives} mạng`;
+                    this.messageEl.textContent = `Sai rồi! Còn ${this.lives} mạng - Level ${this.level}`;
                     this.messageEl.className = 'message error';
                     this.showPatternBtn.disabled = false;
                 }
