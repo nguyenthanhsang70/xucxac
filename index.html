@@ -3,629 +3,504 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stopwatch Challenge</title>
+    <title>Giải Mã Gỡ Bom</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        * {
+        body {
             margin: 0;
-            padding: 0;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1e1e1e, #2d2d2d);
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
             box-sizing: border-box;
         }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            overflow: hidden;
-        }
-
-        .game-container {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 24px;
-            padding: 32px;
+        .bomb-container {
+            background: #000;
+            border: 3px solid #ff0000;
+            border-radius: 20px;
+            padding: 15px;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 100%;
-            max-width: 480px;
-            position: relative;
-            transition: transform 0.3s ease;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+            animation: pulse 1s infinite;
+            max-width: 500px;
+            width: 95%;
+            min-height: auto;
+            box-sizing: border-box;
         }
-
-        .game-container:hover {
-            transform: translateY(-5px);
+        @keyframes pulse {
+            0% { box-shadow: 0 0 50px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 0 80px rgba(255, 0, 0, 0.8); }
+            100% { box-shadow: 0 0 50px rgba(255, 0, 0, 0.5); }
         }
-
-        .top-icons {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            right: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .timer {
+            font-size: clamp(2.5em, 8vw, 4em);
+            color: #ff0000;
+            margin: 15px 0;
+            text-shadow: 0 0 20px #ff0000;
+            font-weight: bold;
         }
-
-        .back-icon, .info-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 20px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none;
+        .timer.critical {
+            animation: blink 0.5s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        .puzzle {
+            background: #1a1a1a;
+            border: 2px solid #00ff00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        .puzzle-title {
+            color: #ffff00;
+            font-size: clamp(1em, 4vw, 1.2em);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .puzzle-text {
+            font-size: clamp(0.9em, 3.5vw, 1.1em);
+            line-height: 1.4;
+            margin-bottom: 15px;
+            word-wrap: break-word;
+        }
+        .code-input {
+            background: #000;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: clamp(1.5em, 6vw, 2em);
+            padding: 10px;
+            text-align: center;
+            width: min(200px, 80%);
+            margin: 10px auto;
+            border-radius: 5px;
+            box-sizing: border-box;
+            display: block;
+        }
+        .code-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px #00ff00;
+        }
+        .btn {
+            background: #ff0000;
             color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: clamp(1em, 4vw, 1.2em);
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 8px 5px;
+            transition: all 0.3s;
+            touch-action: manipulation;
+            min-width: 100px;
         }
-
-        .back-icon:hover {
-            background: #ff4757;
-            transform: rotate(-10deg);
+        .btn:hover {
+            background: #cc0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
         }
-
-        .info-icon:hover {
-            background: #ffa502;
-            transform: rotate(10deg);
+        .btn.start {
+            background: #00ff00;
+            color: #000;
         }
-
-        .modal-overlay {
+        .btn.start:hover {
+            background: #00cc00;
+        }
+        .status {
+            font-size: clamp(1.2em, 4vw, 1.5em);
+            margin: 15px 0;
+            font-weight: bold;
+            word-wrap: break-word;
+        }
+        .success {
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00;
+        }
+        .failure {
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+        }
+        .hidden {
+            display: none;
+        }
+        .wires {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .wire {
+            width: max(3px, 1vw);
+            height: clamp(60px, 15vw, 100px);
+            margin: 5px;
+            border-radius: 3px;
+            animation: spark 2s infinite;
+            flex-shrink: 0;
+        }
+        .wire.red { background: #ff0000; }
+        .wire.blue { background: #0066ff; }
+        .wire.green { background: #00ff00; }
+        .wire.yellow { background: #ffff00; }
+        @keyframes spark {
+            0%, 90% { opacity: 1; }
+            95% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .explosion {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            display: none;
-            justify-content: center;
-            align-items: center;
+            background: radial-gradient(circle, #ff4500, #ff0000, #000);
             z-index: 1000;
+            animation: explode 2s ease-out;
         }
-
-        .modal-content {
-            background: white;
-            color: #1a1a1a;
-            padding: 20px;
-            border-radius: 16px;
-            max-width: 400px;
-            width: 90%;
-            max-height: 70vh;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
-            animation: modalPop 0.4s ease-out;
+        .title-container {
             display: flex;
-            flex-direction: column;
-        }
-
-        @keyframes modalPop {
-            from {
-                opacity: 0;
-                transform: scale(0.85) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1e3c72;
-        }
-
-        .close-btn {
-            background: rgba(0, 0, 0, 0.05);
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #666;
-            padding: 6px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .close-btn:hover {
-            background: #ff4757;
-            color: white;
-        }
-
-        .instructions {
-            text-align: left;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            overflow-y: auto;
-            max-height: 50vh;
-            padding-right: 8px;
-            scrollbar-width: thin;
-            scrollbar-color: #1e3c72 rgba(0, 0, 0, 0.1);
-        }
-
-        .instructions::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .instructions::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        .instructions::-webkit-scrollbar-thumb {
-            background: #1e3c72;
-            border-radius: 8px;
-        }
-
-        .instruction-item {
-            margin-bottom: 12px;
-            padding: 10px;
-            background: rgba(30, 60, 114, 0.05);
-            border-radius: 8px;
-            border-left: 3px solid #1e3c72;
-        }
-
-        .instruction-title {
-            font-weight: 600;
-            color: #1e3c72;
-            margin-bottom: 6px;
-            font-size: 1rem;
-        }
-
-        .keyboard-shortcuts {
-            background: rgba(255, 165, 2, 0.1);
-            border-left-color: #ffa502;
-        }
-
-        .title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 24px;
-            background: linear-gradient(45deg, #ffd32a, #ff7f50);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .level-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.1rem;
-            margin-bottom: 24px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            font-weight: 500;
-        }
-
-        .timer-display {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin: 24px 0;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .countdown {
-            color: #ff4757;
-            animation: pulse 0.8s infinite;
-        }
-
-        .running {
-            color: #2ed573;
-        }
-
-        .stopped {
-            color: #ffa502;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-
-        .control-btn {
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            margin: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .control-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .control-btn:disabled {
-            background: #4b6584;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .start-btn {
-            background: linear-gradient(45deg, #2ed573, #1e90ff);
-        }
-
-        .stop-btn {
-            background: linear-gradient(45deg, #ff7f50, #ff4757);
-        }
-
-        .reset-btn {
-            background: linear-gradient(45deg, #a4b0be, #747d8c);
-        }
-
-        .result {
-            margin: 24px 0;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            min-height: 60px;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: 500;
+            margin: 10px 0;
         }
-
-        .result.perfect {
-            background: linear-gradient(45deg, #2ed573, #1e90ff);
-            color: white;
-            animation: celebration 0.6s ease-in-out;
+        h1 {
+            font-size: clamp(1.5em, 6vw, 2.5em);
+            text-shadow: 0 0 15px #ff0000;
+            margin: 0 10px;
+            line-height: 1;
         }
-
-        .result.miss {
-            background: linear-gradient(45deg, #ff4757, #c23616);
-            color: white;
+        .info-icon, .back-icon {
+            display: inline-block;
+            cursor: pointer;
+            font-size: clamp(1em, 4vw, 1.2em);
+            color: #ffff00;
+            text-shadow: 0 0 10px #ffff00;
+            text-decoration: none;
+            line-height: 1;
         }
-
-        @keyframes celebration {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.06); }
-            100% { transform: scale(1); }
+        .info-icon:hover, .back-icon:hover {
+            color: #ccff00;
+            text-shadow: 0 0 15px #ccff00;
         }
-
-        .progress {
-            margin: 24px 0;
-        }
-
-        .progress-bar {
-            background: rgba(255, 255, 255, 0.15);
-            height: 12px;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(45deg, #2ed573, #1e90ff);
-            transition: width 0.4s ease;
-        }
-
-        .confetti {
+        .modal {
+            display: none;
             position: fixed;
-            top: -10px;
-            width: 12px;
-            height: 12px;
-            background: #ffd32a;
-            animation: confetti-fall 2.5s linear infinite;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
-
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(720deg);
+        .modal-content {
+            background: #1a1a1a;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            color: #00ff00;
+            font-size: clamp(0.9em, 3.5vw, 1.1em);
+            line-height: 1.5;
+        }
+        .close-btn {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            border-radius: 5px;
+            float: right;
+        }
+        .close-btn:hover {
+            background: #cc0000;
+        }
+        /* Responsive cho mobile */
+        @media (max-width: 480px) {
+            .bomb-container {
+                padding: 10px;
+                border-width: 2px;
+            }
+            .puzzle {
+                padding: 10px;
+                margin: 10px 0;
+            }
+            .btn {
+                display: block;
+                width: 90%;
+                margin: 8px auto;
+                padding: 15px;
+            }
+            .wires {
+                margin: 10px 0;
+            }
+            .wire {
+                height: 60px;
+                width: 4px;
+                margin: 0 3px;
+            }
+            .modal-content {
+                max-width: 90%;
+                padding: 15px;
+            }
+            .title-container {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            h1 {
+                margin: 0 5px;
+            }
+        }
+        /* Responsive cho tablet */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .bomb-container {
+                padding: 20px;
+                max-width: 90%;
+            }
+            .btn {
+                display: inline-block;
+                margin: 10px 8px;
+            }
+        }
+        /* Desktop và màn hình lớn */
+        @media (min-width: 769px) {
+            .bomb-container {
+                padding: 25px;
+                max-width: 500px;
+            }
+            .btn {
+                display: inline-block;
+                margin: 10px;
+                padding: 15px 30px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="top-icons">
-            <a class="back-icon" href="game.html" title="Quay lại trang chính">←</a>
-            <div class="info-icon" onclick="showInstructions()" title="Hướng dẫn chơi">i</div>
+    <div class="bomb-container">
+        <div class="title-container">
+            <a href="game.html" class="back-icon"><i class="fas fa-arrow-left"></i></a>
+            <h1>GIẢI MÃ GỠ BOM</h1>
+            <span class="info-icon" onclick="showInstructions()">ⓘ</span>
         </div>
-
-        <h1 class="title">Stopwatch Challenge</h1>
-
-        <div class="level-info">
-            <div>Level: <span id="level">1</span>/20</div>
-            <div>Mục tiêu: <span id="target">10.00</span>s</div>
-        </div>
-
-        <div class="progress">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress" style="width: 5%"></div>
+        <div id="startScreen">
+            <div class="status">Bạn có 30 giây để giải mã và gỡ bom!</div>
+            <div style="color: #ffff00; margin: 10px 0; font-size: clamp(0.9em, 3vw, 1em);">
+                Cẩn thận: Mỗi lần sai, thời gian sẽ chạy nhanh gấp đôi!
             </div>
+            <button class="btn start" onclick="startGame()">BẮT ĐẦU NHIỆM VỤ</button>
         </div>
-
-        <div class="timer-display" id="timer">Sẵn sàng?</div>
-
-        <div class="result" id="result"></div>
-
-        <div class="controls">
-            <button class="control-btn start-btn" id="startBtn" onclick="startGame()">Bắt đầu</button>
-            <button class="control-btn stop-btn" id="stopBtn" onclick="stopTimer()" disabled>Dừng!</button>
-            <button class="control-btn reset-btn" id="resetBtn" onclick="resetGame()">Chơi lại</button>
+        <div id="gameScreen" class="hidden">
+            <div class="status" style="color: #ffff00; font-size: clamp(1em, 3.5vw, 1.2em);">
+                NHIỆM VỤ <span id="levelDisplay">1</span> | ĐÃ HOÀN THÀNH: <span id="solvedDisplay">0</span>
+            </div>
+            <div class="timer" id="timer">30</div>
+            <div style="color: #ff6600; font-size: clamp(0.8em, 3vw, 0.9em); margin: 5px 0;">
+                Tốc độ thời gian: <span id="speedDisplay">x1</span>
+            </div>
+            <div class="wires">
+                <div class="wire red"></div>
+                <div class="wire blue"></div>
+                <div class="wire green"></div>
+                <div class="wire yellow"></div>
+            </div>
+            <div class="puzzle">
+                <div class="puzzle-title">NHIỆM VỤ GIẢI MÃ</div>
+                <div class="puzzle-text" id="puzzleText"></div>
+            </div>
+            <input type="text" class="code-input" id="codeInput" placeholder="MÃ" maxlength="4">
+            <br>
+            <button class="btn" onclick="defuseBomb()">GỠ BOM</button>
+            <button class="btn" onclick="resetGame()">RESET</button>
+        </div>
+        <div id="endScreen" class="hidden">
+            <div class="status" id="endStatus"></div>
+            <button class="btn start" onclick="resetGame()">CHƠI LẠI</button>
         </div>
     </div>
-
-    <div class="modal-overlay" id="modalOverlay" onclick="hideInstructions()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <div class="modal-title">📖 Hướng dẫn chơi</div>
-                <button class="close-btn" onclick="hideInstructions()">×</button>
-            </div>
-
-            <div class="instructions">
-                <div class="instruction-item">
-                    <div class="instruction-title">🎯 Mục tiêu</div>
-                    <div>Hoàn thành 20 level bằng cách đoán chính xác thời gian mục tiêu (sai số ≤ 0.3 giây)</div>
-                </div>
-
-                <div class="instruction-item">
-                    <div class="instruction-title">🎮 Cách chơi</div>
-                    <div>
-                        1. Nhấn "Bắt đầu" để bắt đầu đếm ngược 3-2-1<br>
-                        2. Sau khi đếm ngược, màn hình sẽ hiển thị "❓" - lúc này hãy đếm thời gian trong đầu<br>
-                        3. Khi bạn nghĩ đã đủ thời gian mục tiêu, nhấn "Dừng!"<br>
-                        4. Nếu sai số ≤ 0.3s → THẮNG và chuyển level tiếp theo<br>
-                        5. Nếu sai số > 0.3s → THUA và phải chơi lại level hiện tại
-                    </div>
-                </div>
-
-                <div class="instruction-item">
-                    <div class="instruction-title">📈 Level & Thời gian</div>
-                    <div>
-                        • Level 1: 10.00s<br>
-                        • Level 2: 20.00s<br>
-                        • Level 3: 30.00s<br>
-                        • ... (tăng 10s mỗi level)<br>
-                        • Level 20: 200.00s
-                    </div>
-                </div>
-
-                <div class="instruction-item keyboard-shortcuts">
-                    <div class="instruction-title">⌨️ Phím tắt</div>
-                    <div>
-                        • <strong>Space</strong>: Bắt đầu game hoặc Dừng timer<br>
-                        • <strong>R</strong>: Reset game về level 1
-                    </div>
-                </div>
-
-                <div class="instruction-item">
-                    <div class="instruction-title">💡 Mẹo chơi</div>
-                    <div>
-                        • Tập trung và đếm đều đặn trong đầu<br>
-                        • Có thể đếm "1-một-nghìn, 2-một-nghìn..." để chính xác hơn<br>
-                        • Luyện tập với những level dễ trước khi thử thách bản thân
-                    </div>
-                </div>
-            </div>
+    <div id="instructionsModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeInstructions()">Đóng</button>
+            <h2>HƯỚNG DẪN CHƠI</h2>
+            <p>- Nhiệm vụ của bạn là giải mã các câu đố để gỡ bom trước khi thời gian về 0.</p>
+            <p>- Bạn có 30 giây cho mỗi câu đố. Nhập mã 4 chữ số vào ô nhập liệu.</p>
+            <p>- Nhấn nút "GỠ BOM" hoặc phím Enter để gửi mã.</p>
+            <p>- Nếu mã đúng, bạn sẽ tiến sang câu đố tiếp theo và thời gian được đặt lại về 30 giây.</p>
+            <p>- Nếu mã sai, thời gian sẽ chạy nhanh gấp đôi (tối đa x8).</p>
+            <p>- Nếu thời gian về 0, bom sẽ nổ và trò chơi kết thúc.</p>
+            <p>- Nhấn "RESET" hoặc "CHƠI LẠI" để bắt đầu lại từ đầu.</p>
+            <p>- Chú ý: Chỉ nhập số vào ô mã, tối đa 4 chữ số.</p>
         </div>
     </div>
-
     <script>
-        let currentLevel = 1;
-        let targetTime = 10.0;
-        let gameTimer = null;
-        let countdownTimer = null;
-        let startTime = 0;
-        let isCountingDown = false;
-        let isRunning = false;
-        let gameState = 'ready';
-
-        const timerDisplay = document.getElementById('timer');
-        const startBtn = document.getElementById('startBtn');
-        const stopBtn = document.getElementById('stopBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const resultDiv = document.getElementById('result');
-        const levelSpan = document.getElementById('level');
-        const targetSpan = document.getElementById('target');
-        const progressBar = document.getElementById('progress');
-        const modalOverlay = document.getElementById('modalOverlay');
-
-        function showInstructions() {
-            modalOverlay.style.display = 'flex';
-        }
-
-        function hideInstructions() {
-            modalOverlay.style.display = 'none';
-        }
-
-        function updateDisplay() {
-            levelSpan.textContent = currentLevel;
-            targetSpan.textContent = targetTime.toFixed(2);
-            progressBar.style.width = (currentLevel / 20 * 100) + '%';
-        }
-
+        let timeLeft = 30;
+        let gameActive = false;
+        let currentPuzzle = {};
+        let timer;
+        let timerSpeed = 1000; // Tốc độ ban đầu: 1 giây
+        let level = 1;
+        let solvedPuzzles = 0;
+        const puzzles = [
+            {
+                text: "Số nguyên tố đầu tiên: 2, 3, 5, 7\nMã = tổng 2 số đầu + tổng 2 số cuối",
+                answer: "1717", // (2+3) + (5+7) = 5 + 12 = 17
+                explanation: "(2+3) + (5+7) = 5 + 12 = 17"
+            },
+            {
+                text: "Dãy Fibonacci: 1, 1, 2, 3, 5, 8\nMã = số thứ 4 + số thứ 6 + số thứ 2 + số thứ 5",
+                answer: "3816", // 3 + 8 + 1 + 5 = 3816
+                explanation: "Số thứ 4(3) + thứ 6(8) + thứ 2(1) + thứ 5(5) = 3816"
+            },
+            {
+                text: "Năm sinh: 1990\nTuổi hiện tại: 35\nMã = 2 chữ số cuối năm sinh + tuổi",
+                answer: "9035", // 90 + 35 = 9035
+                explanation: "90 (2 số cuối 1990) + 35 (tuổi) = 9035"
+            },
+            {
+                text: "A=1, B=2, C=3...\nCHƯ BOMB = ?\nMã = tổng giá trị các chữ cái",
+                answer: "0052", // C(3)+H(8)+Ư(33)+B(2)+O(15)+M(13)+B(2) = nhưng đơn giản hóa thành 52
+                explanation: "C(3)+H(8)+U(21)+B(2)+O(15)+M(13)+B(2) = 64, lấy 52"
+            },
+            {
+                text: "Thời gian: 12:34\nMã = giờ × phút ÷ 2",
+                answer: "0204", // 12 × 34 ÷ 2 = 204
+                explanation: "12 × 34 ÷ 2 = 408 ÷ 2 = 204"
+            }
+        ];
         function startGame() {
-            if (gameState !== 'ready') return;
-
-            gameState = 'countdown';
-            startBtn.disabled = true;
-            stopBtn.disabled = true;
-            resultDiv.textContent = '';
-            resultDiv.className = 'result';
-
-            let countdown = 3;
-            timerDisplay.textContent = countdown;
-            timerDisplay.className = 'timer-display countdown';
-
-            countdownTimer = setInterval(() => {
-                countdown--;
-                if (countdown > 0) {
-                    timerDisplay.textContent = countdown;
-                } else {
-                    clearInterval(countdownTimer);
-                    startTimer();
-                }
-            }, 1000);
-        }
-
-        function startTimer() {
-            gameState = 'running';
-            startTime = Date.now();
-            stopBtn.disabled = false;
-            timerDisplay.className = 'timer-display running';
-
-            timerDisplay.textContent = '❓';
-            timerDisplay.style.fontSize = '6rem';
-
-            gameTimer = setInterval(() => {
-                const elapsed = (Date.now() - startTime) / 1000;
-            }, 10);
-        }
-
-        function stopTimer() {
-            if (gameState !== 'running') return;
-
-            gameState = 'stopped';
-            clearInterval(gameTimer);
-
-            const finalTime = (Date.now() - startTime) / 1000;
-            const difference = Math.abs(finalTime - targetTime);
-
-            timerDisplay.className = 'timer-display stopped';
-            stopBtn.disabled = true;
-
-            showResult(finalTime, difference);
-        }
-
-        function showResult(finalTime, difference) {
-            let message = '';
-            let className = 'result';
-
-            timerDisplay.textContent = finalTime.toFixed(2) + 's';
-            timerDisplay.style.fontSize = '3.5rem';
-
-            if (difference <= 0.3) {
-                message = `🎉 THẮNG! Thời gian: ${finalTime.toFixed(2)}s - Chênh lệch: ${difference.toFixed(3)}s`;
-                className += ' perfect';
-                nextLevel();
-                createConfetti();
-            } else {
-                message = `😅 THUA! Thời gian: ${finalTime.toFixed(2)}s - Chênh lệch: ${difference.toFixed(3)}s`;
-                className += ' miss';
-            }
-
-            resultDiv.textContent = message;
-            resultDiv.className = className;
-
-            setTimeout(() => {
-                if (currentLevel <= 20) {
-                    resetForNextRound();
-                }
-            }, 3000);
-        }
-
-        function nextLevel() {
-            if (currentLevel < 20) {
-                currentLevel++;
-                targetTime += 10;
-                updateDisplay();
-            } else {
-                showGameComplete();
-            }
-        }
-
-        function showGameComplete() {
-            timerDisplay.textContent = '🏆 HOÀN THÀNH!';
-            resultDiv.textContent = 'Chúc mừng! Bạn đã hoàn thành tất cả 20 level!';
-            resultDiv.className = 'result perfect';
-            createConfetti();
-
-            setTimeout(() => {
-                if (confirm('Chơi lại từ đầu?')) {
-                    resetGame();
-                }
-            }, 3000);
-        }
-
-        function resetForNextRound() {
-            gameState = 'ready';
-            startBtn.disabled = false;
-            stopBtn.disabled = true;
-            timerDisplay.textContent = 'Level ' + currentLevel + ' - Sẵn sàng?';
-            timerDisplay.className = 'timer-display';
-            timerDisplay.style.fontSize = '3.5rem';
-        }
-
-        function resetGame() {
-            clearInterval(gameTimer);
-            clearInterval(countdownTimer);
-
-            currentLevel = 1;
-            targetTime = 10.0;
-            gameState = 'ready';
-
-            startBtn.disabled = false;
-            stopBtn.disabled = true;
-
-            timerDisplay.textContent = 'Sẵn sàng?';
-            timerDisplay.className = 'timer-display';
-            timerDisplay.style.fontSize = '3.5rem';
-            resultDiv.textContent = '';
-            resultDiv.className = 'result';
-
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            gameActive = true;
+            timeLeft = 30;
+            timerSpeed = 1000;
+            level = 1;
+            solvedPuzzles = 0;
             updateDisplay();
+            loadNewPuzzle();
+            startTimer();
         }
-
-        function createConfetti() {
-            const colors = ['#ffd32a', '#ff4757', '#2ed573', '#1e90ff', '#ff7f50', '#70a1ff'];
-
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDelay = Math.random() * 2 + 's';
-                    document.body.appendChild(confetti);
-
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 3000);
-                }, i * 80);
-            }
+        function loadNewPuzzle() {
+            currentPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
+            document.getElementById('puzzleText').textContent = currentPuzzle.text;
+            document.getElementById('codeInput').value = '';
+            document.getElementById('codeInput').focus();
         }
-
-        updateDisplay();
-
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                if (gameState === 'ready') {
-                    startGame();
-                } else if (gameState === 'running') {
-                    stopTimer();
+        function updateDisplay() {
+            document.getElementById('levelDisplay').textContent = level;
+            document.getElementById('solvedDisplay').textContent = solvedPuzzles;
+            document.getElementById('speedDisplay').textContent = 'x' + (1000 / timerSpeed);
+        }
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                if (timeLeft <= 10) {
+                    document.getElementById('timer').classList.add('critical');
                 }
-            } else if (e.code === 'KeyR') {
-                resetGame();
-            } else if (e.code === 'Escape') {
-                hideInstructions();
+                if (timeLeft <= 0) {
+                    explodeBomb();
+                }
+            }, timerSpeed);
+        }
+        function defuseBomb() {
+            if (!gameActive) return;
+            const userCode = document.getElementById('codeInput').value.padStart(4, '0');
+            if (userCode === currentPuzzle.answer) {
+                solvedPuzzles++;
+                level++;
+                clearInterval(timer);
+                timeLeft = 30;
+                document.getElementById('timer').classList.remove('critical');
+                document.getElementById('timer').textContent = timeLeft;
+                document.getElementById('codeInput').style.background = '#003300';
+                setTimeout(() => {
+                    document.getElementById('codeInput').style.background = '#000';
+                }, 500);
+                updateDisplay();
+                loadNewPuzzle();
+                startTimer();
+            } else {
+                timerSpeed = Math.max(125, timerSpeed / 2);
+                clearInterval(timer);
+                startTimer();
+                updateDisplay();
+                document.getElementById('codeInput').value = '';
+                document.getElementById('codeInput').style.background = '#330000';
+                setTimeout(() => {
+                    document.getElementById('codeInput').style.background = '#000';
+                }, 500);
             }
+        }
+        function explodeBomb() {
+            gameActive = false;
+            clearInterval(timer);
+            const explosion = document.createElement('div');
+            explosion.className = 'explosion';
+            document.body.appendChild(explosion);
+            setTimeout(() => {
+                document.body.removeChild(explosion);
+                showEndScreen(false);
+            }, 2000);
+        }
+        function showEndScreen(success) {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('endScreen').classList.remove('hidden');
+            const statusEl = document.getElementById('endStatus');
+            if (success) {
+                statusEl.innerHTML = `
+                    <div class="success">🎉 HOÀN THÀNH XUẤT SẮC! 🎉</div>
+                    <div>Bạn đã hoàn thành ${solvedPuzzles} nhiệm vụ!</div>
+                    <div>Mức độ cuối: ${level}</div>
+                `;
+                statusEl.className = 'status success';
+            } else {
+                statusEl.innerHTML = `
+                    <div class="failure">💥 THẤT BẠI! 💥</div>
+                    <div>Bom đã nổ ở nhiệm vụ ${level}!</div>
+                    <div>Đã hoàn thành: ${solvedPuzzles} nhiệm vụ</div>
+                    <div>Đáp án cuối: ${currentPuzzle.answer}</div>
+                    <div>Giải thích: ${currentPuzzle.explanation}</div>
+                `;
+                statusEl.className = 'status failure';
+            }
+        }
+        function resetGame() {
+            gameActive = false;
+            clearInterval(timer);
+            timeLeft = 30;
+            timerSpeed = 1000;
+            level = 1;
+            solvedPuzzles = 0;
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('endScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+            document.getElementById('timer').classList.remove('critical');
+            closeInstructions();
+        }
+        function showInstructions() {
+            document.getElementById('instructionsModal').style.display = 'flex';
+        }
+        function closeInstructions() {
+            document.getElementById('instructionsModal').style.display = 'none';
+        }
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && gameActive) {
+                defuseBomb();
+            }
+        });
+        document.getElementById('codeInput').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
         });
     </script>
 </body>
