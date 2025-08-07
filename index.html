@@ -27,11 +27,11 @@
             background: rgba(10, 10, 20, 0.95);
             border: 1px solid #00ff88;
             border-radius: 12px;
-            padding: 15px;
+            padding: clamp(12px, 3vw, 16px);
+            max-width: min(1000px, 95vw);
             width: 100%;
-            max-width: 1000px;
-            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.2);
-            margin: 10px auto;
+            box-shadow: 0 6px 24px rgba(0, 255, 136, 0.2);
+            margin: clamp(10px, 2vw, 15px) auto;
             position: relative;
             overflow: hidden;
         }
@@ -46,62 +46,75 @@
             animation: pulse 2s infinite ease-in-out;
         }
         @keyframes pulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.4; }
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
         }
         .header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            position: relative;
+            justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
-        }
-        .header-content {
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
+            margin-bottom: clamp(15px, 4vw, 20px);
+            position: relative;
+            gap: clamp(5px, 2vw, 8px);
         }
         .icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            width: clamp(28px, 8vw, 32px);
+            height: clamp(28px, 8vw, 32px);
             background: rgba(0, 255, 136, 0.15);
             border: 2px solid #00ff88;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: clamp(14px, 4vw, 16px);
             color: #00ff88;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            flex-shrink: 0;
         }
         .icon:hover {
             background: rgba(0, 255, 136, 0.3);
-            transform: scale(1.15);
-            box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+        }
+        .back-icon, .info-icon {
+            position: static;
+            margin: 0 clamp(5px, 2vw, 8px);
+        }
+        @media (min-width: 768px) {
+            .back-icon {
+                position: absolute;
+                left: clamp(10px, 2vw, 12px);
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .info-icon {
+                position: absolute;
+                right: clamp(10px, 2vw, 12px);
+                top: 50%;
+                transform: translateY(-50%);
+            }
         }
         .title {
-            font-size: clamp(1.4em, 6vw, 2.2em);
+            font-size: clamp(1.6em, 5vw, 2em);
             color: #ff4d4d;
-            text-shadow: 0 0 10px rgba(255, 77, 77, 0.7);
-            margin: 5px 0;
+            text-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
+            margin: clamp(8px, 2vw, 12px) 0;
+            flex: 1;
+            text-align: center;
             font-weight: 700;
-            line-height: 1.2;
         }
         .subtitle {
             color: #ffd700;
-            font-size: clamp(0.8em, 3.5vw, 1em);
+            font-size: clamp(0.8em, 3vw, 0.9em);
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: clamp(12px, 3vw, 15px);
             font-weight: 500;
         }
         .level {
-            margin-bottom: 20px;
-            padding: 15px;
+            margin-bottom: clamp(15px, 4vw, 20px);
+            padding: clamp(12px, 3vw, 16px);
             border: 1px solid #333366;
             border-radius: 8px;
             background: rgba(20, 20, 40, 0.7);
@@ -112,32 +125,31 @@
             display: none;
         }
         .level.unlocked {
-            animation: levelUnlock 0.8s ease-in-out;
+            animation: levelUnlock 0.6s ease-in-out;
         }
         .level.completed {
-            opacity: 0.85;
+            opacity: 0.9;
             border-color: #00ff88;
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(0, 255, 136, 0.15);
         }
         @keyframes levelUnlock {
-            0% { opacity: 0; transform: translateY(30px); }
+            0% { opacity: 0; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         .level-title {
             color: #00ccff;
-            font-size: clamp(1.1em, 4.5vw, 1.3em);
-            margin-bottom: 10px;
+            font-size: clamp(1.1em, 4vw, 1.2em);
+            margin-bottom: clamp(8px, 2vw, 10px);
             text-align: center;
-            font-weight: 700;
-            padding-right: 70px;
+            font-weight: 600;
         }
         .difficulty {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 4px 8px;
+            top: clamp(8px, 2vw, 10px);
+            right: clamp(8px, 2vw, 10px);
+            padding: clamp(4px, 1.5vw, 6px) clamp(8px, 2vw, 10px);
             border-radius: 4px;
-            font-size: clamp(0.65em, 3vw, 0.8em);
+            font-size: clamp(0.65em, 2.5vw, 0.75em);
             font-weight: 600;
         }
         .easy { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
@@ -145,85 +157,67 @@
         .hard { background: rgba(255, 77, 77, 0.2); color: #ff4d4d; }
         .expert { background: rgba(138, 43, 226, 0.2); color: #8a2be2; }
         .master { background: rgba(255, 105, 180, 0.2); color: #ff69b4; }
-        .category {
-            font-size: clamp(0.7em, 3vw, 0.8em);
-            color: #9999cc;
-            margin-bottom: 8px;
-            text-align: center;
-        }
         .clue {
             background: rgba(255, 215, 0, 0.15);
             border-left: 4px solid #ffd700;
-            padding: 10px;
-            margin: 12px 0;
+            padding: clamp(8px, 2vw, 10px);
+            margin: clamp(10px, 2.5vw, 12px) 0;
             color: #ffd700;
-            font-size: clamp(0.8em, 3.5vw, 0.95em);
+            font-size: clamp(0.8em, 3vw, 0.85em);
             line-height: 1.5;
             border-radius: 4px;
         }
         .input-group {
-            margin: 12px 0;
+            margin: clamp(10px, 2.5vw, 12px) 0;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(8px, 2vw, 10px);
         }
         .input-group label {
-            display: block;
-            margin-bottom: 6px;
+            margin-bottom: clamp(5px, 1.5vw, 6px);
             color: #e0e0e0;
-            font-size: clamp(0.8em, 3.5vw, 0.9em);
+            font-size: clamp(0.8em, 3vw, 0.85em);
             font-weight: 500;
         }
         .password-input {
             width: 100%;
-            padding: 10px;
+            padding: clamp(8px, 2vw, 10px);
             background: rgba(20, 20, 40, 0.8);
             border: 1px solid #00ff88;
             border-radius: 6px;
             color: #e0e0e0;
             font-family: inherit;
-            font-size: clamp(0.85em, 4vw, 1em);
+            font-size: clamp(0.85em, 3.5vw, 0.9em);
             transition: all 0.3s ease;
         }
         .password-input:focus {
             outline: none;
             border-color: #00ccff;
-            box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+            box-shadow: 0 0 8px rgba(0, 204, 255, 0.5);
         }
-        .button-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
+        .crack-btn, .hint-btn {
+            padding: clamp(8px, 2vw, 10px) clamp(16px, 4vw, 20px);
+            border-radius: 6px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: clamp(0.75em, 3vw, 0.85em);
         }
         .crack-btn {
             background: linear-gradient(45deg, #ff4d4d, #ff8080);
             border: none;
-            padding: 10px 20px;
             color: #fff;
-            font-family: inherit;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex: 1;
-            min-width: 120px;
-            font-size: clamp(0.8em, 3.5vw, 0.95em);
         }
         .crack-btn:hover {
             background: linear-gradient(45deg, #ff3333, #ff6666);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 77, 77, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(255, 77, 77, 0.4);
         }
         .hint-btn {
             background: rgba(255, 215, 0, 0.15);
             border: 1px solid #ffd700;
             color: #ffd700;
-            padding: 8px 16px;
-            font-family: inherit;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: clamp(0.75em, 3vw, 0.85em);
-            transition: all 0.3s ease;
-            flex: 1;
-            min-width: 80px;
         }
         .hint-btn:hover {
             background: rgba(255, 215, 0, 0.3);
@@ -232,20 +226,20 @@
         .hint {
             background: rgba(255, 215, 0, 0.1);
             border-left: 4px solid #ffd700;
-            padding: 10px;
-            margin: 12px 0;
+            padding: clamp(8px, 2vw, 10px);
+            margin: clamp(10px, 2.5vw, 12px) 0;
             color: #ffd700;
-            font-size: clamp(0.75em, 3vw, 0.9em);
+            font-size: clamp(0.75em, 3vw, 0.8em);
             display: none;
             border-radius: 4px;
         }
         .result {
-            margin-top: 12px;
-            padding: 10px;
+            margin-top: clamp(10px, 2.5vw, 12px);
+            padding: clamp(8px, 2vw, 10px);
             border-radius: 6px;
             text-align: center;
             font-weight: 600;
-            font-size: clamp(0.8em, 3.5vw, 0.9em);
+            font-size: clamp(0.8em, 3vw, 0.85em);
         }
         .success {
             background: rgba(0, 255, 136, 0.2);
@@ -258,23 +252,23 @@
             color: #ff4d4d;
         }
         .progress {
-            margin: 15px 0;
+            margin: clamp(12px, 3vw, 15px) 0;
             text-align: center;
             position: sticky;
-            top: 10px;
+            top: clamp(10px, 2vw, 12px);
             background: rgba(10, 10, 20, 0.95);
-            padding: 12px;
+            padding: clamp(10px, 2.5vw, 12px);
             border-radius: 8px;
             border: 1px solid #333366;
             z-index: 100;
         }
         .progress-bar {
             width: 100%;
-            height: 16px;
+            height: clamp(14px, 3.5vw, 16px);
             background: rgba(20, 20, 40, 0.5);
             border-radius: 8px;
             overflow: hidden;
-            margin: 8px 0;
+            margin: clamp(8px, 2vw, 10px) 0;
         }
         .progress-fill {
             height: 100%;
@@ -284,8 +278,8 @@
         }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-4px); }
-            75% { transform: translateX(4px); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
         }
         .matrix-bg {
             position: fixed;
@@ -295,7 +289,12 @@
             height: 100%;
             pointer-events: none;
             z-index: -1;
-            opacity: 0.08;
+            opacity: 0.07;
+        }
+        .category {
+            font-size: clamp(0.7em, 2.5vw, 0.8em);
+            color: #9999cc;
+            margin-bottom: clamp(6px, 1.5vw, 8px);
         }
         .guide-modal {
             display: none;
@@ -307,169 +306,166 @@
             background: rgba(0, 0, 0, 0.85);
             z-index: 1000;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
             overflow-y: auto;
-            padding: 20px;
+            padding: clamp(10px, 2vw, 15px);
         }
         .guide-content {
             background: rgba(10, 10, 20, 0.95);
             border: 1px solid #00ff88;
             border-radius: 12px;
-            padding: 20px;
-            width: 100%;
-            max-width: 800px;
+            padding: clamp(12px, 3vw, 16px);
+            max-width: min(800px, 90vw);
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.2);
-            margin-top: 20px;
+            box-shadow: 0 6px 24px rgba(0, 255, 136, 0.2);
         }
         .guide-title {
             color: #ff4d4d;
-            font-size: clamp(1.3em, 5vw, 1.6em);
+            font-size: clamp(1.3em, 4.5vw, 1.5em);
             text-align: center;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(255, 77, 77, 0.7);
+            margin-bottom: clamp(12px, 3vw, 15px);
+            text-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
             font-weight: 700;
         }
         .guide-section {
-            margin-bottom: 15px;
-            padding: 12px;
+            margin-bottom: clamp(12px, 3vw, 15px);
+            padding: clamp(10px, 2.5vw, 12px);
             background: rgba(20, 20, 40, 0.7);
             border-radius: 8px;
             border-left: 4px solid #00ccff;
         }
         .guide-section h3 {
             color: #00ccff;
-            margin-bottom: 8px;
-            font-size: clamp(1em, 4vw, 1.2em);
+            margin-bottom: clamp(8px, 2vw, 10px);
+            font-size: clamp(1em, 3.5vw, 1.1em);
             font-weight: 600;
         }
         .guide-section p, .guide-section li {
             color: #e0e0e0;
-            line-height: 1.5;
-            margin-bottom: 8px;
-            font-size: clamp(0.8em, 3.5vw, 0.9em);
+            line-height: 1.6;
+            margin-bottom: clamp(8px, 2vw, 10px);
+            font-size: clamp(0.8em, 3vw, 0.85em);
         }
         .guide-section ul {
-            margin-left: 18px;
+            margin-left: clamp(15px, 4vw, 20px);
         }
         .close-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: clamp(10px, 2vw, 12px);
+            right: clamp(10px, 2vw, 12px);
             background: none;
             border: none;
             color: #ff4d4d;
-            font-size: 24px;
+            font-size: clamp(18px, 5vw, 20px);
             cursor: pointer;
             font-weight: 700;
             transition: all 0.3s ease;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
         }
         .close-btn:hover {
             color: #ff3333;
-            background: rgba(255, 77, 77, 0.1);
-            text-shadow: 0 0 10px rgba(255, 51, 51, 0.7);
+            text-shadow: 0 0 8px rgba(255, 51, 51, 0.6);
         }
         .difficulty-legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-            justify-content: center;
+            gap: clamp(6px, 2vw, 8px);
+            margin-top: clamp(8px, 2vw, 10px);
         }
         .difficulty-item {
-            padding: 5px 10px;
+            padding: clamp(4px, 1.5vw, 6px) clamp(8px, 2vw, 10px);
             border-radius: 4px;
-            font-size: clamp(0.7em, 3vw, 0.8em);
+            font-size: clamp(0.7em, 2.5vw, 0.8em);
             font-weight: 600;
         }
-        @media (min-width: 768px) {
-            .terminal {
-                padding: 20px;
-                margin: 20px auto;
+        @media (max-width: 480px) {
+            body {
+                padding: clamp(5px, 2vw, 8px);
             }
-            .header {
-                margin-bottom: 25px;
+            .terminal {
+                padding: clamp(8px, 2.5vw, 10px);
+                max-width: 98vw;
             }
             .title {
-                font-size: 2em;
+                font-size: clamp(1.4em, 5.5vw, 1.6em);
             }
             .subtitle {
-                font-size: 1em;
+                font-size: clamp(0.7em, 3.5vw, 0.8em);
             }
             .level {
-                padding: 20px;
-                margin-bottom: 25px;
+                padding: clamp(8px, 2.5vw, 10px);
             }
             .level-title {
-                font-size: 1.3em;
+                font-size: clamp(0.95em, 4.5vw, 1em);
             }
-            .difficulty {
-                font-size: 0.8em;
-                padding: 5px 10px;
-            }
-            .clue {
-                font-size: 0.95em;
-            }
-            .input-group label {
-                font-size: 0.9em;
+            .clue, .hint, .input-group label, .result {
+                font-size: clamp(0.7em, 3.5vw, 0.75em);
             }
             .password-input {
-                font-size: 1em;
+                padding: clamp(6px, 2vw, 8px);
+                font-size: clamp(0.75em, 3.5vw, 0.8em);
             }
             .crack-btn, .hint-btn {
-                font-size: 0.9em;
-            }
-            .result {
-                font-size: 0.9em;
+                padding: clamp(6px, 2vw, 8px) clamp(12px, 3.5vw, 16px);
+                font-size: clamp(0.7em, 3.5vw, 0.75em);
             }
             .progress {
-                margin: 20px 0;
-                padding: 15px;
+                padding: clamp(8px, 2vw, 10px);
             }
             .progress-bar {
-                height: 20px;
+                height: clamp(12px, 3vw, 14px);
             }
             .guide-content {
-                margin-top: 40px;
+                padding: clamp(8px, 2.5vw, 10px);
+                max-width: 95vw;
+            }
+            .guide-title {
+                font-size: clamp(1.1em, 5vw, 1.2em);
+            }
+            .guide-section {
+                padding: clamp(8px, 2vw, 10px);
+            }
+            .guide-section h3 {
+                font-size: clamp(0.9em, 4vw, 1em);
+            }
+            .guide-section p, .guide-section li {
+                font-size: clamp(0.7em, 3.5vw, 0.75em);
             }
         }
-        @media (max-width: 480px) {
+        @media (min-width: 481px) and (max-width: 768px) {
             .terminal {
-                padding: 12px;
-                border-radius: 10px;
+                padding: clamp(10px, 2.5vw, 12px);
+                max-width: 95vw;
             }
-            .header {
-                flex-direction: row;
-                justify-content: center;
-                gap: 8px;
+            .title {
+                font-size: clamp(1.5em, 5vw, 1.8em);
+            }
+            .subtitle {
+                font-size: clamp(0.75em, 3vw, 0.85em);
+            }
+            .level {
+                padding: clamp(10px, 2.5vw, 12px);
             }
             .level-title {
-                padding-right: 60px;
-                font-size: 1.1em;
+                font-size: clamp(1em, 4vw, 1.1em);
             }
-            .difficulty {
-                top: 12px;
-                right: 12px;
-                padding: 3px 6px;
+            .clue, .hint, .input-group label, .result {
+                font-size: clamp(0.75em, 3vw, 0.8em);
             }
-            .button-group {
-                flex-direction: column;
-                gap: 6px;
+            .password-input {
+                padding: clamp(7px, 2vw, 9px);
+                font-size: clamp(0.8em, 3.5vw, 0.85em);
             }
             .crack-btn, .hint-btn {
-                width: 100%;
-                min-width: auto;
+                padding: clamp(7px, 2vw, 9px) clamp(14px, 3.5vw, 18px);
+                font-size: clamp(0.75em, 3vw, 0.8em);
             }
-            .guide-content {
-                padding: 15px;
+            .progress {
+                padding: clamp(9px, 2vw, 11px);
+            }
+            .progress-bar {
+                height: clamp(13px, 3.5vw, 15px);
             }
         }
     </style>
@@ -478,25 +474,20 @@
     <canvas class="matrix-bg" id="matrix"></canvas>
     <div class="terminal">
         <div class="header">
-            <a href="game.html" class="icon" title="Quay lại">&#x21A9;</a>
-            <div class="header-content">
-                <div class="title">THÁM TỬ MẬT KHẨU</div>
-                <div class="subtitle">20 Cấp Độ Thử Thách | Từ Cơ Bản Đến Siêu Khó</div>
-            </div>
-            <span class="icon" onclick="showGuide()" title="Hướng dẫn">i</span>
+            <a href="game.html" class="icon back-icon" title="Quay lại">&#x21A9;</a>
+            <div class="title">THÁM TỬ MẬT KHẨU</div>
+            <span class="icon info-icon" onclick="showGuide()" title="Hướng dẫn">i</span>
         </div>
-        
+        <div class="subtitle">20 Cấp Độ Thử Thách | Từ Cơ Bản Đến Siêu Khó</div>
         <div class="progress">
             <div>🏆 Tiến độ: <span id="progressText">0/20</span> cấp độ hoàn thành</div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
-            <div style="font-size: clamp(0.7em, 3vw, 0.8em); color: #9999cc; margin-top: 6px;">
+            <div style="font-size: clamp(0.7em, 2.5vw, 0.8em); color: #9999cc; margin-top: clamp(6px, 1.5vw, 8px);">
                 <span id="currentPhase">Giai đoạn: Khởi đầu</span>
             </div>
         </div>
-        
-        <!-- 20 CẤP ĐỘ -->
         <div class="level" id="level1">
             <div class="difficulty easy">DỄ</div>
             <div class="level-title">CẤP ĐỘ 1: ALPHABET CIPHER</div>
@@ -509,31 +500,445 @@
             <div class="input-group">
                 <label>Nhập từ đã giải mã:</label>
                 <input type="text" class="password-input" id="password1" placeholder="Chuyển số thành chữ...">
-                <div class="button-group">
-                    <button class="crack-btn" onclick="checkPassword(1)">GIẢI MÃ</button>
-                    <button class="hint-btn" onclick="toggleHint(1)">Gợi Ý</button>
-                </div>
+                <button class="crack-btn" onclick="checkPassword(1)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(1)">Gợi Ý</button>
             </div>
             <div class="hint" id="hint1">8=H, 5=E, 12=L, 12=L, 15=O</div>
             <div class="result" id="result1"></div>
         </div>
-        
-        <!-- Các level khác từ 2-20 giữ nguyên cấu trúc như level 1 -->
-        <!-- ... (giữ nguyên các level từ 2-20 như trong code gốc) ... -->
-        
-        <!-- Guide Modal -->
+        <div class="level locked" id="level2">
+            <div class="difficulty easy">DỄ</div>
+            <div class="level-title">CẤP ĐỘ 2: REVERSE CIPHER</div>
+            <div class="category">Danh mục: Xử lý chuỗi</div>
+            <div class="clue">
+                <strong>Văn bản đảo ngược:</strong> "GNAS HNAT NEYUGN"<br>
+                <strong>Logic:</strong> Đọc từ phải sang trái để tìm họ tên gốc.<br>
+                <strong>Gợi ý thêm:</strong> Đây là họ tên của một người Việt Nam.
+            </div>
+            <div class="input-group">
+                <label>Nhập họ tên gốc:</label>
+                <input type="text" class="password-input" id="password2" placeholder="Đảo ngược chuỗi...">
+                <button class="crack-btn" onclick="checkPassword(2)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(2)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint2">GNAS HNAT NEYUGN đọc ngược lại từng từ: SANG THANH NGUYEN</div>
+            <div class="result" id="result2"></div>
+        </div>
+        <div class="level locked" id="level3">
+            <div class="difficulty easy">DỄ</div>
+            <div class="level-title">CẤP ĐỘ 3: SIMPLE MATH</div>
+            <div class="category">Danh mục: Toán học cơ bản</div>
+            <div class="clue">
+                <strong>Phép tính:</strong> (5 × 3) + (8 ÷ 2) - 1 = ?<br>
+                <strong>Logic:</strong> Thực hiện theo thứ tự ưu tiên toán học.
+            </div>
+            <div class="input-group">
+                <label>Nhập kết quả:</label>
+                <input type="text" class="password-input" id="password3" placeholder="Tính toán kết quả...">
+                <button class="crack-btn" onclick="checkPassword(3)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(3)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint3">Ưu tiên: × ÷ trước, + - sau. (15) + (4) - 1 = ?</div>
+            <div class="result" id="result3"></div>
+        </div>
+        <div class="level locked" id="level4">
+            <div class="difficulty easy">DỄ</div>
+            <div class="level-title">CẤP ĐỘ 4: NUMBER PATTERN</div>
+            <div class="category">Danh mục: Quy luật số</div>
+            <div class="clue">
+                <strong>Dãy số:</strong> 2, 4, 8, 16, ?, 64<br>
+                <strong>Logic:</strong> Mỗi số gấp đôi số trước đó.
+            </div>
+            <div class="input-group">
+                <label>Nhập số thiếu:</label>
+                <input type="text" class="password-input" id="password4" placeholder="Tìm số tiếp theo...">
+                <button class="crack-btn" onclick="checkPassword(4)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(4)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint4">16 × 2 = ?</div>
+            <div class="result" id="result4"></div>
+        </div>
+        <div class="level locked" id="level5">
+            <div class="difficulty medium">VỪA</div>
+            <div class="level-title">CẤP ĐỘ 5: CAESAR CIPHER</div>
+            <div class="category">Danh mục: Mật mã cổ điển</div>
+            <div class="clue">
+                <strong>Mã Caesar (+3):</strong> "FRGXULWB"<br>
+                <strong>Logic:</strong> Mỗi chữ cái được dịch chuyển 3 vị trí trong bảng chữ cái.
+            </div>
+            <div class="input-group">
+                <label>Nhập từ gốc:</label>
+                <input type="text" class="password-input" id="password5" placeholder="Dịch chuyển ngược 3 vị trí...">
+                <button class="crack-btn" onclick="checkPassword(5)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(5)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint5">F-3=C, R-3=O, G-3=D, X-3=U...</div>
+            <div class="result" id="result5"></div>
+        </div>
+        <div class="level locked" id="level6">
+            <div class="difficulty medium">VỪA</div>
+            <div class="level-title">CẤP ĐỘ 6: DATE LOGIC</div>
+            <div class="category">Danh mục: Logic thời gian</div>
+            <div class="clue">
+                <strong>Câu hỏi:</strong> Hôm nay là thứ Ba. 100 ngày nữa là thứ mấy?<br>
+                <strong>Logic:</strong> 1 tuần = 7 ngày. Tính số dư khi chia 100 cho 7.
+            </div>
+            <div class="input-group">
+                <label>Nhập thứ (bằng số, thứ 2=2, thứ 3=3...):</label>
+                <input type="text" class="password-input" id="password6" placeholder="Tính ngày trong tuần...">
+                <button class="crack-btn" onclick="checkPassword(6)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(6)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint6">100 ÷ 7 = 14 dư 2. Thứ Ba + 2 ngày = ?</div>
+            <div class="result" id="result6"></div>
+        </div>
+        <div class="level locked" id="level7">
+            <div class="difficulty medium">VỪA</div>
+            <div class="level-title">CẤP ĐỘ 7: BINARY BASIC</div>
+            <div class="category">Danh mục: Hệ nhị phân</div>
+            <div class="clue">
+                <strong>Nhị phân:</strong> "1000001"<br>
+                <strong>Logic:</strong> Chuyển đổi từ nhị phân sang thập phân.
+            </div>
+            <div class="input-group">
+                <label>Nhập số thập phân:</label>
+                <input type="text" class="password-input" id="password7" placeholder="Binary to Decimal...">
+                <button class="crack-btn" onclick="checkPassword(7)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(7)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint7">1×64 + 0×32 + 0×16 + 0×8 + 0×4 + 0×2 + 1×1 = ?</div>
+            <div class="result" id="result7"></div>
+        </div>
+        <div class="level locked" id="level8">
+            <div class="difficulty medium">VỪA</div>
+            <div class="level-title">CẤP ĐỘ 8: MORSE CODE</div>
+            <div class="category">Danh mục: Mã tín hiệu</div>
+            <div class="clue">
+                <strong>Morse:</strong> "... --- ..."<br>
+                <strong>Logic:</strong> . = dit, - = dah. Tra bảng mã Morse.
+            </div>
+            <div class="input-group">
+                <label>Nhập từ đã giải mã:</label>
+                <input type="text" class="password-input" id="password8" placeholder="Dịch mã Morse...">
+                <button class="crack-btn" onclick="checkPassword(8)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(8)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint8">S = "...", O = "---". Ba chữ S-O-S</div>
+            <div class="result" id="result8"></div>
+        </div>
+        <div class="level locked" id="level9">
+            <div class="difficulty hard">KHÓ</div>
+            <div class="level-title">CẤP ĐỘ 9: FIBONACCI ADVANCED</div>
+            <div class="category">Danh mục: Dãy số nâng cao</div>
+            <div class="clue">
+                <strong>Dãy Fibonacci:</strong> F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2)<br>
+                <strong>Câu hỏi:</strong> F(10) = ?<br>
+                <strong>Logic:</strong> Tính số Fibonacci thứ 10.
+            </div>
+            <div class="input-group">
+                <label>Nhập F(10):</label>
+                <input type="text" class="password-input" id="password9" placeholder="Tính Fibonacci(10)...">
+                <button class="crack-btn" onclick="checkPassword(9)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(9)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint9">0,1,1,2,3,5,8,13,21,34,55... F(10) là số thứ 11</div>
+            <div class="result" id="result9"></div>
+        </div>
+        <div class="level locked" id="level10">
+            <div class="difficulty hard">KHÓ</div>
+            <div class="level-title">CẤP ĐỘ 10: HEX TO ASCII</div>
+            <div class="category">Danh mục: Chuyển đổi mã</div>
+            <div class="clue">
+                <strong>Hex:</strong> "48 41 43 4B 45 52"<br>
+                <strong>Logic:</strong> Chuyển từng cặp hex sang ký tự ASCII.
+            </div>
+            <div class="input-group">
+                <label>Nhập từ ASCII:</label>
+                <input type="text" class="password-input" id="password10" placeholder="Hex to ASCII...">
+                <button class="crack-btn" onclick="checkPassword(10)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(10)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint10">48=H, 41=A, 43=C, 4B=K, 45=E, 52=R</div>
+            <div class="result" id="result10"></div>
+        </div>
+        <div class="level locked" id="level11">
+            <div class="difficulty hard">KHÓ</div>
+            <div class="level-title">CẤP ĐỘ 11: PRIME NUMBERS</div>
+            <div class="category">Danh mục: Số học</div>
+            <div class="clue">
+                <strong>Số nguyên tố:</strong> 2, 3, 5, 7, 11, 13, ?, 19<br>
+                <strong>Logic:</strong> Tìm số nguyên tố còn thiếu.
+            </div>
+            <div class="input-group">
+                <label>Nhập số nguyên tố:</label>
+                <input type="text" class="password-input" id="password11" placeholder="Tìm số nguyên tố...">
+                <button class="crack-btn" onclick="checkPassword(11)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(11)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint11">Số nguyên tố giữa 13 và 19 là số nào?</div>
+            <div class="result" id="result11"></div>
+        </div>
+        <div class="level locked" id="level12">
+            <div class="difficulty hard">KHÓ</div>
+            <div class="level-title">CẤP ĐỘ 12: COORDINATE CODE</div>
+            <div class="category">Danh mục: Tọa độ ma trận</div>
+            <div class="clue">
+                <strong>Ma trận 3x3:</strong><br>
+                A B C<br>
+                D E F<br>
+                G H I<br>
+                <strong>Tọa độ:</strong> (1,2), (2,2), (3,1), (3,1), (2,3)<br>
+                <strong>Logic:</strong> (hàng, cột) → ký tự
+            </div>
+            <div class="input-group">
+                <label>Nhập từ đã giải mã:</label>
+                <input type="text" class="password-input" id="password12" placeholder="Tọa độ thành chữ...">
+                <button class="crack-btn" onclick="checkPassword(12)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(12)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint12">(1,2)=B, (2,2)=E, (3,1)=G, (3,1)=G, (2,3)=F</div>
+            <div class="result" id="result12"></div>
+        </div>
+        <div class="level locked" id="level13">
+            <div class="difficulty expert">CHUYÊN GIA</div>
+            <div class="level-title">CẤP ĐỘ 13: SUBSTITUTION CIPHER</div>
+            <div class="category">Danh mục: Mật mã thay thế</div>
+            <div class="clue">
+                <strong>Bảng thay thế:</strong> A→Z, B→Y, C→X... (đảo ngược alphabet)<br>
+                <strong>Mã hóa:</strong> "KZNHD"<br>
+                <strong>Logic:</strong> A=Z, B=Y, C=X, D=W, E=V...
+            </div>
+            <div class="input-group">
+                <label>Nhập từ gốc:</label>
+                <input type="text" class="password-input" id="password13" placeholder="Thay thế ngược...">
+                <button class="crack-btn" onclick="checkPassword(13)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(13)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint13">K=P, Z=A, N=M, H=S, D=W</div>
+            <div class="result" id="result13"></div>
+        </div>
+        <div class="level locked" id="level14">
+            <div class="difficulty expert">CHUYÊN GIA</div>
+            <div class="level-title">CẤP ĐỘ 14: COORDINATES GRID 4x4</div>
+            <div class="category">Danh mục: Mật mã lưới nâng cao</div>
+            <div class="clue">
+                <strong>Ma trận 4x4:</strong><br>
+                  1 2 3 4<br>
+                1 A B C D<br>
+                2 E F G H<br>
+                3 I J K L<br>
+                4 M N O P<br>
+                <strong>Tọa độ:</strong> "13 24 32 14"<br>
+                <strong>Logic:</strong> Mỗi cặp số = (hàng, cột) → ký tự
+            </div>
+            <div class="input-group">
+                <label>Nhập từ đã giải mã:</label>
+                <input type="text" class="password-input" id="password14" placeholder="Grid 4x4 decode...">
+                <button class="crack-btn" onclick="checkPassword(14)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(14)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint14">13=I, 24=H, 32=F, 14=D</div>
+            <div class="result" id="result14"></div>
+        </div>
+        <div class="level locked" id="level15">
+            <div class="difficulty expert">CHUYÊN GIA</div>
+            <div class="level-title">CẤP ĐỘ 15: REVERSE POLYBIUS</div>
+            <div class="category">Danh mục: Mật mã lưới đảo ngược</div>
+            <div class="clue">
+                <strong>Polybius Square 5x5 (Đảo ngược):</strong><br>
+                  5 4 3 2 1<br>
+                5 Z Y X W V<br>
+                4 U T S R Q<br>
+                3 P O N M L<br>
+                2 K I/J H G F<br>
+                1 E D C B A<br>
+                <strong>Mã:</strong> "51 42 33 24"<br>
+                <strong>Logic:</strong> Ma trận đảo ngược + tọa độ (hàng, cột)
+            </div>
+            <div class="input-group">
+                <label>Nhập từ đã giải mã:</label>
+                <input type="text" class="password-input" id="password15" placeholder="Reverse Polybius decode...">
+                <button class="crack-btn" onclick="checkPassword(15)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(15)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint15">51=E, 42=T, 33=N, 24=G</div>
+            <div class="result" id="result15"></div>
+        </div>
+        <div class="level locked" id="level16">
+            <div class="difficulty expert">CHUYÊN GIA</div>
+            <div class="level-title">CẤP ĐỘ 16: POLYBIUS SQUARE</div>
+            <div class="category">Danh mục: Mật mã lưới</div>
+            <div class="clue">
+                <strong>Polybius Square 5x5:</strong><br>
+                  1 2 3 4 5<br>
+                1 A B C D E<br>
+                2 F G H I/J K<br>
+                3 L M N O P<br>
+                4 Q R S T U<br>
+                5 V W X Y Z<br>
+                <strong>Mã:</strong> "44 23 34 15"<br>
+                <strong>Logic:</strong> Mỗi cặp số = (hàng, cột)
+            </div>
+            <div class="input-group">
+                <label>Nhập từ đã giải mã:</label>
+                <input type="text" class="password-input" id="password16" placeholder="Polybius decode...">
+                <button class="crack-btn" onclick="checkPassword(16)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(16)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint16">44=T, 23=H, 34=O, 15=E</div>
+            <div class="result" id="result16"></div>
+        </div>
+        <div class="level locked" id="level17">
+            <div class="difficulty expert">CHUYÊN GIA</div>
+            <div class="level-title">CẤP ĐỘ 17: DNA CODE</div>
+            <div class="category">Danh mục: Mã sinh học</div>
+            <div class="clue">
+                <strong>DNA Code:</strong> A=00, T=01, G=10, C=11<br>
+                <strong>Mã hóa:</strong> "01001001001100"<br>
+                <strong>Logic:</strong> Chia thành cặp 2 bit, chuyển thành base DNA.
+            </div>
+            <div class="input-group">
+                <label>Nhập DNA sequence:</label>
+                <input type="text" class="password-input" id="password17" placeholder="Binary to DNA...">
+                <button class="crack-btn" onclick="checkPassword(17)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(17)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint17">01=T, 00=A, 10=G, 01=T, 00=A, 11=C</div>
+            <div class="result" id="result17"></div>
+        </div>
+        <div class="level locked" id="level18">
+            <div class="difficulty master">MASTER</div>
+            <div class="level-title">CẤP ĐỘ 18: MULTI-CIPHER COMBO</div>
+            <div class="category">Danh mục: Kết hợp mật mã</div>
+            <div class="clue">
+                <strong>Bước 1:</strong> Caesar +5: "QJQQJW"<br>
+                <strong>Bước 2:</strong> Đảo ngược kết quả bước 1<br>
+                <strong>Bước 3:</strong> Alphabet cipher (A=1, B=2...)<br>
+                <strong>Logic:</strong> Thực hiện 3 bước tuần tự.
+            </div>
+            <div class="input-group">
+                <label>Nhập dãy số cuối cùng:</label>
+                <input type="text" class="password-input" id="password18" placeholder="Multi-step decoding...">
+                <button class="crack-btn" onclick="checkPassword(18)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(18)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint18">Caesar-5: QJQQJW→LELLER, Reverse: RELLEL, Numbers: 18 5 12 12 5 12</div>
+            <div class="result" id="result18"></div>
+        </div>
+        <div class="level locked" id="level19">
+            <div class="difficulty master">MASTER</div>
+            <div class="level-title">CẤP ĐỘ 19: MUSICAL CIPHER</div>
+            <div class="category">Danh mục: Mật mã âm nhạc</div>
+            <div class="clue">
+                <strong>Nốt nhạc:</strong> C=1, D=2, E=3, F=4, G=5, A=6, B=7<br>
+                <strong>Giai điệu:</strong> "C E A D E"<br>
+                <strong>Logic:</strong> Chuyển nốt nhạc thành số, sau đó thành chữ cái.
+            </div>
+            <div class="input-group">
+                <label>Nhập từ đã giải mã:</label>
+                <input type="text" class="password-input" id="password19" placeholder="Music to text...">
+                <button class="crack-btn" onclick="checkPassword(19)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(19)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint19">C=1=A, E=3=C, A=6=F, D=2=B, E=3=C</div>
+            <div class="result" id="result19"></div>
+        </div>
+        <div class="level locked" id="level20">
+            <div class="difficulty master">MASTER</div>
+            <div class="level-title">CẤP ĐỘ 20: GRAND FINALE</div>
+            <div class="category">Danh mục: Thử thách tối thượng</div>
+            <div class="clue">
+                <strong>Siêu thử thách:</strong><br>
+                1. Hex: "48 45 4C 4C 4F"<br>
+                2. Fibonacci số thứ 8<br>
+                3. Caesar +N (N = Fibonacci từ bước 2)<br>
+                4. Binary của ký tự đầu tiên từ bước 3<br>
+                <strong>Logic:</strong> Kết hợp tất cả kỹ năng đã học!
+            </div>
+            <div class="input-group">
+                <label>Nhập kết quả cuối cùng (binary):</label>
+                <input type="text" class="password-input" id="password20" placeholder="Ultimate challenge...">
+                <button class="crack-btn" onclick="checkPassword(20)">GIẢI MÃ</button>
+                <button class="hint-btn" onclick="toggleHint(20)">Gợi Ý</button>
+            </div>
+            <div class="hint" id="hint20">Hex→HELLO, F(8)=21, Caesar+21→YVCCF, Y=89 decimal=1011001 binary</div>
+            <div class="result" id="result20"></div>
+        </div>
         <div class="guide-modal" id="guideModal">
             <div class="guide-content">
                 <button class="close-btn" onclick="hideGuide()">&times;</button>
                 <div class="guide-title">📖 HƯỚNG DẪN CHƠI</div>
-                <!-- Nội dung hướng dẫn giữ nguyên như code gốc -->
-                <!-- ... (giữ nguyên nội dung hướng dẫn) ... -->
+                <div class="guide-section">
+                    <h3>🎯 MỤC TIÊU GAME</h3>
+                    <p>Trở thành <strong>THÁM TỬ MẬT KHẨU</strong> bậc thầy bằng cách giải mã 20 cấp độ từ dễ đến siêu khó!</p>
+                </div>
+                <div class="guide-section">
+                    <h3>🎮 CÁCH CHƠI</h3>
+                    <ul>
+                        <li>Đọc kỹ <strong>clue</strong> màu vàng để hiểu logic giải mã</li>
+                        <li>Nhập đáp án vào ô input</li>
+                        <li>Nhấn <strong>"GIẢI MÃ"</strong> để kiểm tra</li>
+                        <li>Dùng <strong>"Gợi Ý"</strong> nếu gặp khó khăn</li>
+                        <li>Hoàn thành level để mở khóa level tiếp theo</li>
+                    </ul>
+                </div>
+                <div class="guide-section">
+                    <h3>📊 CÁC CẤP ĐỘ KHÓ</h3>
+                    <div class="difficulty-legend">
+                        <div class="difficulty-item easy">DỄ (1-4)</div>
+                        <div class="difficulty-item medium">VỪA (5-8)</div>
+                        <div class="difficulty-item hard">KHÓ (9-12)</div>
+                        <div class="difficulty-item expert">CHUYÊN GIA (13-17)</div>
+                        <div class="difficulty-item master">MASTER (18-20)</div>
+                    </div>
+                </div>
+                <div class="guide-section">
+                    <h3>🧩 CÁC LOẠI MẬT MÃ</h3>
+                    <ul>
+                        <li><strong>Alphabet Cipher:</strong> A=1, B=2, C=3...</li>
+                        <li><strong>Caesar Cipher:</strong> Dịch chuyển chữ cái theo số cố định</li>
+                        <li><strong>Reverse Text:</strong> Đảo ngược chuỗi ký tự</li>
+                        <li><strong>Binary:</strong> Hệ nhị phân (0,1)</li>
+                        <li><strong>Morse Code:</strong> Dấu chấm và gạch ngang</li>
+                        <li><strong>Hex to ASCII:</strong> Mã thập lục phân</li>
+                        <li><strong>Coordinate Grid:</strong> Tọa độ ma trận</li>
+                        <li><strong>DNA Code:</strong> A=00, T=01, G=10, C=11</li>
+                    </ul>
+                </div>
+                <div class="guide-section">
+                    <h3>💡 MẸO GIẢI MÃ</h3>
+                    <ul>
+                        <li>Đọc kỹ <strong>Logic</strong> trong mỗi clue</li>
+                        <li>Chú ý đến <strong>pattern</strong> và quy luật</li>
+                        <li>Sử dụng gợi ý khi cần thiết</li>
+                        <li>Thử nghiệm và kiên nhẫn</li>
+                        <li>Học từ các level trước để áp dụng cho level sau</li>
+                    </ul>
+                </div>
+                <div class="guide-section">
+                    <h3>🏆 TIẾN ĐỘ & THÀNH TÍCH</h3>
+                    <p>Theo dõi tiến độ qua thanh progress bar và các giai đoạn:</p>
+                    <ul>
+                        <li><strong>Khởi đầu:</strong> 0 level</li>
+                        <li><strong>Cơ bản:</strong> 5+ levels</li>
+                        <li><strong>Nâng cao:</strong> 9+ levels</li>
+                        <li><strong>Chuyên gia:</strong> 13+ levels</li>
+                        <li><strong>Bậc thầy:</strong> 17+ levels</li>
+                        <li><strong>Huyền thoại:</strong> 20 levels (hoàn thành!)</li>
+                    </ul>
+                </div>
+                <div class="guide-section">
+                    <h3>⚡ PHÍM TẮT</h3>
+                    <p><strong>Enter:</strong> Gửi đáp án (khi đang focus vào ô input)</p>
+                </div>
+                <div class="guide-section" style="text-align: center; border-left: 4px solid #ff4d4d;">
+                    <h3 style="color: #ff4d4d;">🔥 CHÚC BẠN MAY MẮN!</h3>
+                    <p style="color: #ffd700;">Hãy trở thành <strong>MASTER CRYPTOGRAPHER</strong> đích thực!</p>
+                </div>
             </div>
         </div>
     </div>
-
     <script>
-        // Matrix background effect
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
@@ -545,36 +950,28 @@
 
         const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
         const matrixArray = matrix.split("");
-
-        const fontSize = 12;
+        const fontSize = Math.min(Math.max(Math.floor(window.innerWidth * 0.03), 10), 12);
         const columns = Math.floor(canvas.width / fontSize);
-
-        const drops = [];
-        for (let x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
+        const drops = Array(columns).fill(1);
 
         function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             ctx.fillStyle = '#00ff88';
-            ctx.font = fontSize + 'px Roboto Mono';
+            ctx.font = `${fontSize}px Roboto Mono`;
 
             for (let i = 0; i < drops.length; i++) {
                 const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.98) {
                     drops[i] = 0;
                 }
                 drops[i]++;
             }
         }
 
-        setInterval(drawMatrix, 30);
-        
-        // Game logic - 20 levels with answers
+        setInterval(drawMatrix, 35);
+
         const passwords = {
             1: "HELLO",
             2: "NGUYEN THANH SANG",
@@ -597,7 +994,6 @@
             19: "ACFBC",
             20: "1011001"
         };
-        
         let completedLevels = 0;
         const phases = {
             0: "Khởi đầu",
@@ -607,20 +1003,18 @@
             17: "Bậc thầy",
             20: "Huyền thoại"
         };
-        
+
         function updatePhase() {
             const phaseElement = document.getElementById('currentPhase');
             let currentPhase = "Khởi đầu";
-
             for (let threshold in phases) {
                 if (completedLevels >= parseInt(threshold)) {
                     currentPhase = phases[threshold];
                 }
             }
-
             phaseElement.textContent = `Giai đoạn: ${currentPhase}`;
         }
-        
+
         function checkPassword(level) {
             const input = document.getElementById(`password${level}`).value.toUpperCase().trim();
             const result = document.getElementById(`result${level}`);
@@ -628,27 +1022,22 @@
             if (input === passwords[level]) {
                 result.className = 'result success';
                 result.textContent = 'MẬT KHẨU ĐÃ ĐƯỢC PHÂN TÍCH! Truy cập được cấp phép.';
-
                 if (!document.getElementById(`level${level}`).classList.contains('completed')) {
                     completedLevels++;
                     document.getElementById(`level${level}`).classList.add('completed');
                     updateProgress();
                     updatePhase();
-
                     if (completedLevels < 20) {
                         const nextLevel = document.getElementById(`level${completedLevels + 1}`);
                         nextLevel.classList.remove('locked');
                         nextLevel.classList.add('unlocked');
-
                         setTimeout(() => {
                             nextLevel.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }, 500);
-
                         setTimeout(() => {
                             result.textContent += ` Cấp độ ${completedLevels + 1} đã được mở khóa!`;
                         }, 500);
                     }
-
                     if (completedLevels === 20) {
                         setTimeout(() => {
                             alert('🎉🏆 CHÚC MỪNG! BẠN ĐÃ TRỞ THÀNH SIÊU HACKER HUYỀN THOẠI! 🏆🎉\n\n' +
@@ -672,7 +1061,6 @@
             } else {
                 result.className = 'result error';
                 result.textContent = '❌ TRUY CẬP BỊ TỪ CHỐI. Hãy thử lại.';
-
                 const inputField = document.getElementById(`password${level}`);
                 inputField.style.animation = 'shake 0.5s';
                 setTimeout(() => {
@@ -680,17 +1068,17 @@
                 }, 500);
             }
         }
-        
+
         function toggleHint(level) {
             const hint = document.getElementById(`hint${level}`);
             hint.style.display = hint.style.display === 'none' || hint.style.display === '' ? 'block' : 'none';
         }
-        
+
         function updateProgress() {
             document.getElementById('progressText').textContent = `${completedLevels}/20`;
             document.getElementById('progressFill').style.width = `${(completedLevels / 20) * 100}%`;
         }
-        
+
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 const target = e.target;
@@ -700,39 +1088,37 @@
                 }
             }
         });
-        
+
         window.addEventListener('resize', function() {
             resizeCanvas();
-            const columns = Math.floor(canvas.width / fontSize);
-            drops.length = 0;
-            for (let x = 0; x < columns; x++) {
-                drops[x] = 1;
+            const newColumns = Math.floor(canvas.width / fontSize);
+            drops.length = newColumns;
+            for (let x = 0; x < newColumns; x++) {
+                drops[x] = drops[x] || 1;
             }
         });
-        
-        updatePhase();
-        
+
         function showGuide() {
             document.getElementById('guideModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
         }
-        
+
         function hideGuide() {
             document.getElementById('guideModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
         }
-        
+
         document.getElementById('guideModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 hideGuide();
             }
         });
-        
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 hideGuide();
             }
         });
+
+        updatePhase();
     </script>
 </body>
 </html>
