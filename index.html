@@ -430,11 +430,16 @@
         let moveHistory = [];
         const transpositionTable = new Map();
 
-        // Thêm sự kiện cho nút quay lại
-        document.getElementById('backButton').addEventListener('click', function(event) {
-            event.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
-            window.location.href = 'game.html'; // Chuyển hướng đến game.html
-        });
+        // Sửa sự kiện cho nút quay lại
+        const backButton = document.getElementById('backButton');
+        if (backButton) {
+            backButton.addEventListener('click', function(event) {
+                console.log('Back button clicked, redirecting to game.html');
+                window.location.href = 'game.html';
+            });
+        } else {
+            console.error('Back button element not found');
+        }
 
         function initializeBoard() {
             const chessboard = document.getElementById('chessboard');
@@ -879,7 +884,7 @@
                 for (const move of moves) {
                     const capturedPiece = board[move.toRow][move.toCol];
                     board[move.toRow][move.toCol] = board[move.fromRow][move.fromCol];
-                    board[move.fromRow][move.fromCol] = null;
+                    board[move.fromRow][fromCol] = null;
                     if ((board[move.toRow][move.toCol] === '♙' && move.toRow === 0)) {
                         board[move.toRow][move.toCol] = '♕';
                     }
